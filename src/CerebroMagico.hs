@@ -3,7 +3,11 @@ module CerebroMagico where
 vocales :: String
 vocales = "aeiouAEIOU"
 
--- BORRAR ESTOS COMENTARIOS Y COMPLETAR LA SOLUCIÓN DEL ENUNCIADO EN ESTE ARCHIVO
--- esVocal :: ...
--- esVocal letra = ...
+esVocal :: Char -> Bool
+esVocal letra = elem letra vocales
 
+esParticular :: String -> Bool
+esParticular nombre = esVocal(head nombre) || length nombre > 7
+
+esMagico :: String -> Bool
+esMagico nombre = esParticular nombre && not (esVocal (nombre !! (length nombre - 1)))
