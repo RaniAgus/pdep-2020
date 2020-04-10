@@ -9,14 +9,20 @@ esVocal letra = elem letra vocales
 primeraLetra :: String -> Char
 primeraLetra = head
 
-ultimaLetra:: String -> Char
+ultimaLetra :: String -> Char
 ultimaLetra = last
+
+empiezaConVocal :: String -> Bool
+empiezaConVocal = esVocal.primeraLetra 
+
+terminaConConsonante :: String -> Bool
+terminaConConsonante = not.esVocal.ultimaLetra
 
 gradoMayorASiete :: String -> Bool
 gradoMayorASiete palabra = length palabra > 7
 
 esParticular :: String -> Bool
-esParticular nombre = (esVocal.primeraLetra) nombre || gradoMayorASiete nombre
+esParticular nombre = empiezaConVocal nombre || gradoMayorASiete nombre
 
 esMagico :: String -> Bool
-esMagico nombre = esParticular nombre && (not.esVocal.ultimaLetra) nombre
+esMagico nombre = esParticular nombre && terminaConConsonante nombre
