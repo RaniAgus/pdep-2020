@@ -6,8 +6,17 @@ vocales = "aeiouAEIOU"
 esVocal :: Char -> Bool
 esVocal letra = elem letra vocales
 
+primeraLetra :: String -> Char
+primeraLetra = head
+
+ultimaLetra:: String -> Char
+ultimaLetra = last
+
+gradoMayorASiete :: String -> Bool
+gradoMayorASiete palabra = length palabra > 7
+
 esParticular :: String -> Bool
-esParticular nombre = (esVocal.head) nombre || length nombre > 7
+esParticular nombre = (esVocal.primeraLetra) nombre || gradoMayorASiete nombre
 
 esMagico :: String -> Bool
-esMagico nombre = esParticular nombre && (not.esVocal.last) nombre
+esMagico nombre = esParticular nombre && (not.esVocal.ultimaLetra) nombre
