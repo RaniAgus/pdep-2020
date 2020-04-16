@@ -5,20 +5,20 @@ main :: IO()
 main = hspec $ do
   describe "esVocal" $ do
      it "letra es vocal" $ do
-        expectationFailure "Falta implementar" 
+        esVocal 'a' `shouldBe` True
      it "letra no es vocal" $ do
-        expectationFailure "Falta implementar" 
+        esVocal 'b' `shouldBe` False
   describe "esParticular" $ do
      it "nombre que comienza con vocal es particular" $ do
-        expectationFailure "Falta implementar" 
+        esParticular "Ana" `shouldBe` True
      it "nombre largo es particular" $ do
-        expectationFailure "Falta implementar" 
+        esParticular "Fernando" `shouldBe` True
      it "nombre no es particular" $ do
-        expectationFailure "Falta implementar" 
+        esParticular "Beto" `shouldBe` False
   describe "esMagico" $ do
      it "nombre que termina en vocal no es magico" $ do
-        expectationFailure "Falta implementar" 
+        esMagico "Ana" `shouldBe` False
      it "nombre que no es particular no es magico" $ do
-        expectationFailure "Falta implementar" 
+        esMagico "Flor" `shouldBe` False
      it "nombre es magico" $ do
-        expectationFailure "Falta implementar" 
+        esMagico "Omar" `shouldBe` True
