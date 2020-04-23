@@ -8,33 +8,22 @@ main :: IO()
 main = hspec $ do
    describe "Tecnicas de Combate" $ do
       it "presion de un golpe sobre un objetivo" $ do
-         expectationFailure "Falta implementar"
+         golpe 200 "bolsa de entrenamiento" `shouldBe` 68
 
       it "presion de golpes normales consecutivos" $ do
-         expectationFailure "Falta implementar"
+         golpesNormalesConsecutivos "bolsa de entrenamiento" `shouldBe` 81
 
       it "presion de gomu gomu elephant gatling" $ do
-         expectationFailure "Falta implementar"
+         golpeGomuElephantTraining "bolsa de entrenamiento" `shouldBe` 61
 
       it "objetivo dificil" $ do
-         expectationFailure "Falta implementar"
+         "bolsa de entrenamiento" `shouldSatisfy` esDificil
 
       it "objetivo no dificil" $ do
-         expectationFailure "Falta implementar"
-
-
----------------- BORRAR ESTAS PRUEBAS AL RESOLVER EL EJERCICIO ----------------
-   -- Para hacer pruebas sobre funciones que devuelven booleanos se pueden usar 
-   -- shouldSatisfy y shouldNotSatisfy de la siguiente manera
-      it "BORRAME" $ do
-         2 `shouldSatisfy` even
-      it "BORRAME" $ do
-         1 `shouldNotSatisfy` even
----------------- BORRAR ESTAS PRUEBAS AL RESOLVER EL EJERCICIO ----------------
-
+         "gatito" `shouldNotSatisfy` esDificil
 
       it "accesibilidad baja" $ do
-         expectationFailure "Falta implementar"
+         accesibilidad "bolsa de entrenamiento" `shouldBe` 25
 
       it "accesibilidad alta" $ do
-         expectationFailure "Falta implementar"
+         accesibilidad "gatito" `shouldBe` 30
