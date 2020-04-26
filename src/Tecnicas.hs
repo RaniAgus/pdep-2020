@@ -1,27 +1,29 @@
 module Tecnicas where
 
 type Objetivo = String
+type Entrenamiento = Int
+type PoderGolpe = Int
 
-golpe :: Int -> String -> Int
+golpe :: Entrenamiento -> Objetivo -> PoderGolpe
 golpe horas objetivo = poder horas `div` fortaleza objetivo
 
-fortaleza :: String -> Int
+fortaleza :: Objetivo -> PoderGolpe
 fortaleza = (*2).length 
 
-poder :: Int -> Int
+poder :: Entrenamiento -> PoderGolpe
 poder = (*15)
 
-golpesNormalesConsecutivos :: String -> Int
+golpesNormalesConsecutivos :: Objetivo -> PoderGolpe
 golpesNormalesConsecutivos = golpe 240
 
-golpeGomuElephantTraining :: String -> Int
+golpeGomuElephantTraining :: Objetivo -> PoderGolpe
 golpeGomuElephantTraining = golpe 180
 
-esDificil :: String -> Bool
+esDificil :: Objetivo -> Bool
 esDificil = (<100).golpeGomuElephantTraining
 
-accesibilidad :: String -> Int
+accesibilidad :: Objetivo -> PoderGolpe
 accesibilidad = (`div` 10).golpesNormalesConsecutivos.focalizar
 
-focalizar :: String -> String
+focalizar :: Objetivo -> Objetivo
 focalizar = take 7
