@@ -13,8 +13,8 @@ cuantoPagar criterioPropina cuenta = cuenta + criterioPropina cuenta
 propinaRecomendada :: CriterioPropina
 propinaRecomendada cuenta = cuenta * 0.1
 
-noCreeEnPropina :: CriterioPropina
-noCreeEnPropina _ = 0
+propinaNoPaga :: CriterioPropina
+propinaNoPaga _ = 0
 
 propinaConservadora :: CriterioPropina
 propinaConservadora cuenta 
