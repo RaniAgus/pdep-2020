@@ -38,3 +38,6 @@ propinaSegunCosto cuenta
     | cuenta < 500 = ((*3).propinaRecomendada) cuenta
     | cuenta < 1000 = propinaConservadora cuenta
     | otherwise = 0
+
+mozoEstaSatisfecho :: CriterioPropina -> Precio -> Bool
+mozoEstaSatisfecho criterioPropina cuenta = criterioPropina cuenta > cuenta * 0.15
