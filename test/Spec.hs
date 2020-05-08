@@ -7,7 +7,7 @@ main = hspec $ do
       it "pago propina recomendada" $ do
          cuantoPagar propinaRecomendada 2000 `shouldBe` 2200
       it "no pago propina" $ do
-         cuantoPagar propinaSinPagar 1000 `shouldBe` 1000
+         cuantoPagar propinaALaMrPink 1000 `shouldBe` 1000
       it "pago propina conservadora para precio par" $ do
          cuantoPagar propinaConservadora 1000 `shouldBe` 1020
       it "pago propina conservadora para precio impar" $ do
