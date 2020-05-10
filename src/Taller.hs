@@ -18,11 +18,11 @@ data Auto = Auto {
 } deriving Show
 
 unAuto = Auto {
-    patente ="AAA000",
-    desgasteLlantas = [1.0, 0.1, 0, 0.2],
-    rpm = 3000,
-    temperaturaAgua = 1.5,
-    ultimoArreglo = (17,11,1999)
+    patente = "",
+    desgasteLlantas = [],
+    rpm = 0,
+    temperaturaAgua = 0,
+    ultimoArreglo = (0,0,0)
 } 
 
 -- Punto 1
