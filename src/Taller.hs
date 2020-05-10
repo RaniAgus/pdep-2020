@@ -61,8 +61,14 @@ estaMuyDesgastada = (>0.5)
 año:: Fecha -> Int
 año (_,_,año) = año
 
+anioUltimoArreglo::Auto->Int
+anioUltimoArreglo =(año.ultimoArreglo)
+
+antesOigual ::Int->Int->Bool
+antesOigual anio  = (<=anio)
+
 necesitaRevision ::Auto ->Bool
-necesitaRevision auto = ((<2015).(año.ultimoArreglo)) auto 
+necesitaRevision  =(antesOigual 2015).anioUltimoArreglo  
 
 -- Punto 3
 -- Parte 1 (integrante a)

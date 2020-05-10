@@ -19,6 +19,8 @@ main = hspec $ do
       it "auto con primera llanta muy desgastada" $ do
          unAuto { desgasteLlantas = [0.6,0,0,0]} `shouldSatisfy` esAutoPeligroso
       -- aca irian tests punto 2 parte 2
+   
+
       it "auto que regula a menos de 2000 vueltas atendido por alfa" $ do
          (rpm.alfa) unAuto { rpm = 1999 } `shouldBe` 1999
       it "auto que regula a mas de 2000 vueltas atendido por alfa" $ do
@@ -29,5 +31,7 @@ main = hspec $ do
          (rpm.charly) unAuto { rpm = 2001, desgasteLlantas = [1,1,1,1] } `shouldBe` 2000
          (desgasteLlantas.charly) unAuto { rpm = 2001, desgasteLlantas = [1,1,1,1] } `shouldBe` [0,0,0,0]
       -- aca irian tests punto 3 parte 2
+      
+        
 
 
