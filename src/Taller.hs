@@ -87,3 +87,17 @@ charly :: Auto -> Auto
 charly = bravo.alfa
 
 -- Parte 2 (integrante b)
+tango::Auto->Auto
+tango  = id
+
+zulu::Auto->Auto
+zulu auto = auto {temperaturaAgua = 90,desgasteLlantas =cambioDelantero auto}
+
+lima::Auto ->Auto
+lima auto = auto {desgasteLlantas =cambioDelantero auto}
+
+cambioDelantero::Auto->[Desgaste]
+cambioDelantero auto =[0,0,obtenerLlanta 2 auto,obtenerLlanta 3 auto ]
+
+obtenerLlanta ::Int->Auto->Float
+obtenerLlanta n=(!!n).desgasteLlantas
