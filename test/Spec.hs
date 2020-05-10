@@ -19,7 +19,10 @@ main = hspec $ do
       it "auto con primera llanta muy desgastada" $ do
          unAuto { desgasteLlantas = [0.6,0,0,0]} `shouldSatisfy` esAutoPeligroso
       -- aca irian tests punto 2 parte 2
-   
+      it "Un auto cuyo último arreglo fue hace mucho" $ do
+         unAuto { ultimoArreglo = (17,11,2010)} `shouldSatisfy` necesitaRevision
+      it "Un auto cuyo último arreglo fue hace poco" $ do
+         unAuto { ultimoArreglo = (17,11,2019)} `shouldNotSatisfy` necesitaRevision
 
       it "auto que regula a menos de 2000 vueltas atendido por alfa" $ do
          (rpm.alfa) unAuto { rpm = 1999 } `shouldBe` 1999
