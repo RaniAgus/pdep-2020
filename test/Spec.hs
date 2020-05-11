@@ -18,7 +18,7 @@ main = hspec $ do
          unAuto { desgasteLlantas = [0.4,1,1,1]} `shouldNotSatisfy` esAutoPeligroso
       it "auto con primera llanta muy desgastada" $ do
          unAuto { desgasteLlantas = [0.6,0,0,0]} `shouldSatisfy` esAutoPeligroso
-      -- aca irian tests punto 2 parte 2
+   
       it "Un auto cuyo último arreglo fue hace mucho" $ do
          unAuto { ultimoArreglo = (17,11,2010)} `shouldSatisfy` necesitaRevision
       it "Un auto cuyo último arreglo fue hace poco" $ do
@@ -33,8 +33,21 @@ main = hspec $ do
       it "auto atendido por charly" $ do
          (rpm.charly) unAuto { rpm = 2001, desgasteLlantas = [1,1,1,1] } `shouldBe` 2000
          (desgasteLlantas.charly) unAuto { rpm = 2001, desgasteLlantas = [1,1,1,1] } `shouldBe` [0,0,0,0]
-      -- aca irian tests punto 3 parte 2
-      
+    
+      it "auto atendido por Tango" $ do
+         (patente.tango) unAuto { patente = "AAA123" } `shouldBe` "AAA123"
+         (desgasteLlantas.tango) unAuto { desgasteLlantas = [1,1,1,1] } `shouldBe` [1,1,1,1]
+         (rpm.tango) unAuto { rpm = 10 } `shouldBe` 10
+         (temperaturaAgua.tango) unAuto { temperaturaAgua = 90 } `shouldBe` 90
+         (ultimoArreglo.tango) unAuto { ultimoArreglo = (17,11,2000) } `shouldBe` (17,11,2000)
+
+      it "auto atendido por Zulu" $ do
+         (temperaturaAgua.zulu) unAuto { temperaturaAgua = 60, desgasteLlantas = [1,1,1,1] } `shouldBe` 90
+         (desgasteLlantas.zulu) unAuto { temperaturaAgua = 60, desgasteLlantas = [1,1,1,1] } `shouldBe` [0,0,1,1]
+         
+      it "auto atendido por Lima" $ do
+         (desgasteLlantas.lima) unAuto { desgasteLlantas = [1,1,1,1] } `shouldBe` [0,0,1,1]
+
         
 
 

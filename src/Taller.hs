@@ -28,15 +28,15 @@ unAuto = Auto {
 -- Punto 1
 costoDeReparacion :: Auto -> Costo
 costoDeReparacion auto
-    | esPatenteNueva auto = 12500
-    | esPatenteAnterior auto && (patenteEstaEntre "DJ" "NB") auto = (calculoPatental.patente) auto
+    | patente7 auto = 12500
+    | patente6 auto && (patenteEstaEntre "DJ" "NB") auto = (calculoPatental.patente) auto
     | otherwise = 15000
 
-esPatenteNueva :: Auto -> Bool
-esPatenteNueva = (==7).length.patente
+patente7 :: Auto -> Bool
+patente7 = (==7).length.patente
 
-esPatenteAnterior :: Auto -> Bool
-esPatenteAnterior = (==6).length.patente
+patente6 :: Auto -> Bool
+patente6 = (==6).length.patente
 
 patenteEstaEntre :: Patente -> Patente -> Auto -> Bool
 patenteEstaEntre patente1 patente2 auto = patente1 < (patente auto) && (patente auto) < patente2
