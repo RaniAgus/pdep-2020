@@ -28,15 +28,15 @@ unAuto = Auto {
 -- Punto 1
 costoDeReparacion :: Auto -> Costo
 costoDeReparacion auto
-    | patente7 auto = 12500
-    | patente6 auto && (patenteEstaEntre "DJ" "NB") auto = (calculoPatental.patente) auto
+    | esPatente7 auto = 12500
+    | esPatente6 auto && (patenteEstaEntre "DJ" "NB") auto = (calculoPatental.patente) auto
     | otherwise = 15000
 
-patente7 :: Auto -> Bool
-patente7 = (==7).length.patente
+esPatente7 :: Auto -> Bool
+esPatente7 = (==7).length.patente
 
-patente6 :: Auto -> Bool
-patente6 = (==6).length.patente
+esPatente6 :: Auto -> Bool
+esPatente6 = (==6).length.patente
 
 patenteEstaEntre :: Patente -> Patente -> Auto -> Bool
 patenteEstaEntre patente1 patente2 auto = patente1 < (patente auto) && (patente auto) < patente2
@@ -73,12 +73,12 @@ necesitaRevision  =(antesOigual 2015).anioUltimoArreglo
 -- Punto 3
 -- Parte 1 (integrante a)
 alfa :: Auto -> Auto
-alfa unAuto 
-    | rpm unAuto < 2000 = unAuto
-    | otherwise = unAuto { rpm = 2000 }
+alfa auto 
+    | rpm auto < 2000 = auto
+    | otherwise = auto { rpm = 2000 }
 
 bravo :: Auto -> Auto
-bravo unAuto = unAuto { desgasteLlantas = sinDesgaste }
+bravo auto = auto { desgasteLlantas = sinDesgaste }
 
 sinDesgaste :: [Desgaste]
 sinDesgaste = [0, 0, 0, 0]
