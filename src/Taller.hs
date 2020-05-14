@@ -91,13 +91,14 @@ tango::Auto->Auto
 tango  = id
 
 zulu::Auto->Auto
-zulu auto = auto {temperaturaAgua = 90,desgasteLlantas =cambioDelantero auto}
+zulu  = cambioTemperatura.lima
+
+cambioTemperatura::Auto->Auto
+cambioTemperatura auto=auto{temperaturaAgua=90}
 
 lima::Auto ->Auto
 lima auto = auto {desgasteLlantas =cambioDelantero auto}
 
 cambioDelantero::Auto->[Desgaste]
-cambioDelantero auto =[0,0,obtenerLlanta 2 auto,obtenerLlanta 3 auto ]
+cambioDelantero auto = concat [[0,0] ,drop  2 (desgasteLlantas auto)]
 
-obtenerLlanta ::Int->Auto->Float
-obtenerLlanta n=(!!n).desgasteLlantas
