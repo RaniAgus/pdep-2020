@@ -4,6 +4,7 @@ module Lib where
 
 data TipoPokemon = Planta | Agua | Fuego deriving (Show, Eq)
 
+tieneVentajaContra :: TipoPokemon -> TipoPokemon -> Bool
 tieneVentajaContra Planta Agua = True
 tieneVentajaContra Agua Fuego = True
 tieneVentajaContra Fuego Planta = True
@@ -14,15 +15,21 @@ data Pokemon = Pokemon {
     tipo :: TipoPokemon
 } deriving (Show, Eq)
 
+bulbasaur :: Pokemon
 bulbasaur = Pokemon "Bulbasaur" Planta
+charmander :: Pokemon
 charmander = Pokemon "Charmander" Fuego
-squirtle = Pokemon "Squirtle" Agua
-oddish = Pokemon "Oddish" Planta
-gyarados = Pokemon "Gyarados" Agua
+flareon :: Pokemon
 flareon = Pokemon "Flareon" Fuego
+gyarados :: Pokemon
+gyarados = Pokemon "Gyarados" Agua
+oddish :: Pokemon
+oddish = Pokemon "Oddish" Planta
+squirtle :: Pokemon
+squirtle = Pokemon "Squirtle" Agua
 
 ganaContra :: Pokemon -> Pokemon -> Bool
-ganaContra atacante defensor = tieneVentajaContra (tipo atacante) (tipo defensor)
+ganaContra atacante defensor = (tipo atacante) `tieneVentajaContra` (tipo defensor)
 
 contraQuienesGana :: Pokemon -> [Pokemon] -> [Pokemon]
 contraQuienesGana atacante = filter (\defensor -> atacante `ganaContra` defensor)
@@ -71,9 +78,9 @@ puedoViajar origen destino = origen == destino || puedoViajar (siguiente origen)
 --PUNTO 6
 
 elMasPicante :: [Pokemon] -> Pokemon
-elMasPicante pokemones = foldl1 (masPicanteDeDos pokemones) pokemones
+elMasPicante pokelista = foldl1 (masPicanteDeDos pokelista) pokelista
 
 masPicanteDeDos :: [Pokemon] -> Pokemon -> Pokemon -> Pokemon
-masPicanteDeDos pokemones p1 p2 
-    | cantidadVictorias p1 pokemones >= cantidadVictorias p2 pokemones = p1
-    | otherwise = p2 
+masPicanteDeDos pokelista atacante1 atacante2 
+    | cantidadVictorias atacante1 pokelista >= cantidadVictorias atacante2 pokelista = atacante1
+    | otherwise = atacante2 
