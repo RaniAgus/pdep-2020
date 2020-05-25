@@ -1,6 +1,27 @@
 import Test.Hspec
 import Taller
 
+unAuto = Auto {
+    patente = "",
+    desgasteLlantas = [],
+    rpm = 0,
+    temperaturaAgua = 0,
+    ultimoArreglo = (0,0,0)
+} 
+autoImpar = unAuto{
+    desgasteLlantas = [0.3,0.5,0.1]
+}
+autoPar = unAuto{
+    desgasteLlantas = [0.3,0.5,0.2]
+}
+autoAReparar = Auto{
+    patente="AAA000",
+    desgasteLlantas= [0.2,0.2,0.2,0.2],
+    rpm = 3000,
+    temperaturaAgua=100,
+    ultimoArreglo = (24,07,1999)
+}
+
 main :: IO()
 main = hspec $ do
    describe "Taller mecanico" $ do
@@ -21,9 +42,9 @@ main = hspec $ do
       it "auto con primera llanta muy desgastada" $ do
          unAuto { desgasteLlantas = [0.6,0,0,0]} `shouldSatisfy` esAutoPeligroso
    
-      it "Un auto cuyo último arreglo fue hace mucho" $ do
+      it "auto cuyo último arreglo fue hace mucho" $ do
          unAuto { ultimoArreglo = (17,11,2010)} `shouldSatisfy` necesitaRevision
-      it "Un auto cuyo último arreglo fue hace poco" $ do
+      it "auto cuyo último arreglo fue hace poco" $ do
          unAuto { ultimoArreglo = (17,11,2019)} `shouldNotSatisfy` necesitaRevision
 
       it "auto que regula a menos de 2000 vueltas atendido por Alfa" $ do
@@ -51,7 +72,23 @@ main = hspec $ do
          
       it "auto atendido por Lima" $ do
          (desgasteLlantas.lima) unAuto { desgasteLlantas = [1,1,1,1] } `shouldBe` [0,0,1,1]
-
-        
+      
+      it "lista con dos autos donde el primero tiene una cantidad de desgaste impar y el segundo par está ordenada." $ do
+         [autoImpar,autoPar] `shouldSatisfy` estaOrdenadoTOC
+      it "lista con dos autos donde ambos tienen una cantidad de desgaste impar no está ordenada según el criterio solicitado." $ do
+         [autoImpar,autoImpar] `shouldNotSatisfy` estaOrdenadoTOC
+      it "lista con dos autos donde ambos tienen una cantidad de desgaste par no está ordenada según el criterio solicitado." $ do
+         [autoPar,autoPar] `shouldNotSatisfy` estaOrdenadoTOC
+      it "lista con un solo auto que tiene una cantidad de desgaste impar está ordenada según el criterio solicitado." $ do
+         [autoImpar] `shouldSatisfy` estaOrdenadoTOC 
+      it "lista con un solo auto que tiene una cantidad de desgaste par no está ordenada según el criterio solicitado." $ do
+         [autoPar] `shouldNotSatisfy` estaOrdenadoTOC 
+      
+      it "auto reparado recibe las tareas de cada técnico" $ do
+         (desgasteLlantas.ordenReparacion autoAReparar [alfa,zulu]) (25,05,2020) `shouldBe` [0,0,0.2,0.2]
+         (rpm.ordenReparacion autoAReparar [alfa,zulu]) (25,05,2020) `shouldBe` 2000
+      it "auto reparado recibe la nueva fecha de último arreglo" $ do
+         (ultimoArreglo.ordenReparacion autoAReparar [alfa,zulu]) (25,05,2020) `shouldBe` (25,05,2020)
+          
 
 

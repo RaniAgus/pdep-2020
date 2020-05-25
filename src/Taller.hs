@@ -4,6 +4,7 @@ type Desgaste = Float
 type Patente = String
 type Fecha = (Int, Int, Int)
 type Costo = Int
+type Tecnico = Auto -> Auto
  
 -- Definiciones base
 anio :: Fecha -> Int
@@ -16,14 +17,6 @@ data Auto = Auto {
     temperaturaAgua :: Float,
     ultimoArreglo :: Fecha
 } deriving Show
-
-unAuto = Auto {
-    patente = "",
-    desgasteLlantas = [],
-    rpm = 0,
-    temperaturaAgua = 0,
-    ultimoArreglo = (0,0,0)
-} 
 
 -- Punto 1
 costoDeReparacion :: Auto -> Costo
@@ -60,11 +53,8 @@ estaMuyDesgastada :: Desgaste -> Bool
 estaMuyDesgastada = (>0.5)
 
 -- Parte 2 (integrante b)
-año:: Fecha -> Int
-año (_,_,año) = año
-
 anioUltimoArreglo::Auto->Int
-anioUltimoArreglo =(año.ultimoArreglo)
+anioUltimoArreglo =(anio.ultimoArreglo)
 
 antesOigual ::Int->Int->Bool
 antesOigual anio  = (<=anio)
@@ -74,30 +64,58 @@ necesitaRevision  =(antesOigual 2015).anioUltimoArreglo
 
 -- Punto 3
 -- Parte 1 (integrante a)
-alfa :: Auto -> Auto
+alfa :: Tecnico
 alfa auto = auto { rpm = min (rpm auto) 2000 }
 
-bravo :: Auto -> Auto
+bravo :: Tecnico
 bravo auto = auto { desgasteLlantas = (quitarDesgaste.desgasteLlantas) auto }
 
 quitarDesgaste :: [Desgaste] -> [Desgaste]
 quitarDesgaste = map (\x -> 0)
 
-charly :: Auto -> Auto
+charly :: Tecnico
 charly = bravo.alfa
 
 -- Parte 2 (integrante b)
-tango::Auto->Auto
+tango:: Tecnico
 tango  = id
 
-zulu::Auto->Auto
+zulu:: Tecnico
 zulu  = trabajoZulu.lima
 
-trabajoZulu::Auto->Auto
+trabajoZulu:: Tecnico
 trabajoZulu auto=auto{temperaturaAgua=90}
 
-lima::Auto ->Auto
+lima:: Tecnico
 lima auto = auto {desgasteLlantas =cambioDelantero auto}
 
 cambioDelantero::Auto->[Desgaste]
 cambioDelantero auto = concat [[0,0] ,drop  2 (desgasteLlantas auto)]
+
+-- Punto 4
+cantidadDesgaste :: Auto -> Int
+cantidadDesgaste  = round.(*10).sum.desgasteLlantas 
+
+compararPosicionyDesgaste :: Int -> [Int] -> Bool
+compararPosicionyDesgaste pos [x] = even pos == even x 
+compararPosicionyDesgaste pos (x:xs) = even pos == even x && compararPosicionyDesgaste (pos+1) xs
+
+estaOrdenadoTOC :: [Auto] -> Bool
+estaOrdenadoTOC = (compararPosicionyDesgaste 1).(map cantidadDesgaste)
+
+-- Punto 5
+ordenReparacion :: Auto -> [Tecnico] -> Fecha -> Auto
+ordenReparacion auto tecnicos fecha = foldr ($) auto (nuevaFecha fecha:tecnicos)
+
+nuevaFecha :: Fecha -> Tecnico
+nuevaFecha fecha auto = auto{ultimoArreglo = fecha}
+
+-- Punto 6
+-- Parte 1 (integrante a)
+
+-- Parte 2 (integrante b)
+
+-- Punto 7
+-- Parte 1 (integrante a)
+
+-- Parte 2 (integrante b)
