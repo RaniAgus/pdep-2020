@@ -30,15 +30,18 @@ data Personaje = Personaje {
 armadurasNoRotas :: Personaje -> [ParteDeArmadura]
 armadurasNoRotas unPersonaje = filter ((>0).durabilidad) (armadura unPersonaje)
 
+calcularDefensa :: [ParteDeArmadura] -> Poder
+calcularDefensa = (sum.map defensa)
+
 poderDeDefensa :: Personaje -> Poder
-poderDeDefensa unPersonaje = vida unPersonaje + (sum.armadurasNoRotas) unPersonaje
+poderDeDefensa unPersonaje = vida unPersonaje + (calcularDefensa.armadurasNoRotas) unPersonaje
 
 --Punto 2
 poderDeAtaque :: Personaje -> Poder
 poderDeAtaque = poderDeArma.arma
 
 poderDeArma :: Arma -> Poder
-poderDeArma (Baculo nom intelig) = intelig + length nom
+poderDeArma (Baculo nom intelig) = intelig + (fromIntegral.length) nom
 poderDeArma (Arco rang long danio) = rang * long + danio
 poderDeArma (Espada alm mat) = alm * (coeficienteDeMaterial mat)
 
@@ -51,10 +54,25 @@ coeficienteDeMaterial _ = 1
 type Buff = Personaje -> Personaje
 
 frenesi :: Buff
-frenesi unPersonaje = unPersonaje { armadura = (buffDefensaArmadura (*1.20).armadura) unPersonaje }
+frenesi unPersonaje = unPersonaje { armadura = buffDefensaArmadura (*1.20) unPersonaje }
 
-buffDefensaArmadura :: (Poder->Poder) -> [ParteDeArmadura] -> [ParteDeArmadura]
-buffDefensaArmadura buff unArmadura = unArmadura {defensa = ((map buff).defensa) unArmadura }
+buffDefensaArmadura :: (Poder->Poder) -> Personaje -> [ParteDeArmadura]
+buffDefensaArmadura buff unPersonaje = map (\parte -> parte{defensa = (buff.defensa) parte}) (armadura unPersonaje)
 
 mantoEtereo :: Buff
-mantoEtereo unPersonaje = unPersonaje { vida = (-100.vida) unPersonaje, armadura = (buffDefensaArmadura (+3).armadura) unPersonaje }
+mantoEtereo unPersonaje = unPersonaje { vida = (quitarVida 100) unPersonaje, armadura = buffDefensaArmadura (+3) unPersonaje }
+
+quitarVida :: Poder -> Personaje -> Poder
+quitarVida valor unPersonaje = vida unPersonaje - valor
+
+berserker :: Buff
+berserker unPersonaje = unPersonaje { armadura = buffDefensaArmadura (\x->2) unPersonaje, arma = (transformarEnMetal.arma) unPersonaje }
+
+transformarEnMetal :: Arma -> Arma
+transformarEnMetal (Espada almas Madera) = Espada almas Metal  
+transformarEnMetal unArma@(Espada _ _) = id unArma 
+transformarEnMetal unArma@(Baculo _ _) = id unArma 
+transformarEnMetal unArma@(Arco _ _ _) = id unArma 
+
+espejoDeKarma :: Buff -> Buff
+espejoDeKarma buff = buff.buff
