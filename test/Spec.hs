@@ -16,11 +16,16 @@ autoPar = unAuto{
 }
 autoAReparar = Auto{
     patente="AAA000",
-    desgasteLlantas= [0.2,0.2,0.2,0.2],
+    desgasteLlantas= [0.6,0.6,0.6,0.6],
     rpm = 3000,
     temperaturaAgua=100,
     ultimoArreglo = (24,07,1999)
 }
+
+listaAutosAReparar = [
+   autoAReparar, 
+   autoAReparar{ ultimoArreglo = (1,1,2020) }, 
+   autoAReparar{ patente = "AA000AA" }]
 
 main :: IO()
 main = hspec $ do
@@ -85,10 +90,20 @@ main = hspec $ do
          [autoPar] `shouldNotSatisfy` estaOrdenadoTOC 
       
       it "auto reparado recibe las tareas de cada técnico" $ do
-         (desgasteLlantas.ordenReparacion autoAReparar [alfa,zulu]) (25,05,2020) `shouldBe` [0,0,0.2,0.2]
+         (desgasteLlantas.ordenReparacion autoAReparar [alfa,zulu]) (25,05,2020) `shouldBe` [0,0,0.6,0.6]
          (rpm.ordenReparacion autoAReparar [alfa,zulu]) (25,05,2020) `shouldBe` 2000
       it "auto reparado recibe la nueva fecha de último arreglo" $ do
          (ultimoArreglo.ordenReparacion autoAReparar [alfa,zulu]) (25,05,2020) `shouldBe` (25,05,2020)
           
+      it "se listan los tecnicos que dejan el auto en condiciones" $ do
+         (length.tecnicosDejanEnCondiciones autoAReparar) [bravo,lima, tango] `shouldBe` 2
 
+      it "costo total de reparación de una lista de autos" $ do
+         costoTotalDeReparacion listaAutosAReparar `shouldBe` 27500
 
+      it "primer tecnico seguro desde una lista infinita" $ do
+         (temperaturaAgua . ($ autoAReparar) . primerTecnicoSeguro autoAReparar) tecnicosInfinitos `shouldBe` 90
+         (desgasteLlantas . ($ autoAReparar) . primerTecnicoSeguro autoAReparar) tecnicosInfinitos `shouldBe` [0,0,0.6,0.6]
+
+      it "costo de reparación primeros 3 autos" $ do
+         costoTotalDeReparacionV2 autosInfinitos `shouldBe` 45000
