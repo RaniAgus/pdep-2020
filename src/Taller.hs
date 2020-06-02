@@ -97,7 +97,7 @@ cantidadDesgaste :: Auto -> Int
 cantidadDesgaste  = round.(*10).sum.desgasteLlantas 
 
 compararPosicionyDesgaste :: Int -> [Int] -> Bool
-compararPosicionyDesgaste pos [x] = even pos == even x 
+compararPosicionyDesgaste pos [] = True 
 compararPosicionyDesgaste pos (x:xs) = even pos == even x && compararPosicionyDesgaste (pos+1) xs
 
 estaOrdenadoTOC :: [Auto] -> Bool
