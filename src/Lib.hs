@@ -34,13 +34,13 @@ poderDeDefensa :: Personaje -> Poder
 poderDeDefensa personaje = vida personaje + defensaTotal personaje
 
 defensaTotal :: Personaje -> Poder
-defensaTotal = calcularDefensa.armadurasNoRotas
+defensaTotal = sumarDefensa.noRotas.armadura
 
-calcularDefensa :: [Parte] -> Poder
-calcularDefensa = sum.map defensa
+sumarDefensa :: [Parte] -> Poder
+sumarDefensa = sum.map defensa
 
-armadurasNoRotas :: Personaje -> [Parte]
-armadurasNoRotas = filter (not.estaRota).armadura 
+noRotas :: [Parte] -> [Parte]
+noRotas = filter (not.estaRota) 
 
 estaRota :: Parte -> Bool
 estaRota = (==0).durabilidad
@@ -109,7 +109,7 @@ metalizar arma = arma
 espejoDeKarma :: Buff -> Buff
 espejoDeKarma buff = buff.buff
 
---buffCreativo :: Buff -> Buff
+--buffCreativo
 repararArmadura :: Buff
 repararArmadura = transformarArmadura (transformarDurabilidad (\x->10))
 
@@ -165,12 +165,13 @@ potenciarClanSegun :: (Personaje -> Poder) -> Clan -> [Personaje]
 potenciarClanSegun f clan = ( map ( potenciarMiembroSegun f (buffs clan) ) . miembros ) clan
 
 potenciarMiembroSegun :: (Personaje -> Poder) -> [Buff] -> Buff
-potenciarMiembroSegun f buffs miembro = potenciar miembro (elegirMejorBuff f buffs miembro)
+potenciarMiembroSegun f buffs miembro = potenciar miembro elegirMejorBuff
+    where 
+    elegirMejorBuff = foldl1 (esMejorSegun criterioAlPotenciar) buffs
+    criterioAlPotenciar = (f.potenciar miembro)
 
-elegirMejorBuff :: (Personaje -> Poder) -> [Buff] -> Personaje -> Buff
-elegirMejorBuff f buffs miembro = foldl1 (esMejorSegun (f.potenciar miembro)) buffs
 
 esMejorSegun :: (Buff -> Poder) -> Buff -> Buff -> Buff
-esMejorSegun g buff1 buff2
-    | g buff1 > g buff2 = buff1 
+esMejorSegun criterio buff1 buff2
+    | criterio buff1 > criterio buff2 = buff1 
     | otherwise = buff2
