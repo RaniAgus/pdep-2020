@@ -8,7 +8,7 @@ import Text.Show.Functions
 
 laVerdad = True
 
--- Punto 1
+-- PUNTO 1:
 data Turista = Turista {
     cansancio :: Int,
     stress :: Int,
@@ -54,7 +54,7 @@ cathi' = beto {
 --Incluso usando una función:
 cathi'' = agregarIdioma Catalan beto
 
---Punto 2
+--PUNTO 2:
 type Excursion = Turista -> Turista
 
 modificarCansancio :: (Int -> Int -> Int) -> Int -> Excursion
@@ -152,7 +152,8 @@ esExcursionDesestresante :: Excursion -> Turista -> Bool
 esExcursionDesestresante excursion = esDesestresante . deltaExcursionSegun stress excursion
     where esDesestresante = (<= -3)
 
-{- Para mantener a los turistas ocupados todo el día, la empresa vende paquetes de excursiones llamados tours. 
+{- PUNTO 3:
+Para mantener a los turistas ocupados todo el día, la empresa vende paquetes de excursiones llamados tours. 
 Un tour se compone por una serie de excursiones. -}
 type Tour = [Excursion]
 
@@ -224,8 +225,7 @@ espiritualidadRecibida turista tour = ( sum . map (espiritualidadSegun turista t
 espiritualidadSegun :: Turista -> Tour -> Indice -> Int
 espiritualidadSegun turista tour indice = - deltaExcursionSegun indice (hacerTour tour) turista
 
--- Implementar y contestar en modo de comentarios o pruebas por consola
-
+-- PUNTO 4: Implementar y contestar en modo de comentarios o pruebas por consola
 
 -- Construir un tour donde se visiten infinitas playas.
 infinitasPlayas :: Tour
@@ -233,13 +233,17 @@ infinitasPlayas = repeat irAPlaya
 
 -- ¿Se puede saber si ese tour es convincente para Ana? ¿Y con Beto? Justificar.
 {-
-Para Ana se puede, porque la condición de corte para "any" es que el aplicar 
-. Esto es gracias a la evaluación diferida
+Para Ana se puede, porque la condición de corte para "any" es encontrar el primer elemento que,
+al aplicar la función esExcursionConvincente, retorne True. Y la excursión irAPlaya es convincente
+para Ana. Esto es gracias a la evaluación diferida de Haskell.
 
-Para Beto no se podría, porque en ese mismo cas
+Para Beto no se podría, porque en ese mismo caso no hay condición de corte, porque la excursión
+irAPlaya no es convincente para Beto, entonces el programa se queda evaluando toda la lista
+infinita hasta hallar la primera excursión convincente (lo cual nunca ocurre).
 -}
 
 -- ¿Existe algún caso donde se pueda conocer la efectividad de este tour? Justificar.
 {-
-
+No, no se puede, porque para calcular la efectividad de este tour emplea funciones que no tienen
+condición de corte, sino que necesitan evaluar toda la lista (sum y map)
 -}
