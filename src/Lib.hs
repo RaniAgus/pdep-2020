@@ -53,16 +53,17 @@ type Excursion = Turista -> Turista
 
 modificarCansancio :: (Int -> Int -> Int) -> Int -> Excursion
 modificarCansancio f val turista = turista {
-    cansancio = (f val.cansancio) turista `max` 0
+    cansancio = max 0 (cansancio turista `f` val)
 }
 
 modificarStress :: (Int -> Int -> Int) -> Int -> Excursion
 modificarStress f val turista = turista {
-    stress = (f val.stress) turista `max` 0
+    stress = (max 0.(`f` val).stress) turista
 }
+-- De todas maneras, me parece más expresivo hacerlo como en "modificarCansancio"
 
-porcentual :: Int -> Int -> Int
-porcentual porcentaje = (`div` 100).(* porcentaje)
+restarPorcentual :: Int -> Int -> Int
+restarPorcentual val porcentaje = val - val * porcentaje `div` 100
 
 agregarIdioma :: Idioma -> Excursion
 agregarIdioma idioma turista
@@ -113,7 +114,7 @@ paseoEnBarco MareaTranquila = caminar 10 . apreciarElementoDePaisaje "mar" . sal
 efectos propios de la excursión, reduce en un 10% su stress. -}
 
 hacerExcursion :: Turista -> Excursion -> Turista
-hacerExcursion turista excursion = (modificarStress porcentual 10.excursion) turista
+hacerExcursion turista excursion = (modificarStress restarPorcentual 10.excursion) turista
 
 {-Definir la función deltaExcursionSegun que a partir de un índice, un turista y una excursión determine cuánto 
 varió dicho índice después de que el turista haya hecho la excursión.  Llamamos índice a cualquier función que
@@ -125,3 +126,6 @@ type Indice = Turista -> Int
 
 deltaExcursionSegun :: Indice -> Turista -> Excursion -> Int
 deltaExcursionSegun indice turista excursion = deltaSegun indice (hacerExcursion turista excursion) turista
+
+esExcursionEducativa :: Turista -> Excursion -> Bool
+esExcursionEducativa turista excursion = 0 < deltaExcursionSegun (length.idiomas) turista excursion 
