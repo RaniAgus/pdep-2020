@@ -61,18 +61,19 @@ modificarCansancio :: (Int -> Int -> Int) -> Int -> Excursion
 modificarCansancio f val turista = turista {
     cansancio = max 0 (cansancio turista `f` val)
 }
+-- Se puede hacer: (max 0.(`f` val).cansancio) turista
+-- De todas maneras, me parece más expresivo hacerlo así
+-- Hice que sea infija porque lo más común es hacer sumas o restas
 
 modificarStress :: (Int -> Int -> Int) -> Int -> Excursion
 modificarStress f val turista = turista {
-    stress = (max 0.(`f` val).stress) turista
+    stress = max 0 (stress turista `f` val)
 }
 
 darCompania :: Excursion
 darCompania turista = turista {
     viajaSolo = False
 }
-
--- De todas maneras, me parece más expresivo hacerlo como en "modificarCansancio"
 
 restarPorcentual :: Int -> Int -> Int
 restarPorcentual val porcentaje = val - val * porcentaje `div` 100
@@ -115,12 +116,12 @@ intensidadCaminata = (`div` 4)
 con los tripulantes alemanes.
 -}
 
-data Marea = MareaFuerte | MareaModerada | MareaTranquila deriving (Show, Eq)
+data Marea = Fuerte | Moderada | Tranquila deriving (Show, Eq)
 
 paseoEnBarco :: Marea -> Excursion
-paseoEnBarco MareaFuerte = modificarStress (+) 6 . modificarCansancio (+) 10
-paseoEnBarco MareaModerada = id
-paseoEnBarco MareaTranquila = salirConGenteQueHablaUnIdioma Aleman . apreciarElementoDePaisaje "mar" . caminar 10
+paseoEnBarco Fuerte = modificarStress (+) 6 . modificarCansancio (+) 10
+paseoEnBarco Moderada = id
+paseoEnBarco Tranquila = salirConGenteQueHablaUnIdioma Aleman . apreciarElementoDePaisaje "mar" . caminar 10
 
 {- Hacer que un turista haga una excursión. Al hacer una excursión, el turista además de sufrir los
 efectos propios de la excursión, reduce en un 10% su stress. -}
@@ -155,6 +156,9 @@ esExcursionDesestresante excursion = esDesestresante . deltaExcursionSegun stres
 Un tour se compone por una serie de excursiones. -}
 type Tour = [Excursion]
 
+{-Completo: Comienza con una caminata de 20 minutos para apreciar una "cascada", luego se camina 40 minutos hasta una playa,
+ y finaliza con una salida con gente local que habla "melmacquiano"-}
+
 tourCompleto :: Tour
 tourCompleto = [
     caminar 20,
@@ -164,12 +168,21 @@ tourCompleto = [
     salirConGenteQueHablaUnIdioma Melmacquiano
     ]
 
+{-Lado B: Este tour consiste en ir al otro lado de la isla a hacer alguna excursión (de las existentes) que elija el turista. 
+Primero se hace un paseo en barco por aguas tranquilas (cercanas a la costa) hasta la otra punta de la isla, luego realiza 
+la excursión elegida y finalmente vuelve caminando hasta la otra punta, tardando 2 horas.-}
+
 tourLadoB :: Excursion -> Tour
 tourLadoB excursion = [
-    paseoEnBarco MareaTranquila,
+    paseoEnBarco Tranquila,
     excursion,
     caminar 120
     ]
+
+{-Isla Vecina: Se navega hacia una isla vecina para hacer una excursión. Esta excursión depende de cómo esté la marea al
+llegar a la otra isla: si está fuerte se aprecia un "lago", sino se va a una playa. En resumen, este tour implica hacer un
+paseo en barco hasta la isla vecina, luego llevar a cabo dicha excursión, y finalmente volver a hacer un paseo en barco de
+regreso. La marea es la misma en todo el camino.-}
 
 islaVecina :: Marea -> Tour
 islaVecina marea = [
@@ -179,12 +192,25 @@ islaVecina marea = [
     ]
 
 elegirExcursionSegunMarea :: Marea -> Excursion
-elegirExcursionSegunMarea MareaFuerte = apreciarElementoDePaisaje "lago"
+elegirExcursionSegunMarea Fuerte = apreciarElementoDePaisaje "lago"
 elegirExcursionSegunMarea _ = irAPlaya
 
-pagarTour :: Tour -> Excursion
-pagarTour tour = modificarStress (+) (length tour)
+{-Hacer que un turista haga un tour. Esto implica, primero un aumento del stress en tantas unidades como cantidad de
+excursiones tenga el tour, y luego realizar las excursiones en orden.-}
 
-hacerTour :: Tour -> Excursion
-hacerTour = undefined
---hacerTour tour turista = foldr hacerExcursion (pagarTour tour turista) tour
+hacerTour :: Tour -> Turista -> Turista
+hacerTour tour turista = foldl hacerExcursion turista (pagarTour:tour)
+    where pagarTour = modificarStress (+) (length tour)
+
+{-Dado un conjunto de tours, saber si existe alguno que sea convincente para un turista. Esto significa que el tour
+tiene alguna excursión desestresante la cual, además, deja al turista acompañado luego de realizarla.-}
+
+--hayAlgunTourConvincente :: Turista -> [Tour] -> Bool
+--hayAlgunTourConvincente turista = any . map (esTourConvincente turista)
+
+esTourConvincente :: Turista -> Tour -> Bool
+esTourConvincente turista = any (esExcursionConvincente turista)
+
+esExcursionConvincente :: Turista -> Excursion -> Bool
+esExcursionConvincente turista excursion = undefined
+    --(.esExcursionDesestresante excursion) 
