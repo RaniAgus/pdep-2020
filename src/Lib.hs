@@ -198,19 +198,48 @@ elegirExcursionSegunMarea _ = irAPlaya
 {-Hacer que un turista haga un tour. Esto implica, primero un aumento del stress en tantas unidades como cantidad de
 excursiones tenga el tour, y luego realizar las excursiones en orden.-}
 
-hacerTour :: Tour -> Turista -> Turista
+hacerTour :: Tour -> Excursion
 hacerTour tour turista = foldl hacerExcursion turista (pagarTour:tour)
     where pagarTour = modificarStress (+) (length tour)
 
 {-Dado un conjunto de tours, saber si existe alguno que sea convincente para un turista. Esto significa que el tour
 tiene alguna excursión desestresante la cual, además, deja al turista acompañado luego de realizarla.-}
 
---hayAlgunTourConvincente :: Turista -> [Tour] -> Bool
---hayAlgunTourConvincente turista = any . map (esTourConvincente turista)
-
 esTourConvincente :: Turista -> Tour -> Bool
 esTourConvincente turista = any (esExcursionConvincente turista)
 
 esExcursionConvincente :: Turista -> Excursion -> Bool
-esExcursionConvincente turista excursion = undefined
-    --(.esExcursionDesestresante excursion) 
+esExcursionConvincente turista excursion = esExcursionDesestresante excursion turista && dejaAcompañado excursion turista
+
+dejaAcompañado :: Excursion -> Turista -> Bool
+dejaAcompañado excursion = not.viajaSolo.(`hacerExcursion` excursion)
+
+{-Saber la efectividad de un tour para un conjunto de turistas. Esto se calcula como la sumatoria de la espiritualidad
+recibida de cada turista a quienes les resultó convincente el tour. 
+La espiritualidad que recibe un turista es la suma de las pérdidas de stress y cansancio tras el tour.-}
+
+espiritualidadRecibida :: Turista -> Tour -> Int
+espiritualidadRecibida turista tour = ( sum . map (espiritualidadSegun turista tour) ) [stress,cansancio]
+
+espiritualidadSegun :: Turista -> Tour -> Indice -> Int
+espiritualidadSegun turista tour indice = - deltaExcursionSegun indice (hacerTour tour) turista
+
+-- Implementar y contestar en modo de comentarios o pruebas por consola
+
+
+-- Construir un tour donde se visiten infinitas playas.
+infinitasPlayas :: Tour
+infinitasPlayas = repeat irAPlaya
+
+-- ¿Se puede saber si ese tour es convincente para Ana? ¿Y con Beto? Justificar.
+{-
+Para Ana se puede, porque la condición de corte para "any" es que el aplicar 
+. Esto es gracias a la evaluación diferida
+
+Para Beto no se podría, porque en ese mismo cas
+-}
+
+-- ¿Existe algún caso donde se pueda conocer la efectividad de este tour? Justificar.
+{-
+
+-}
