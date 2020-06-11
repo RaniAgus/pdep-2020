@@ -1,6 +1,6 @@
 {-
-Nombre: Apellido, Nombre
-Legajo: 999999-9
+Nombre: Ranieri, Agustín Ezequiel
+Legajo: 167755-0
 -}
 
 module Lib where
