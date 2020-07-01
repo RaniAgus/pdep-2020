@@ -72,4 +72,83 @@ limitrofes(australia,borneo).
 limitrofes(australia,chile).
 
 
-% SOLUCIÓN AQUÍ
+% PARTE A
+
+% 1. loLiquidaron/1 que se cumple para un jugador si no ocupa ningún país.
+loLiquidaron(Jugador):-
+    jugador(Jugador),
+    not(ocupa(_,Jugador,_)).
+
+% 2. ocupaContinente/2 que relaciona un jugador y un continente si el jugador ocupa todos los países del mismo.
+ocupaContinente(Jugador,Continente):-
+    jugador(Jugador),
+    continente(Continente),
+    forall(
+        estaEn(Continente,Pais),
+        ocupa(Pais,Jugador,_)
+    ).
+
+% 3. seAtrinchero/1 que se cumple para los jugadores que ocupan países en un único continente.
+seAtrinchero(Jugador):-
+    jugador(Jugador),
+    estaEnContinente(Jugador, Continente),
+    forall(
+        ocupa(Pais,Jugador,_),
+        estaEn(Continente,Pais)
+    ).
+
+estaEnContinente(Jugador, Continente):-
+    jugador(Jugador),
+    continente(Continente),
+    ocupa(Pais,Jugador,_),
+    estaEn(Continente,Pais).
+
+:- begin_tests(teg).
+
+test(jugador_sin_pais_lo_liquidaron, nondet) :-
+    loLiquidaron(blanco).
+test(jugador_con_pais_no_lo_liquidaron, fail) :-
+    loLiquidaron(magenta).
+
+test(jugador_con_todos_los_paises_ocupa_continente, nondet) :-
+    ocupaContinente(amarillo,americaDelNorte).
+test(jugador_sin_todos_los_paises_no_ocupa_continente, fail) :-
+    ocupaContinente(amarillo,asia).
+
+test(jugador_solo_en_un_continente_se_atrinchero, nondet) :-
+    seAtrinchero(magenta).
+test(jugador_en_varios_continentes_no_se_atrinchero, fail) :-
+    seAtrinchero(amarillo).
+
+:- end_tests(teg). 
+
+%% PARTE B
+
+/* 4. puedeConquistar/2 que relaciona un jugador y un continente si no ocupa dicho continente,
+pero todos los países del mismo que no tiene son limítrofes a alguno que ocupa y a su vez ese
+país no es de un aliado.
+
+puedeConquistar(Jugador,Continente):-
+    jugador(Jugador),
+    continente(Continente),
+    not(ocupaContinente(Jugador,Continente)),
+    forall(
+        estaEn(Continente,Pais),
+        puedeOcupar(Jugador,Pais)
+    ).
+
+puedeOcupar(Jugador,Pais):-
+    jugador(Jugador),
+    ocupa(Pais,Jugador,_).
+puedeOcupar(Jugador,Pais):-
+    jugador(Jugador),
+    not(paisAliado(Jugador,Pais)),
+    ocupa(OtroPais,Jugador,_),
+    sonLimitrofes(Pais,OtroPais).
+
+paisAliado(Jugador,Pais):-
+    jugador(Jugador),
+    aliados(Jugador,Aliado),
+    ocupa(Pais,Aliado,_).
+
+*/
