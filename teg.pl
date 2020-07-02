@@ -90,7 +90,6 @@ ocupaContinente(Jugador,Continente):-
 
 % 3. seAtrinchero/1 que se cumple para los jugadores que ocupan países en un único continente.
 seAtrinchero(Jugador):-
-    jugador(Jugador),
     estaEnContinente(Jugador, Continente),
     forall(
         ocupa(Pais,Jugador,_),
@@ -127,28 +126,86 @@ test(jugador_en_varios_continentes_no_se_atrinchero, fail) :-
 /* 4. puedeConquistar/2 que relaciona un jugador y un continente si no ocupa dicho continente,
 pero todos los países del mismo que no tiene son limítrofes a alguno que ocupa y a su vez ese
 país no es de un aliado.
+*/
 
 puedeConquistar(Jugador,Continente):-
     jugador(Jugador),
     continente(Continente),
     not(ocupaContinente(Jugador,Continente)),
     forall(
-        estaEn(Continente,Pais),
+        (   estaEn(Continente,Pais),  
+        not(ocupa(Pais,Jugador,_))  ),
         puedeOcupar(Jugador,Pais)
     ).
 
 puedeOcupar(Jugador,Pais):-
-    jugador(Jugador),
-    ocupa(Pais,Jugador,_).
-puedeOcupar(Jugador,Pais):-
-    jugador(Jugador),
     not(paisAliado(Jugador,Pais)),
-    ocupa(OtroPais,Jugador,_),
-    sonLimitrofes(Pais,OtroPais).
+    ocupaLimitrofe(Jugador,Pais).
 
 paisAliado(Jugador,Pais):-
-    jugador(Jugador),
     aliados(Jugador,Aliado),
     ocupa(Pais,Aliado,_).
 
+ocupaLimitrofe(Jugador,Pais):-
+    ocupa(OtroPais,Jugador,_),
+    sonLimitrofes(Pais,OtroPais).
+
+/*
+6. elQueTieneMasEjercitos/2 que relaciona un jugador y un país si se cumple que es en ese país 
+que hay más ejércitos que en los países del resto del mundo y a su vez ese país es ocupado por
+ese jugador. 
+*/
+
+elQueTieneMasEjercitos(Jugador,Pais):-
+    jugador(Jugador),
+    ocupa(Pais,Jugador,Tropas),
+    forall(
+        (   ocupa(OtroPais,Jugador,OtrasTropas),
+            OtroPais \= Pais                    ),
+        Tropas >= OtrasTropas
+    ).
+
+%% Se agrega lo siguiente a la base de conocimiento:
+
+objetivo(amarillo, ocuparContinente(asia)).
+objetivo(amarillo,ocuparPaises(2, americaDelSur)). 
+objetivo(blanco, destruirJugador(negro)). 
+objetivo(magenta, destruirJugador(blanco)). 
+objetivo(negro, ocuparContinente(oceania)).
+objetivo(negro,ocuparContinente(americaDelSur)). 
+
+/*
+cuantosPaisesOcupaEn(amarillo, americaDelSur, 1).
+cuantosPaisesOcupaEn(amarillo, americaDelNorte, 4).
+cuantosPaisesOcupaEn(amarillo, asia, 3).
+cuantosPaisesOcupaEn(amarillo, oceania, 0).
+cuantosPaisesOcupaEn(magenta, americaDelSur, 2).
+cuantosPaisesOcupaEn(magenta, americaDelNorte, 0).
+cuantosPaisesOcupaEn(magenta, asia, 0).
+cuantosPaisesOcupaEn(magenta, oceania, 0).
+cuantosPaisesOcupaEn(negro, americaDelSur, 1).
+cuantosPaisesOcupaEn(negro, americaDelNorte, 0).
+cuantosPaisesOcupaEn(negro, asia, 1).
+cuantosPaisesOcupaEn(negro, oceania, 4).
+*/
+
+cuantosPaisesOcupaEn(Jugador,Continente,Cantidad):-
+    findall(Pais,(ocupa(Pais,Jugador,_),estaEn(Continente,Pais)),Paises),
+    length(Paises, Cantidad).
+
+
+/* 
+7. cumpleObjetivos/1 que se cumple para un jugador si cumple todos los objetivos que tiene.
+Los objetivos se cumplen de la siguiente forma:
+- ocuparContinente: el jugador debe ocupar el continente indicado
+- ocuparPaises: el jugador debe ocupar al menos la cantidad de países indicada de ese continente
+- destruirJugador: se cumple si el jugador indicado ya no ocupa ningún país
+*/
+
+
+
+/*
+8. leInteresa/2 que relaciona un jugador y un continente, y es cierto cuando alguno de sus 
+objetivos implica hacer algo en ese continente (en el caso de destruirJugador, si el jugador 
+a destruir ocupa algún país del continente).
 */
