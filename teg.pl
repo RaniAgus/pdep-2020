@@ -117,28 +117,32 @@ estaEnContinente(Jugador,Continente):-
    |_|\___||___/\__|___/
 
 */
+:- begin_tests(lo_liquidaron).
 
-:- begin_tests(teg_parte_a).
-
-% 1. loLiquidaron/1
 test(jugador_sin_pais_lo_liquidaron, nondet) :-
     loLiquidaron(blanco).
 test(jugador_con_pais_no_lo_liquidaron, fail) :-
     loLiquidaron(magenta).
 
-% 2. ocupaContinente/2 
+:- end_tests(lo_liquidaron). 
+
+:- begin_tests(ocupa_continente).
+
 test(jugador_con_todos_los_paises_ocupa_continente, nondet) :-
     ocupaContinente(negro,oceania).
 test(jugador_sin_todos_los_paises_no_ocupa_continente, fail) :-
     ocupaContinente(amarillo,asia).
 
-% 3. seAtrinchero/1
+:- end_tests(ocupa_continente). 
+
+:- begin_tests(se_atrinchero).
+
 test(jugador_solo_en_un_continente_se_atrinchero, nondet) :-
     seAtrinchero(magenta).
 test(jugador_en_varios_continentes_no_se_atrinchero, fail) :-
     seAtrinchero(amarillo).
 
-:- end_tests(teg_parte_a). 
+:- end_tests(se_atrinchero). 
 
 /*
   ____            _         ____  
@@ -254,9 +258,7 @@ interesaContinente(Continente,ocuparPaises(_,Continente)).
 
 */
 
-:- begin_tests(teg_parte_b).
-
-% 4. puedeConquistar/2
+:- begin_tests(puede_conquistar).
 
 test(jugador_no_puede_conquistar_continente_ya_ocupado, fail) :-
     puedeConquistar(negro,oceania).
@@ -267,19 +269,18 @@ test(jugador_no_puede_conquistar_continente_sin_limitrofes, fail) :-
 test(jugador_puede_conquistar_continente, nondet) :-
     puedeConquistar(negro,asia).
 
-% 5. elQueTieneMasEjercitos/2 
+:- end_tests(puede_conquistar). 
+
+:- begin_tests(el_que_tiene_mas_ejercitos).
 
 test(pais_no_es_el_que_tiene_mas_ejercitos, fail) :-
     elQueTieneMasEjercitos(amarillo,brasil).
 test(pais_es_el_que_tiene_mas_ejercitos, nondet) :-
     elQueTieneMasEjercitos(amarillo,canada).
 
-/* 
-7. cumpleObjetivos/1
-- ocuparContinente (ocupaContinente/2)
-- destruirJugador (loLiquidaron/1)
-- ocuparPaises
-*/
+:- end_tests(el_que_tiene_mas_ejercitos). 
+
+:- begin_tests(cumple_objetivos).
 
 test(jugador_cumple_algun_objetivo_pero_no_todos, fail) :-
     cumpleObjetivos(negro).
@@ -291,7 +292,9 @@ test(no_se_cumple_ocupar_paises, fail) :-
 test(se_cumple_ocupar_paises, nondet) :-
     seCumple(magenta,ocuparPaises(2,americaDelSur)).
 
-% 8. leInteresa/2
+:- end_tests(cumple_objetivos). 
+
+:- begin_tests(le_interesa).
 
 test(continente_no_le_interesa_a_jugador_que_cumplio_objetivos, fail) :-
     leInteresa(magenta,_).
@@ -300,4 +303,4 @@ test(continente_no_le_interesa_a_jugador_sin_objetivos_alli, fail) :-
 test(continente_le_interesa_a_jugador, nondet) :-
     leInteresa(negro,americaDelSur).
 
-:- end_tests(teg_parte_b). 
+:- end_tests(le_interesa). 
