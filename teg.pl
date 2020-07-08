@@ -32,13 +32,13 @@ alianza(amarillo,magenta).
 
 %el numero son los ejercitos
 ocupa(argentina, magenta, 5).
-ocupa(chile, negro, 3).
+ocupa(chile, amarillo, 3). %ocupa(chile, negro, 3).
 ocupa(brasil, amarillo, 8).
 ocupa(uruguay, magenta, 5).
 ocupa(alaska, amarillo, 7).
 ocupa(yukon, amarillo, 1).
 ocupa(canada, amarillo, 10).
-ocupa(oregon, amarillo, 5).
+ocupa(oregon, negro, 5). %ocupa(oregon, amarillo, 5).
 ocupa(kamtchatka, negro, 6).
 ocupa(china, amarillo, 2).
 ocupa(siberia, amarillo, 5).
@@ -233,7 +233,7 @@ test(jugador_con_pais_no_lo_liquidaron, fail) :-
 
 % 2. ocupaContinente/2 
 test(jugador_con_todos_los_paises_ocupa_continente, nondet) :-
-    ocupaContinente(amarillo,americaDelNorte).
+    ocupaContinente(negro,oceania).
 test(jugador_sin_todos_los_paises_no_ocupa_continente, fail) :-
     ocupaContinente(amarillo,asia).
 
@@ -242,5 +242,49 @@ test(jugador_solo_en_un_continente_se_atrinchero, nondet) :-
     seAtrinchero(magenta).
 test(jugador_en_varios_continentes_no_se_atrinchero, fail) :-
     seAtrinchero(amarillo).
+
+% 4. puedeConquistar/2
+
+test(jugador_no_puede_conquistar_continente_ya_ocupado, fail) :-
+    puedeConquistar(negro,oceania).
+test(jugador_no_puede_conquistar_paises_aliados, fail) :-
+    puedeConquistar(magenta,americaDelSur).
+test(jugador_no_puede_conquistar_continente_sin_limitrofes, fail) :-
+    puedeConquistar(negro,americaDelNorte).
+test(jugador_puede_conquistar_continente, nondet) :-
+    puedeConquistar(negro,asia).
+
+% 5. elQueTieneMasEjercitos/2 
+
+test(pais_no_es_el_que_tiene_mas_ejercitos, fail) :-
+    elQueTieneMasEjercitos(amarillo,brasil).
+test(pais_es_el_que_tiene_mas_ejercitos, nondet) :-
+    elQueTieneMasEjercitos(amarillo,canada).
+
+/* 
+7. cumpleObjetivos/1
+- ocuparContinente (ocupaContinente/2)
+- destruirJugador (loLiquidaron/1)
+- ocuparPaises
+*/
+
+test(jugador_cumple_algun_objetivo_pero_no_todos, fail) :-
+    cumpleObjetivos(negro).
+test(jugador_cumple_objetivos, nondet) :-
+    cumpleObjetivos(magenta).
+
+test(no_se_cumple_ocupar_paises, fail) :-
+    seCumple(magenta,ocuparPaises(3,americaDelSur)).
+test(se_cumple_ocupar_paises, nondet) :-
+    seCumple(magenta,ocuparPaises(2,americaDelSur)).
+
+% 8. leInteresa/2
+
+test(continente_no_le_interesa_a_jugador_que_cumplio_objetivos, fail) :-
+    leInteresa(magenta,_).
+test(continente_no_le_interesa_a_jugador_sin_objetivos_alli, fail) :-
+    leInteresa(negro,asia).
+test(continente_le_interesa_a_jugador, nondet) :-
+    leInteresa(negro,americaDelSur).
 
 :- end_tests(teg). 
