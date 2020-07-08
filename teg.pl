@@ -110,6 +110,37 @@ estaEnContinente(Jugador,Continente):-
     estaEn(Continente,Pais).
 
 /*
+  _____         _       
+ |_   _|__  ___| |_ ___ 
+   | |/ _ \/ __| __/ __|
+   | |  __/\__ \ |_\__ \
+   |_|\___||___/\__|___/
+
+*/
+
+:- begin_tests(teg_parte_a).
+
+% 1. loLiquidaron/1
+test(jugador_sin_pais_lo_liquidaron, nondet) :-
+    loLiquidaron(blanco).
+test(jugador_con_pais_no_lo_liquidaron, fail) :-
+    loLiquidaron(magenta).
+
+% 2. ocupaContinente/2 
+test(jugador_con_todos_los_paises_ocupa_continente, nondet) :-
+    ocupaContinente(negro,oceania).
+test(jugador_sin_todos_los_paises_no_ocupa_continente, fail) :-
+    ocupaContinente(amarillo,asia).
+
+% 3. seAtrinchero/1
+test(jugador_solo_en_un_continente_se_atrinchero, nondet) :-
+    seAtrinchero(magenta).
+test(jugador_en_varios_continentes_no_se_atrinchero, fail) :-
+    seAtrinchero(amarillo).
+
+:- end_tests(teg_parte_a). 
+
+/*
   ____            _         ____  
  |  _ \ __ _ _ __| |_ ___  | __ ) 
  | |_) / _` | '__| __/ _ \ |  _ \ 
@@ -223,25 +254,7 @@ interesaContinente(Continente,ocuparPaises(_,Continente)).
 
 */
 
-:- begin_tests(teg).
-
-% 1. loLiquidaron/1
-test(jugador_sin_pais_lo_liquidaron, nondet) :-
-    loLiquidaron(blanco).
-test(jugador_con_pais_no_lo_liquidaron, fail) :-
-    loLiquidaron(magenta).
-
-% 2. ocupaContinente/2 
-test(jugador_con_todos_los_paises_ocupa_continente, nondet) :-
-    ocupaContinente(negro,oceania).
-test(jugador_sin_todos_los_paises_no_ocupa_continente, fail) :-
-    ocupaContinente(amarillo,asia).
-
-% 3. seAtrinchero/1
-test(jugador_solo_en_un_continente_se_atrinchero, nondet) :-
-    seAtrinchero(magenta).
-test(jugador_en_varios_continentes_no_se_atrinchero, fail) :-
-    seAtrinchero(amarillo).
+:- begin_tests(teg_parte_b).
 
 % 4. puedeConquistar/2
 
@@ -287,4 +300,4 @@ test(continente_no_le_interesa_a_jugador_sin_objetivos_alli, fail) :-
 test(continente_le_interesa_a_jugador, nondet) :-
     leInteresa(negro,americaDelSur).
 
-:- end_tests(teg). 
+:- end_tests(teg_parte_b). 
