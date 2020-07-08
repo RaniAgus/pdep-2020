@@ -16,10 +16,10 @@ estaEn(asia, kamtchatka).
 estaEn(asia, china).
 estaEn(asia, siberia).
 estaEn(asia, japon).
-estaEn(oceania,australia).
-estaEn(oceania,sumatra).
-estaEn(oceania,java).
-estaEn(oceania,borneo).
+estaEn(oceania, australia).
+estaEn(oceania, sumatra).
+estaEn(oceania, java).
+estaEn(oceania, borneo).
 
 jugador(amarillo).
 jugador(magenta).
@@ -52,27 +52,34 @@ ocupa(borneo, negro, 1).
 sonLimitrofes(X, Y) :- limitrofes(X, Y).
 sonLimitrofes(X, Y) :- limitrofes(Y, X).
 
-limitrofes(argentina,brasil).
-limitrofes(argentina,chile).
-limitrofes(argentina,uruguay).
-limitrofes(uruguay,brasil).
-limitrofes(alaska,kamtchatka).
-limitrofes(alaska,yukon).
-limitrofes(canada,yukon).
-limitrofes(alaska,oregon).
-limitrofes(canada,oregon).
-limitrofes(siberia,kamtchatka).
-limitrofes(siberia,china).
-limitrofes(china,kamtchatka).
-limitrofes(japon,china).
-limitrofes(japon,kamtchatka).
-limitrofes(australia,sumatra).
-limitrofes(australia,java).
-limitrofes(australia,borneo).
-limitrofes(australia,chile).
+limitrofes(argentina, brasil).
+limitrofes(argentina, chile).
+limitrofes(argentina, uruguay).
+limitrofes(uruguay, brasil).
+limitrofes(alaska, kamtchatka).
+limitrofes(alaska, yukon).
+limitrofes(canada, yukon).
+limitrofes(alaska, oregon).
+limitrofes(canada, oregon).
+limitrofes(siberia, kamtchatka).
+limitrofes(siberia, china).
+limitrofes(china, kamtchatka).
+limitrofes(japon, china).
+limitrofes(japon, kamtchatka).
+limitrofes(australia, sumatra).
+limitrofes(australia, java).
+limitrofes(australia, borneo).
+limitrofes(australia, chile).
 
 
-% PARTE A
+/*
+  ____            _            _    
+ |  _ \ __ _ _ __| |_ ___     / \   
+ | |_) / _` | '__| __/ _ \   / _ \  
+ |  __/ (_| | |  | ||  __/  / ___ \ 
+ |_|   \__,_|_|   \__\___| /_/   \_\
+
+*/
 
 % 1. loLiquidaron/1 que se cumple para un jugador si no ocupa ningún país.
 loLiquidaron(Jugador):-
@@ -90,38 +97,26 @@ ocupaContinente(Jugador,Continente):-
 
 % 3. seAtrinchero/1 que se cumple para los jugadores que ocupan países en un único continente.
 seAtrinchero(Jugador):-
-    estaEnContinente(Jugador, Continente),
+    estaEnContinente(Jugador,Continente),
     forall(
         ocupa(Pais,Jugador,_),
         estaEn(Continente,Pais)
     ).
 
-estaEnContinente(Jugador, Continente):-
+estaEnContinente(Jugador,Continente):-
     jugador(Jugador),
     continente(Continente),
     ocupa(Pais,Jugador,_),
     estaEn(Continente,Pais).
 
-:- begin_tests(teg).
-
-test(jugador_sin_pais_lo_liquidaron, nondet) :-
-    loLiquidaron(blanco).
-test(jugador_con_pais_no_lo_liquidaron, fail) :-
-    loLiquidaron(magenta).
-
-test(jugador_con_todos_los_paises_ocupa_continente, nondet) :-
-    ocupaContinente(amarillo,americaDelNorte).
-test(jugador_sin_todos_los_paises_no_ocupa_continente, fail) :-
-    ocupaContinente(amarillo,asia).
-
-test(jugador_solo_en_un_continente_se_atrinchero, nondet) :-
-    seAtrinchero(magenta).
-test(jugador_en_varios_continentes_no_se_atrinchero, fail) :-
-    seAtrinchero(amarillo).
-
-:- end_tests(teg). 
-
-%% PARTE B
+/*
+  ____            _         ____  
+ |  _ \ __ _ _ __| |_ ___  | __ ) 
+ | |_) / _` | '__| __/ _ \ |  _ \ 
+ |  __/ (_| | |  | ||  __/ | |_) |
+ |_|   \__,_|_|   \__\___| |____/ 
+                                  
+*/
 
 /* 4. puedeConquistar/2 que relaciona un jugador y un continente si no ocupa dicho continente,
 pero todos los países del mismo que no tiene son limítrofes a alguno que ocupa y a su vez ese
@@ -151,7 +146,7 @@ ocupaLimitrofe(Jugador,Pais):-
     sonLimitrofes(Pais,OtroPais).
 
 /*
-6. elQueTieneMasEjercitos/2 que relaciona un jugador y un país si se cumple que es en ese país 
+5. elQueTieneMasEjercitos/2 que relaciona un jugador y un país si se cumple que es en ese país 
 que hay más ejércitos que en los países del resto del mundo y a su vez ese país es ocupado por
 ese jugador. 
 */
@@ -165,34 +160,20 @@ elQueTieneMasEjercitos(Jugador,Pais):-
         Tropas >= OtrasTropas
     ).
 
-%% Se agrega lo siguiente a la base de conocimiento:
+%% 6. Se agrega lo siguiente a la base de conocimiento:
 
 objetivo(amarillo, ocuparContinente(asia)).
-objetivo(amarillo,ocuparPaises(2, americaDelSur)). 
+objetivo(amarillo, ocuparPaises(2,americaDelSur)). 
 objetivo(blanco, destruirJugador(negro)). 
 objetivo(magenta, destruirJugador(blanco)). 
 objetivo(negro, ocuparContinente(oceania)).
-objetivo(negro,ocuparContinente(americaDelSur)). 
-
-/*
-cuantosPaisesOcupaEn(amarillo, americaDelSur, 1).
-cuantosPaisesOcupaEn(amarillo, americaDelNorte, 4).
-cuantosPaisesOcupaEn(amarillo, asia, 3).
-cuantosPaisesOcupaEn(amarillo, oceania, 0).
-cuantosPaisesOcupaEn(magenta, americaDelSur, 2).
-cuantosPaisesOcupaEn(magenta, americaDelNorte, 0).
-cuantosPaisesOcupaEn(magenta, asia, 0).
-cuantosPaisesOcupaEn(magenta, oceania, 0).
-cuantosPaisesOcupaEn(negro, americaDelSur, 1).
-cuantosPaisesOcupaEn(negro, americaDelNorte, 0).
-cuantosPaisesOcupaEn(negro, asia, 1).
-cuantosPaisesOcupaEn(negro, oceania, 4).
-*/
+objetivo(negro, ocuparContinente(americaDelSur)). 
 
 cuantosPaisesOcupaEn(Jugador,Continente,Cantidad):-
+    jugador(Jugador),
+    continente(Continente),
     findall(Pais,(ocupa(Pais,Jugador,_),estaEn(Continente,Pais)),Paises),
-    length(Paises, Cantidad).
-
+    length(Paises,Cantidad).
 
 /* 
 7. cumpleObjetivos/1 que se cumple para un jugador si cumple todos los objetivos que tiene.
@@ -202,10 +183,64 @@ Los objetivos se cumplen de la siguiente forma:
 - destruirJugador: se cumple si el jugador indicado ya no ocupa ningún país
 */
 
+cumpleObjetivos(Jugador):-
+    jugador(Jugador),
+    forall(objetivo(Jugador,Objetivo), seCumple(Jugador,Objetivo)).
 
+seCumple(Jugador,ocuparContinente(Continente)):-
+    ocupaContinente(Jugador, Continente).
+seCumple(_,destruirJugador(Jugador)):-
+    loLiquidaron(Jugador).
+seCumple(Jugador,ocuparPaises(Cantidad,Continente)):-
+%    objetivo(Jugador,ocuparPaises(Cantidad,Continente)),
+    cuantosPaisesOcupaEn(Jugador,Continente,Ocupados),
+    Ocupados >= Cantidad.
 
 /*
 8. leInteresa/2 que relaciona un jugador y un continente, y es cierto cuando alguno de sus 
 objetivos implica hacer algo en ese continente (en el caso de destruirJugador, si el jugador 
 a destruir ocupa algún país del continente).
 */
+
+leInteresa(Jugador,Continente):-
+    continente(Continente),
+    objetivo(Jugador,Objetivo),
+    not(seCumple(Jugador,Objetivo)),
+    interesaContinente(Continente,Objetivo).
+
+interesaContinente(Continente,ocuparContinente(Continente)).
+interesaContinente(Continente,destruirJugador(Jugador)):-
+    cuantosPaisesOcupaEn(Jugador,Continente,Cantidad),
+    Cantidad > 0.
+interesaContinente(Continente,ocuparPaises(_,Continente)).
+
+/*
+  _____         _       
+ |_   _|__  ___| |_ ___ 
+   | |/ _ \/ __| __/ __|
+   | |  __/\__ \ |_\__ \
+   |_|\___||___/\__|___/
+
+*/
+
+:- begin_tests(teg).
+
+% 1. loLiquidaron/1
+test(jugador_sin_pais_lo_liquidaron, nondet) :-
+    loLiquidaron(blanco).
+test(jugador_con_pais_no_lo_liquidaron, fail) :-
+    loLiquidaron(magenta).
+
+% 2. ocupaContinente/2 
+test(jugador_con_todos_los_paises_ocupa_continente, nondet) :-
+    ocupaContinente(amarillo,americaDelNorte).
+test(jugador_sin_todos_los_paises_no_ocupa_continente, fail) :-
+    ocupaContinente(amarillo,asia).
+
+% 3. seAtrinchero/1
+test(jugador_solo_en_un_continente_se_atrinchero, nondet) :-
+    seAtrinchero(magenta).
+test(jugador_en_varios_continentes_no_se_atrinchero, fail) :-
+    seAtrinchero(amarillo).
+
+:- end_tests(teg). 
