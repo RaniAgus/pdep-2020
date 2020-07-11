@@ -97,6 +97,7 @@ ocupaContinente(Jugador,Continente):-
 
 % 3. seAtrinchero/1 que se cumple para los jugadores que ocupan países en un único continente.
 seAtrinchero(Jugador):-
+    jugador(Jugador),
     estaEnContinente(Jugador,Continente),
     forall(
         ocupa(Pais,Jugador,_),
@@ -104,10 +105,9 @@ seAtrinchero(Jugador):-
     ).
 
 estaEnContinente(Jugador,Continente):-
-    jugador(Jugador),
     continente(Continente),
-    ocupa(Pais,Jugador,_),
-    estaEn(Continente,Pais).
+    estaEn(Continente,Pais),
+    ocupa(Pais,Jugador,_).
 
 /*
   _____         _       
@@ -124,6 +124,10 @@ estaEnContinente(Jugador,Continente):-
         loLiquidaron(blanco).
     test(jugador_con_pais_no_lo_liquidaron, fail) :-
         loLiquidaron(magenta).
+    test(lo_liquidaron_es_inversible,
+        set(Jugadores == [blanco])    
+    ):-
+        loLiquidaron(Jugadores).
 
 :- end_tests(lo_liquidaron). 
 
@@ -134,6 +138,14 @@ estaEnContinente(Jugador,Continente):-
         ocupaContinente(negro,oceania).
     test(jugador_sin_todos_los_paises_no_ocupa_continente, fail) :-
         ocupaContinente(amarillo,asia).
+    test(ocupa_continente_es_inversible_para_jugadores,
+        set(Jugadores == [negro])
+    ) :-
+    ocupaContinente(Jugadores,oceania).
+    test(ocupa_continente_es_inversible_para_continentes,
+        set(Continentes == [oceania])
+    ) :-
+        ocupaContinente(negro,Continentes).
 
 :- end_tests(ocupa_continente). 
 
@@ -144,7 +156,11 @@ estaEnContinente(Jugador,Continente):-
         seAtrinchero(magenta).
     test(jugador_en_varios_continentes_no_se_atrinchero, fail) :-
         seAtrinchero(amarillo).
-
+    test(se_atrinchero_es_inversible,
+        set(Jugadores == [magenta])    
+    ):-
+        seAtrinchero(Jugadores).
+    
 :- end_tests(se_atrinchero). 
 
 /*
@@ -166,8 +182,7 @@ puedeConquistar(Jugador,Continente):-
     continente(Continente),
     not(ocupaContinente(Jugador,Continente)),
     forall(
-        (   estaEn(Continente,Pais),  
-        not(ocupa(Pais,Jugador,_))  ),
+        (   estaEn(Continente,Pais), not(ocupa(Pais,Jugador,_))  ),
         puedeOcupar(Jugador,Pais)
     ).
 
@@ -193,8 +208,7 @@ elQueTieneMasEjercitos(Jugador,Pais):-
     jugador(Jugador),
     ocupa(Pais,Jugador,Tropas),
     forall(
-        (   ocupa(OtroPais,Jugador,OtrasTropas),
-            OtroPais \= Pais                    ),
+        (  ocupa(OtroPais,Jugador,OtrasTropas), OtroPais \= Pais  ),
         Tropas >= OtrasTropas
     ).
 
@@ -210,7 +224,11 @@ objetivo(negro, ocuparContinente(americaDelSur)).
 cuantosPaisesOcupaEn(Jugador,Continente,Cantidad):-
     jugador(Jugador),
     continente(Continente),
-    findall(Pais,(ocupa(Pais,Jugador,_),estaEn(Continente,Pais)),Paises),
+    findall(
+        Pais,
+        (  ocupa(Pais,Jugador,_), estaEn(Continente,Pais)  ),
+        Paises
+    ),
     length(Paises,Cantidad).
 
 /* 
@@ -225,13 +243,13 @@ cumpleObjetivos(Jugador):-
     jugador(Jugador),
     forall(objetivo(Jugador,Objetivo), seCumple(Jugador,Objetivo)).
 
+seCumple(Jugador,ocuparPaises(Cantidad,Continente)):-
+    cuantosPaisesOcupaEn(Jugador,Continente,Ocupados),
+    Ocupados >= Cantidad.
 seCumple(Jugador,ocuparContinente(Continente)):-
     ocupaContinente(Jugador, Continente).
 seCumple(_,destruirJugador(Jugador)):-
     loLiquidaron(Jugador).
-seCumple(Jugador,ocuparPaises(Cantidad,Continente)):-
-    cuantosPaisesOcupaEn(Jugador,Continente,Ocupados),
-    Ocupados >= Cantidad.
 
 /*
 8. leInteresa/2 que relaciona un jugador y un continente, y es cierto cuando alguno de sus 
@@ -245,10 +263,10 @@ leInteresa(Jugador,Continente):-
     not(seCumple(Jugador,Objetivo)),
     interesaContinente(Continente,Objetivo).
 
-interesaContinente(Continente,ocuparContinente(Continente)).
 interesaContinente(Continente,destruirJugador(Jugador)):-
     cuantosPaisesOcupaEn(Jugador,Continente,Cantidad),
     Cantidad > 0.
+interesaContinente(Continente,ocuparContinente(Continente)).
 interesaContinente(Continente,ocuparPaises(_,Continente)).
 
 /*
@@ -270,6 +288,14 @@ interesaContinente(Continente,ocuparPaises(_,Continente)).
         puedeConquistar(negro,americaDelSur).
     test(jugador_puede_conquistar_continente, nondet) :-
         puedeConquistar(negro,asia).
+    test(puede_conquistar_es_inversible_para_jugadores,
+        set(Jugadores == [amarillo,negro])    
+    ):-
+        puedeConquistar(Jugadores,asia).
+    test(puede_conquistar_es_inversible_para_continentes,
+        set(Continentes == [asia])    
+    ):-
+        puedeConquistar(amarillo,Continentes).
 
 :- end_tests(puede_conquistar). 
 
@@ -280,6 +306,11 @@ interesaContinente(Continente,ocuparPaises(_,Continente)).
         elQueTieneMasEjercitos(amarillo,brasil).
     test(pais_es_el_que_tiene_mas_ejercitos, nondet) :-
         elQueTieneMasEjercitos(amarillo,canada).
+    test(el_que_tiene_mas_ejercitos_es_inversible_para_paises,
+        set(Paises == [argentina,uruguay])    
+    ):-
+        elQueTieneMasEjercitos(magenta,Paises).
+
 
 :- end_tests(el_que_tiene_mas_ejercitos). 
 
@@ -290,6 +321,10 @@ interesaContinente(Continente,ocuparPaises(_,Continente)).
         cumpleObjetivos(negro).
     test(jugador_cumple_objetivos, nondet) :-
         cumpleObjetivos(magenta).
+    test(cumple_objetivos_es_inversible,
+        set(Jugadores == [magenta])    
+    ):-
+        cumpleObjetivos(Jugadores).
 
     test(no_se_cumple_ocupar_paises, fail) :-
         seCumple(magenta,ocuparPaises(3,americaDelSur)).
@@ -307,5 +342,13 @@ interesaContinente(Continente,ocuparPaises(_,Continente)).
         leInteresa(negro,asia).
     test(continente_le_interesa_a_jugador, nondet) :-
         leInteresa(negro,americaDelSur).
-
+    test(le_interesa_es_inversible_para_jugadores,
+        set(Jugadores == [amarillo,blanco,negro])    
+    ):-
+        leInteresa(Jugadores,americaDelSur).
+    test(le_interesa_es_inversible_para_continentes,
+        set(Continentes == [americaDelSur,asia])    
+    ):-
+        leInteresa(amarillo,Continentes).
+    
 :- end_tests(le_interesa). 
