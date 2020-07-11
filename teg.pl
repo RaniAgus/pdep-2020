@@ -138,14 +138,10 @@ estaEnContinente(Jugador,Continente):-
         ocupaContinente(negro,oceania).
     test(jugador_sin_todos_los_paises_no_ocupa_continente, fail) :-
         ocupaContinente(amarillo,asia).
-    test(ocupa_continente_es_inversible_para_jugadores,
-        set(Jugadores == [negro])
+    test(ocupa_continente_es_inversible,
+        set((Jugadores,Continentes) == [(negro,oceania),(amarillo,americaDelNorte)])
     ) :-
-    ocupaContinente(Jugadores,oceania).
-    test(ocupa_continente_es_inversible_para_continentes,
-        set(Continentes == [oceania])
-    ) :-
-        ocupaContinente(negro,Continentes).
+    ocupaContinente(Jugadores,Continentes).
 
 :- end_tests(ocupa_continente). 
 
@@ -288,14 +284,11 @@ interesaContinente(Continente,ocuparPaises(_,Continente)).
         puedeConquistar(negro,americaDelSur).
     test(jugador_puede_conquistar_continente, nondet) :-
         puedeConquistar(negro,asia).
-    test(puede_conquistar_es_inversible_para_jugadores,
-        set(Jugadores == [amarillo,negro])    
+    test(puede_conquistar_es_inversible,
+        set((Jugadores,Continentes) == [(amarillo,asia),(negro,asia)])    
     ):-
-        puedeConquistar(Jugadores,asia).
-    test(puede_conquistar_es_inversible_para_continentes,
-        set(Continentes == [asia])    
-    ):-
-        puedeConquistar(amarillo,Continentes).
+        puedeConquistar(Jugadores,Continentes).
+
 
 :- end_tests(puede_conquistar). 
 
@@ -307,9 +300,14 @@ interesaContinente(Continente,ocuparPaises(_,Continente)).
     test(pais_es_el_que_tiene_mas_ejercitos, nondet) :-
         elQueTieneMasEjercitos(amarillo,canada).
     test(el_que_tiene_mas_ejercitos_es_inversible_para_paises,
-        set(Paises == [argentina,uruguay])    
+        set((Jugadores,Paises) == [
+            (magenta,argentina),
+            (magenta,uruguay),
+            (amarillo,canada),
+            (negro,australia)
+        ])    
     ):-
-        elQueTieneMasEjercitos(magenta,Paises).
+        elQueTieneMasEjercitos(Jugadores,Paises).
 
 
 :- end_tests(el_que_tiene_mas_ejercitos). 
@@ -343,12 +341,16 @@ interesaContinente(Continente,ocuparPaises(_,Continente)).
     test(continente_le_interesa_a_jugador, nondet) :-
         leInteresa(negro,americaDelSur).
     test(le_interesa_es_inversible_para_jugadores,
-        set(Jugadores == [amarillo,blanco,negro])    
+        set((Jugadores,Continentes) == [
+            (amarillo,americaDelSur),
+            (blanco,americaDelSur),
+            (negro,americaDelSur),
+            (amarillo,asia),
+            (blanco,asia),
+            (blanco,oceania)
+        ])    
     ):-
-        leInteresa(Jugadores,americaDelSur).
-    test(le_interesa_es_inversible_para_continentes,
-        set(Continentes == [americaDelSur,asia])    
-    ):-
-        leInteresa(amarillo,Continentes).
+        leInteresa(Jugadores,Continentes).
+
     
 :- end_tests(le_interesa). 
