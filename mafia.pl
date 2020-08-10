@@ -41,23 +41,20 @@ Explicar qué conceptos permiten resolver este requerimiento sin la necesidad de
 
 
 /* c. Casos de prueba */
+:- begin_tests(rondas_tests).
 % Al ser eliminado, la persona pierde en esa ronda (por ejemplo nick pierde en la primera ronda).
-
 
 % Un atacado por la mafia pierde si nadie lo salva (por ejemplo homero en la cuarta ronda).
 
-
 % Un atacado por la mafia no pierde si alguien lo salva (por ejemplo lisa en la primer ronda).
-
 
 % A pesar de ser salvado, si te eliminan perdés (por ejemplo rafa en la segunda ronda).
 
-
 % Si nunca fue eliminada ni atacada, la persona no perdió en ninguna ronda (por ejemplo maggie).
-
 
 % En una ronda puede perder más de una persona (por ejemplo en la quinta ronda pierden bart y lisa).
 
+:- end_tests(rondas_tests).
 
 /*********************************************************************************************
 2) GANADOR (integrante 1)
@@ -85,15 +82,14 @@ Explicar cómo se relaciona el concepto de inversibilidad con la solución. */
 
 
 /* c. Casos de prueba. Nota: ¡Los nombres de los tests deben representar su clase de equivalencia! */
-
+begin_tests(ganador_tests).
 % Los contrincantes de tony (por ser de la mafia) son homero, burns, nick, hibbert, lisa y rafa.
-
 
 % Los contrincantes de homero (por no ser de la mafia) son bart, tony y maggie.
 
-
 % La única ganadora es maggie.
 
+end_tests(ganador_tests).
 
 /***********************************************************************************************
 3. IMBATIBLES (integrante 2)
@@ -113,6 +109,7 @@ Explicar cómo se relacionan los conceptos de inversibilidad y universo cerrado 
 
 
 /* b. Casos de prueba. Nota: ¡Los nombres de los tests deben representar su clase de equivalencia!*/
+begin_tests(imbatibles_tests).
 % hibbert es un médico imbatible.
 
 % nick no es un médico imbatible.
@@ -122,6 +119,8 @@ Explicar cómo se relacionan los conceptos de inversibilidad y universo cerrado 
 % rafa no es un detective imbatible.
 
 % Homero (por ser civil) nunca es imbatible.
+
+end_tests(imbatibles_tests).
 
 /*************************************************************************************************
 4) MÁS INFO (dividido - evitar repetir lógica)
@@ -153,32 +152,31 @@ es 3 veces la cantidad de civiles con los que empezó la partida. */
 /* Casos de prueba Nota: ¡Los nombres de los tests deben representar su clase de equivalencia!*/
 
 % PUNTO A
+begin_tests(sigue_en_juego_tests).
 % rafa sigue jugando en la segunda ronda, por más que pierda luego.
-
 
 % nick no sigue jugando en la cuarta ronda, porque perdió antes.
 
-
 % Las personas que llegan hasta la última ronda son maggie y burns.
-
 
 % Todas las personas en juego juegan la primera ronda.
 
+end_tests(sigue_en_juego_tests).
 
 % PUNTO B
+begin_tests(es_interesante_tests).
 % La primera ronda es interesante por tener mucha gente.
-
 
 % La última ronda es interesante porque quedan pocas personas.
 
-
 % La tercera ronda no es interesante por tener 7 personas en juego.
-
 
 % Las rondas interesantes son la primera, la segunda y la última.
 
+end_tests(es_interesante_tests).
 
 % PUNTO C
+begin_tests(vivio_el_peligro_tests).
 % homero vivió el peligro por ser civil y haber jugado la cuarta ronda.
 
 
@@ -193,7 +191,7 @@ es 3 veces la cantidad de civiles con los que empezó la partida. */
 
 % Las personas que vivieron el peligro son homero, burns y lisa.
 
-
+end_tests(vivio_el_peligro_tests).
 
 /**********************************************************************************************
 5) ESTRATEGIA (ambos integrantes)
