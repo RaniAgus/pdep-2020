@@ -29,30 +29,71 @@ Modelar las acciones anteriores de forma tal que se pueda: */
 
 /* a. Expandir la base de conocimiento agregando información de las acciones que se produjeron 
 en cada ronda. */
+accion(1,atacar(lisa)).
+accion(1,salvar(nick,nick)).
+accion(1,salvar(hibbert,lisa)).
+accion(1,investigar(lisa,tony)).
+accion(1,investigar(rafa,lisa)).
+accion(1,eliminar(nick)).
 
+accion(2,atacar(rafa)).
+accion(2,salvar(hibbert,rafa)).
+accion(2,investigar(lisa,bart)).
+accion(2,investigar(rafa,maggie)).
+accion(2,eliminar(rafa)).
 
+accion(3,atacar(lisa)).
+accion(3,salvar(hibbert,lisa)).
+accion(3,investigar(lisa,burns)).
+accion(3,eliminar(hibbert)).
+
+accion(4,atacar(homero)).
+accion(4,investigar(lisa,homero)).
+accion(4,eliminar(tony)).
+
+accion(5,atacar(lisa)).
+accion(5,investigar(lisa,maggie)).
+accion(5,eliminar(bart)).
+
+accion(6,atacar(burns)).
 
 /* b. Deducir las personas que perdieron en una determinada ronda. O sea, aquellas que fueron:
 - eliminadas en dicho ronda, ó 
 - atacadas por la mafia, salvo que algún médico haya salvado a la persona, en dicha ronda.
 
 Explicar qué conceptos permiten resolver este requerimiento sin la necesidad de armar listas. */
+perdio(Ronda, Persona):-
+    rol(Persona,_),
+    loEliminaron(Ronda,Persona).
 
-
+loEliminaron(Ronda,Persona):-
+    accion(Ronda,eliminar(Persona)).
+loEliminaron(Ronda,Persona):-
+    accion(Ronda,atacar(Persona)),
+    not(accion(Ronda,salvar(_,Persona))).
 
 /* c. Casos de prueba */
 :- begin_tests(rondas_tests).
 % Al ser eliminado, la persona pierde en esa ronda (por ejemplo nick pierde en la primera ronda).
-
+test(jugador_eliminado_pierde_en_esa_ronda, nondet):-
+    perdio(1,nick).
 % Un atacado por la mafia pierde si nadie lo salva (por ejemplo homero en la cuarta ronda).
-
+test(jugador_atacado_pierde_si_no_lo_salvan, nondet):-
+    perdio(4,homero).
 % Un atacado por la mafia no pierde si alguien lo salva (por ejemplo lisa en la primer ronda).
-
+test(jugador_atacado_no_pierde_si_lo_salvan, fail):-
+    perdio(1,lisa).
 % A pesar de ser salvado, si te eliminan perdés (por ejemplo rafa en la segunda ronda).
-
+test(jugador_salvado_pierde_si_lo_eliminan, nondet):-
+    perdio(2,rafa).
 % Si nunca fue eliminada ni atacada, la persona no perdió en ninguna ronda (por ejemplo maggie).
-
+test(jugador_nunca_atacado_no_pierde, fail):-
+    perdio(_,maggie).
 % En una ronda puede perder más de una persona (por ejemplo en la quinta ronda pierden bart y lisa).
+test(pueden_perder_mas_de_uno_en_una_ronda,
+    set( Personas == [bart,lisa] )
+):-
+    perdio(5, Personas).
 
 :- end_tests(rondas_tests).
 
@@ -72,24 +113,49 @@ a la mafia, los contrincantes son todos aquellos que no forman parte de la mafia
 Esta  relación debe ser SIMÉTRICA (no importa el orden de los parámetros. Si R(A,B) se cumple,
 entonces también R(B,A)). */
 
+contrincantes(X,Y):- contrincante(X,Y).
+contrincantes(X,Y):- contrincante(Y,X).
 
+contrincante(Persona,Contrincante):-
+    rol(Persona,mafia),
+    rol(Contrincante,Rol),
+    Rol \= mafia.
 
 /* b. Saber si alguien ganó, y en el caso que haya varios ganadores, conocerlos todos. Una persona 
 es ganadora cuando no perdió pero todos sus contrincantes sí.
 
-Explicar cómo se relaciona el concepto de inversibilidad con la solución. */
+Explicar cómo se relaciona el concepto de inversibilidad con la solución. 
 
+Rta: Se relaciona en cuanto a que, para conocer todos los ganadores, tengo que poder pasarle a 
+la regla una variable sin matchear, y que Prolog me retorne todos los individuos con los que
+se cumple esa regla
+*/
+ganador(Persona):-
+    rol(Persona,_),
+    not(perdio(_,Persona)),
+    forall( contrincantes(Persona,Contrincante),
+            perdio(_,Contrincante)
+    ).
 
 
 /* c. Casos de prueba. Nota: ¡Los nombres de los tests deben representar su clase de equivalencia! */
-begin_tests(ganador_tests).
+:- begin_tests(ganador_tests).
 % Los contrincantes de tony (por ser de la mafia) son homero, burns, nick, hibbert, lisa y rafa.
-
+    test(contrincantes_de_uno_que_pertenece_a_la_mafia,
+        set(Contrincantes == [homero,burns,nick,hibbert,lisa,rafa])
+    ):-
+        contrincantes(tony,Contrincantes).
 % Los contrincantes de homero (por no ser de la mafia) son bart, tony y maggie.
-
+    test(contrincantes_de_uno_que_no_pertenece_a_la_mafia,
+        set(Contrincantes == [bart,tony,maggie])
+    ):-
+        contrincantes(homero,Contrincantes).
 % La única ganadora es maggie.
-
-end_tests(ganador_tests).
+    test(ganador_es_inversible,
+        set(Ganadores == [maggie])
+    ):-
+        ganador(Ganadores).
+:- end_tests(ganador_tests).
 
 /***********************************************************************************************
 3. IMBATIBLES (integrante 2)
@@ -105,22 +171,39 @@ Se pide: */
 /* a. Saber si un jugador es imbatible.
 Explicar cómo se relacionan los conceptos de inversibilidad y universo cerrado con la solución.*/
 
+esImbatible(Medico):-
+    rol(Medico, medico),
+    forall(
+      accion(Ronda,salvar(Medico,Salvado)),
+      accion(Ronda,atacar(Salvado)) 
+    ).
+esImbatible(Detective):-
+    rol(Detective,detective),
+    forall(
+        rol(Mafioso, mafia),
+        accion(_,investigar(Detective,Mafioso))    
+    ).
 
-
+% "El resto de las personas nunca son imbatibles" no lleva regla por el concepto de universo cerrado.
 
 /* b. Casos de prueba. Nota: ¡Los nombres de los tests deben representar su clase de equivalencia!*/
-begin_tests(imbatibles_tests).
+:- begin_tests(imbatibles_tests).
 % hibbert es un médico imbatible.
-
+    test(medico_imbatible, nondet):-
+        esImbatible(hibbert).
 % nick no es un médico imbatible.
-
+    test(medico_no_imbatible, fail):-
+        esImbatible(nick).
 % lisa es una detective imbatible.
-
+    test(detective_imbatible, nondet):-
+        esImbatible(lisa).
 % rafa no es un detective imbatible.
-
+    test(detective_no_imbatible, fail):-
+        esImbatible(rafa).
 % Homero (por ser civil) nunca es imbatible.
-
-end_tests(imbatibles_tests).
+    test(un_civil_nunca_es_imbatible, fail):-
+        esImbatible(homero).
+:- end_tests(imbatibles_tests).
 
 /*************************************************************************************************
 4) MÁS INFO (dividido - evitar repetir lógica)
@@ -131,6 +214,7 @@ Implementar los predicados necesarios para: */
 
 /* a. (ambos integrantes) Deducir las personas que siguen en juego al comenzar una determinada 
 ronda, o sea, las que todavía no perdieron (sin importar si pierde en dicha ronda o posterior). */
+%sigueEnJuego(Ronda, Persona):-
 
 
 
@@ -152,7 +236,7 @@ es 3 veces la cantidad de civiles con los que empezó la partida. */
 /* Casos de prueba Nota: ¡Los nombres de los tests deben representar su clase de equivalencia!*/
 
 % PUNTO A
-begin_tests(sigue_en_juego_tests).
+%begin_tests(sigue_en_juego_tests).
 % rafa sigue jugando en la segunda ronda, por más que pierda luego.
 
 % nick no sigue jugando en la cuarta ronda, porque perdió antes.
@@ -161,10 +245,10 @@ begin_tests(sigue_en_juego_tests).
 
 % Todas las personas en juego juegan la primera ronda.
 
-end_tests(sigue_en_juego_tests).
+%end_tests(sigue_en_juego_tests).
 
 % PUNTO B
-begin_tests(es_interesante_tests).
+%begin_tests(es_interesante_tests).
 % La primera ronda es interesante por tener mucha gente.
 
 % La última ronda es interesante porque quedan pocas personas.
@@ -173,10 +257,10 @@ begin_tests(es_interesante_tests).
 
 % Las rondas interesantes son la primera, la segunda y la última.
 
-end_tests(es_interesante_tests).
+%end_tests(es_interesante_tests).
 
 % PUNTO C
-begin_tests(vivio_el_peligro_tests).
+%begin_tests(vivio_el_peligro_tests).
 % homero vivió el peligro por ser civil y haber jugado la cuarta ronda.
 
 
@@ -191,7 +275,7 @@ begin_tests(vivio_el_peligro_tests).
 
 % Las personas que vivieron el peligro son homero, burns y lisa.
 
-end_tests(vivio_el_peligro_tests).
+%end_tests(vivio_el_peligro_tests).
 
 /**********************************************************************************************
 5) ESTRATEGIA (ambos integrantes)
