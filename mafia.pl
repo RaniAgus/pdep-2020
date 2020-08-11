@@ -127,8 +127,9 @@ es ganadora cuando no perdió pero todos sus contrincantes sí.
 Explicar cómo se relaciona el concepto de inversibilidad con la solución. 
 
 Rta: Se relaciona en cuanto a que, para conocer todos los ganadores, tengo que poder pasarle a 
-la regla una variable sin matchear, y que Prolog me retorne todos los individuos con los que
-se cumple esa regla
+la regla un individuo sin matchear, y que Prolog me retorne todos los individuos con los que
+se cumple esa regla. Además, dentro de forall, la regla contrincantes/2 debe ser inversible para
+encontrar todos los contrincantes de esa persona.
 */
 ganador(Persona):-
     rol(Persona,_),
@@ -169,7 +170,13 @@ imbatibles para poder planear mejor sus ataques. Nos contaron que:
 Se pide: */
 
 /* a. Saber si un jugador es imbatible.
-Explicar cómo se relacionan los conceptos de inversibilidad y universo cerrado con la solución.*/
+
+Explicar cómo se relacionan los conceptos de inversibilidad y universo cerrado con la solución.
+
+Rta: En cuanto a la inversibilidad, estamos aprovechando que la regla accion\3 es inversible para
+que, en el forall, podamos obtener todas las personas a las que salva un médico en todas las
+rondas. Por otro lado, "el resto de las personas nunca son imbatibles" no lleva regla por el 
+concepto de universo cerrado.*/
 
 esImbatible(Medico):-
     rol(Medico, medico),
@@ -183,8 +190,6 @@ esImbatible(Detective):-
         rol(Mafioso, mafia),
         accion(_,investigar(Detective,Mafioso))    
     ).
-
-% "El resto de las personas nunca son imbatibles" no lleva regla por el concepto de universo cerrado.
 
 /* b. Casos de prueba. Nota: ¡Los nombres de los tests deben representar su clase de equivalencia!*/
 :- begin_tests(imbatibles_tests).
@@ -214,68 +219,119 @@ Implementar los predicados necesarios para: */
 
 /* a. (ambos integrantes) Deducir las personas que siguen en juego al comenzar una determinada 
 ronda, o sea, las que todavía no perdieron (sin importar si pierde en dicha ronda o posterior). */
-%sigueEnJuego(Ronda, Persona):-
 
+sigueEnJuego(Ronda, Persona):-
+    rol(Persona,_),
+    noPerdio(Ronda, Persona).
 
-
+noPerdio(Ronda, Persona):-
+    perdio(RondaPerdio,Persona),
+    RondaPerdio >= Ronda.
+noPerdio(_, Persona):-
+    not(perdio(_,Persona)).
 
 /* b. (integrante 1) Conocer cuáles son las rondas interesantes que tuvo la partida. Una ronda es 
 interesante si en dicha ronda siguen más de 7 personas en juego. También es interesante cuando
 quedan en juego menos o igual cantidad de personas que la cantidad inicial de la mafia. */
 
+esInteresante(Ronda):-
+    personasEnJuego(Ronda, Cantidad),
+    esCantidadInteresante(Cantidad).
 
+personasEnJuego(Ronda, Cantidad):-
+    accion(Ronda,_),
+    findall(Persona, sigueEnJuego(Ronda,Persona),Personas),
+    length(Personas,Cantidad).
 
+esCantidadInteresante(CantPersonas):-
+    CantPersonas > 7.
+esCantidadInteresante(CantPersonas):-
+    personasPorRol(mafia, CantMafiosos),
+    CantPersonas =< CantMafiosos.
+
+personasPorRol(Rol, Cantidad):-
+    findall(Persona, rol(Persona, Rol), Personas),
+    length(Personas,Cantidad).
 
 /* c. (integrante 2) Saber quiénes vivieron el peligro, que son los civiles o detectives que jugaron
 alguna ronda peligrosa. Se dice que una ronda es peligrosa cuando la cantidad de personas en juego
 es 3 veces la cantidad de civiles con los que empezó la partida. */
 
+vivioElPeligro(Persona):-
+    civilODetective(Persona),
+    esPeligrosa(Ronda),
+    sigueEnJuego(Ronda, Persona).
 
+civilODetective(Persona):-
+    rol(Persona,civil).
+civilODetective(Persona):-
+    rol(Persona,detective).
 
+esPeligrosa(Ronda):-
+    personasEnJuego(Ronda, CantPersonas),
+    personasPorRol(civil, CantCiviles),
+    CantPersonas is 3 * CantCiviles.
 
-/* Casos de prueba Nota: ¡Los nombres de los tests deben representar su clase de equivalencia!*/
+/* CASOS DE PRUEBA. Nota: ¡Los nombres de los tests deben representar su clase de equivalencia!*/
 
 % PUNTO A
-%begin_tests(sigue_en_juego_tests).
+:- begin_tests(sigue_en_juego_tests).
 % rafa sigue jugando en la segunda ronda, por más que pierda luego.
-
+    test(sigue_en_juego_aunque_pierda_en_esa_ronda, nondet):-
+        sigueEnJuego(2,rafa).
 % nick no sigue jugando en la cuarta ronda, porque perdió antes.
-
+test(no_sigue_en_juego_porque_perdio_rondas_anteriores,fail):-
+    sigueEnJuego(4,nick).
 % Las personas que llegan hasta la última ronda son maggie y burns.
-
+    test(sigue_en_juego_inversible_para_personas,
+        set(Personas == [maggie,burns])
+    ):-
+        sigueEnJuego(6, Personas).
 % Todas las personas en juego juegan la primera ronda.
-
-%end_tests(sigue_en_juego_tests).
+    test(todos_juegan_la_primera_ronda,
+        set(Personas == [maggie,burns,homero,lisa,rafa,bart,hibbert,nick,tony])
+    ):-
+        sigueEnJuego(1,Personas).
+:- end_tests(sigue_en_juego_tests).
 
 % PUNTO B
-%begin_tests(es_interesante_tests).
+:- begin_tests(es_interesante_tests).
 % La primera ronda es interesante por tener mucha gente.
-
+    test(ronda_con_mucha_gente_es_interesante,nondet):-
+        esInteresante(1).
 % La última ronda es interesante porque quedan pocas personas.
-
+    test(ronda_interesante_con_pocas_personas,nondet):-
+        esInteresante(6).
 % La tercera ronda no es interesante por tener 7 personas en juego.
-
+    test(ronda_con_siete_personas_no_es_interesante, fail):-
+        esInteresante(3).
 % Las rondas interesantes son la primera, la segunda y la última.
-
-%end_tests(es_interesante_tests).
+    test(rondas_interesantes,
+        set(Rondas == [1,2,6])
+    ):-
+        esInteresante(Rondas).
+:- end_tests(es_interesante_tests).
 
 % PUNTO C
-%begin_tests(vivio_el_peligro_tests).
+:- begin_tests(vivio_el_peligro_tests).
 % homero vivió el peligro por ser civil y haber jugado la cuarta ronda.
-
-
+    test(civil_vivio_el_peligro,nondet):-
+        vivioElPeligro(homero).
 % lisa vivió el peligro por ser detective y haber jugado la cuarta ronda.
-
-
+    test(detective_vivio_el_peligro, nondet):-
+        vivioElPeligro(lisa).
 % tony no vivió el peligro por ser de la mafia.
-
-
+    test(no_vivio_el_peligro, fail):-
+        vivioElPeligro(tony).
 % rafa no vivió el peligro por no haber jugado la cuarta ronda.
-
-
+    test(detective_no_vivio_el_peligro,fail):-
+        vivioElPeligro(rafa).
 % Las personas que vivieron el peligro son homero, burns y lisa.
-
-%end_tests(vivio_el_peligro_tests).
+    test(vivio_el_peligro_es_inversible,
+        set( Personas == [homero, burns, lisa] )
+    ):-
+        vivioElPeligro(Personas).
+:- end_tests(vivio_el_peligro_tests).
 
 /**********************************************************************************************
 5) ESTRATEGIA (ambos integrantes)
@@ -294,3 +350,77 @@ la persona eliminada. La persona afectada es la eliminada.
 
 Resolver: */
 
+/* a. Conocer los jugadores profesionales, que son aquellos que le hicieron algo a todos sus 
+contrincantes, o sea que las acciones de las que el profesional es responsable terminaron 
+afectando a todos sus contrincantes.*/
+
+profesional(Persona):-
+    rol(Persona,_),
+    forall(
+        contrincantes(Persona, Contrincante),
+        afecto(_, Persona, Contrincante, _)
+    ).
+
+afecto(Ronda, Responsable, Afectado, atacar(Afectado)):-
+    rol(Responsable, mafia),
+    accion(Ronda,atacar(Afectado)).
+afecto(Ronda, Responsable, Afectado, salvar(Responsable,Afectado)):-
+    rol(Responsable, medico),
+    accion(Ronda,salvar(Responsable,Afectado)).
+afecto(Ronda, Responsable, Afectado, investigar(Responsable,Afectado)):-
+    rol(Responsable, detective),
+    accion(Ronda,investigar(Responsable,Afectado)).
+afecto(Ronda, Responsable, Afectado, eliminar(Afectado)):-
+    contrincantes(Responsable,Afectado),
+    accion(Ronda, eliminar(Afectado)).
+
+/* b. Encontrar una “estrategia” que se haya desenvuelto en la partida. Una estrategia es una
+serie de acciones que se desarrollan a lo largo de la partida y deben cumplir que:
+- La estrategia está conformada por acciones, correspondientes a una acción por cada ronda de la
+partida.
+- Las acciones sucedieron en orden durante la partida.
+- Las acciones están encadenadas, lo que significa que la persona afectada por la acción anterior
+es la responsable de la siguiente.
+- Una estrategia debe cumplir, además, que comienza con una acción de la primera ronda y termina 
+con una de la última.
+*/
+
+estrategia(1, Accion):-
+    accion(1, Accion).
+estrategia(Ronda, Accion):-
+    afecto(RondaAnterior, _, ResponsableAfectado, _),
+    Ronda is RondaAnterior + 1,
+    afecto(Ronda, ResponsableAfectado, _, Accion).
+
+/*c. Casos de prueba a definir por estudiantes.*/
+
+% PUNTO A
+:- begin_tests(profesional_tests).
+    test(detective_investiga_a_todos_es_profesional, nondet):-
+        profesional(lisa).
+    test(medico_que_no_elimina_ni_salva_a_contrincantes_no_es_profesional, fail):-
+        profesional(hibbert).
+    test(mafioso_que_elimina_a_sus_contrincantes_es_profesional, nondet):-
+        profesional(tony).
+    test(profesional_es_inversible,
+        set( Profesionales == [maggie,tony,bart,rafa,lisa] )
+    ):-
+        profesional(Profesionales).
+:- end_tests(profesional_tests).
+
+% PUNTO B
+:- begin_tests(estrategia_tests).
+    test(acciones_primera_ronda_son_estrategias,
+        set( Acciones == [atacar(lisa), salvar(nick, nick), salvar(hibbert, lisa), 
+            investigar(lisa, tony), investigar(rafa, lisa), eliminar(nick)] )
+    ):-
+        estrategia(1, Acciones).
+    test(estrategias_luego_de_primera_ronda,
+        set( Acciones == [eliminar(bart), atacar(lisa)] )
+    ):-
+        estrategia(5, Acciones).
+    test(afectado_realiza_estrategia, nondet):-
+        estrategia(2,investigar(lisa,bart)).
+    test(no_afectado_no_realiza_estrategia, fail):-
+        estrategia(2,salvar(hibbert,rafa)).
+:- end_tests(estrategia_tests).
