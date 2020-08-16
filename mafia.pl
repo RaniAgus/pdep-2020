@@ -385,13 +385,17 @@ es la responsable de la siguiente.
 con una de la última.
 */
 
-estrategia(1, Accion):-
-    accion(1, Accion).
-estrategia(Ronda, Accion):-
-    afecto(RondaAnterior, _, ResponsableAfectado, _),
-    Ronda is RondaAnterior + 1,
-    afecto(Ronda, ResponsableAfectado, _, Accion).
+estrategia(Estrategia):-
+    rol(PrimerResponsable, _),
+    estrategiaDesdeRonda(1, PrimerResponsable, Estrategia).
 
+estrategiaDesdeRonda(Ronda, Responsable, [Accion|Estrategia]):-
+    afecto(Ronda, Responsable, ResponsableSig, Accion),
+    RondaSig is Ronda + 1,
+    estrategiaDesdeRonda(RondaSig, ResponsableSig, Estrategia).
+estrategiaDesdeRonda(RondaInexistente, _,[]):- % Sería la última ronda + 1
+    not(accion(RondaInexistente, _)). 
+                                        
 /*c. Casos de prueba a definir por estudiantes.*/
 
 % PUNTO A
@@ -410,17 +414,30 @@ estrategia(Ronda, Accion):-
 
 % PUNTO B
 :- begin_tests(estrategia_tests).
-    test(acciones_primera_ronda_son_estrategias,
-        set( Acciones == [atacar(lisa), salvar(nick, nick), salvar(hibbert, lisa), 
-            investigar(lisa, tony), investigar(rafa, lisa), eliminar(nick)] )
-    ):-
-        estrategia(1, Acciones).
-    test(estrategias_luego_de_primera_ronda,
-        set( Acciones == [eliminar(bart), atacar(lisa)] )
-    ):-
-        estrategia(5, Acciones).
-    test(afectado_realiza_estrategia, nondet):-
-        estrategia(2,investigar(lisa,bart)).
-    test(no_afectado_no_realiza_estrategia, fail):-
-        estrategia(2,salvar(hibbert,rafa)).
+    test(estrategia_ejemplo, nondet):-
+        estrategia([atacar(lisa), 
+                    investigar(lisa, bart), 
+                    atacar(lisa), 
+                    investigar(lisa, homero), 
+                    eliminar(bart), 
+                    atacar(burns)]
+        ).
+
+    test(estrategias_tienen_misma_longitud_que_la_cantidad_de_rondas, nondet):-
+        forall( estrategia(Estrategia),
+                length(Estrategia, 6)
+        ).
+
+    test(estrategias_tienen_una_accion_por_ronda, nondet):-
+        forall(estrategia(Estrategia),
+                forall( nth1(Ronda, Estrategia, Accion),
+                        accion(Ronda, Accion))
+        ).
+
+    test(afectado_ronda_anterior_es_responsable_ronda_siguiente, nondet):-
+        forall(estrategia(Estrategia),
+                forall( (nth1(Ronda, Estrategia, Accion), RondaSig is Ronda + 1, nth1(RondaSig, Estrategia, AccionSig)),
+                        (afecto(Ronda,_,Persona, Accion), afecto(RondaSig, Persona,_, AccionSig))
+                )
+        ).
 :- end_tests(estrategia_tests).
