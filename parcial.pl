@@ -34,6 +34,7 @@ tiene(cata, fuego).
 tiene(cata, tierra).
 tiene(cata, agua).
 tiene(cata, aire).
+% Nota: ver punto 7 -- línea 234.
 
 % Para construir pasto hace falta agua y tierra.
 seConstruyeCon(pasto, agua).
@@ -69,29 +70,34 @@ seConstruyeCon(plastico, presion).
 /* 2- Saber si un jugador tieneIngredientesPara construir un elemento, que es cuando tiene en su 
 inventario todo lo que hace falta. */
 
-persona(Persona):-
-    herramienta(Persona,_).
-
 tieneIngredientesPara(Persona, Elemento):-
     persona(Persona),
     seConstruyeCon(Elemento, _),
     forall(seConstruyeCon(Elemento, Ingrediente), tiene(Persona, Ingrediente)).
 
-% Por ejemplo, ana tiene los ingredientes para el pasto, pero no para el vapor.
+persona(Persona):-
+    herramienta(Persona,_). 
+persona(Persona):-
+    tiene(Persona,_). 
+
+% Por ejemplo: 
 
 :- begin_tests(tiene_ingredientes_para_tests).
-    test(jugador_tiene_ingredientes, nondet):-
-        tieneIngredientesPara(ana, pasto).
-    test(jugador_no_tiene_ingredientes, fail):-
-        tieneIngredientesPara(ana, vapor).
-    test(tiene_ingredientes_para_es_inversible_para_personas,
-        set(Personas == [ana, beto, cata])
-    ):-
-        tieneIngredientesPara(Personas, silicio).
+    
+    % ana tiene los ingredientes para el pasto...
     test(tiene_ingredientes_para_es_inversible_para_elementos,
         set(Elementos == [pasto, presion, silicio])
     ):-
     tieneIngredientesPara(ana, Elementos).
+
+    % ...pero no para el vapor.
+    test(jugador_no_tiene_ingredientes, fail):-
+        tieneIngredientesPara(ana, vapor).
+
+    test(tiene_ingredientes_para_es_inversible_para_personas,
+        set(Personas == [ana, beto,cata])
+    ):-
+        tieneIngredientesPara(Personas, silicio).
 :- end_tests(tiene_ingredientes_para_tests).
 
 /* 3- Saber si un elemento estaVivo. Se sabe que el agua, el fuego y todo lo que fue construido a 
@@ -103,14 +109,20 @@ estaVivo(Elemento):-
     seConstruyeCon(Elemento, OtroElemento),
     estaVivo(OtroElemento).
 
-% Debe funcionar para cualquier nivel. Por ejemplo, la play station y los huesos están vivos, 
-% pero el silicio no.
+% Debe funcionar para cualquier nivel. Por ejemplo:
 
 :- begin_tests(esta_vivo_tests).
+    
+    % la playstation y los huesos están vivos...
     test(esta_vivo_es_inversible, 
         set(Elementos == [agua, fuego, pasto, hierro, huesos, presion, vapor, playstation, plastico])
     ):-
         estaVivo(Elementos).
+
+    % pero el silicio no.
+    test(no_esta_vivo, fail):-
+        estaVivo(silicio).
+
 :- end_tests(esta_vivo_tests).
 
 /* 4- Conocer las personas que puedeConstruir un elemento, para lo que se necesita tener los 
@@ -144,33 +156,38 @@ herramientaFabricaElemento(libro(vida), Elemento):-
 herramientaFabricaElemento(libro(inerte), Elemento):- 
     not(estaVivo(Elemento)).
 
-/* Por ejemplo, beto puede construir el silicio (porque tiene tierra y tiene el libro inerte, que le 
-sirve para el silicio), pero no puede construir la presión (porque a pesar de tener hierro y vapor, 
-no cuenta con herramientas que le sirvan para la presión). Ana, por otro lado, sí puede construir 
-silicio y presión. */
+/* Por ejemplo, , . A. */
 
 :- begin_tests(puede_construir_tests).
+
+    % beto puede construir el silicio (porque tiene tierra y tiene el libro inerte, que le sirve para el silicio).
     test(puede_construir_con_libro_inerte, nondet):-
         puedeConstruir(beto, silicio).
+    
+    % pero no puede construir la presión (porque a pesar de tener hierro y vapor, no cuenta con herramientas que le sirvan para la presión).
     test(no_puede_construir_sin_herramienta, fail):-
         puedeConstruir(beto, presion).
+
+    % ana, por otro lado, sí puede construir silicio y presión.
     test(puede_construir_inversible_para_elementos, 
         set(Elementos == [pasto,presion,silicio])
     ):-
         puedeConstruir(ana, Elementos).
+
     test(puede_construir_inversible_para_personas, 
     set(Personas == [ana, cata])
     ):-
         puedeConstruir(Personas, pasto).
+
     test(cuchara_fabrica_elemento, nondet):-
         herramientaFabricaElemento(cuchara(30), hierro).
     test(cuchara_no_fabrica_elemento, fail):-
         herramientaFabricaElemento(cuchara(29), hierro).
+
     test(circulo_fabrica_elemento, nondet):-
         herramientaFabricaElemento(circulo(100,3), hierro).
     test(circulo_no_fabrica_elemento, fail):-
         herramientaFabricaElemento(circulo(99,3), hierro).
-
 :- end_tests(puede_construir_tests).
 
 
