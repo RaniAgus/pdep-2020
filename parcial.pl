@@ -1,6 +1,6 @@
 /*
-Nombre: Apellido, Nombre
-Legajo: 999999-9
+Nombre: Ranieri, Agustin Ezequiel
+Legajo: 167755-0
 */
 
 laVerdad.
