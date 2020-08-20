@@ -34,7 +34,6 @@ tiene(cata, fuego).
 tiene(cata, tierra).
 tiene(cata, agua).
 tiene(cata, aire).
-% "Cata no tiene vapor" se cumple por principio de universo cerrado
 
 % Para construir pasto hace falta agua y tierra.
 seConstruyeCon(pasto, agua).
@@ -149,6 +148,7 @@ herramientaFabricaElemento(libro(inerte), Elemento):-
 sirve para el silicio), pero no puede construir la presión (porque a pesar de tener hierro y vapor, 
 no cuenta con herramientas que le sirvan para la presión). Ana, por otro lado, sí puede construir 
 silicio y presión. */
+
 :- begin_tests(puede_construir_tests).
     test(puede_construir_con_libro_inerte, nondet):-
         puedeConstruir(beto, silicio).
@@ -162,17 +162,29 @@ silicio y presión. */
     set(Personas == [ana, cata])
     ):-
         puedeConstruir(Personas, pasto).
+    test(cuchara_fabrica_elemento, nondet):-
+        herramientaFabricaElemento(cuchara(30), hierro).
+    test(cuchara_no_fabrica_elemento, fail):-
+        herramientaFabricaElemento(cuchara(29), hierro).
+    test(circulo_fabrica_elemento, nondet):-
+        herramientaFabricaElemento(circulo(100,3), hierro).
+    test(circulo_no_fabrica_elemento, fail):-
+        herramientaFabricaElemento(circulo(99,3), hierro).
+
 :- end_tests(puede_construir_tests).
 
 
 /* 5- Saber si alguien es todopoderoso, que es cuando tiene todos los elementos primitivos (los 
 que no pueden construirse a partir de nada) y además cuenta con herramientas que sirven para 
-construir cada elemento que no tenga. Por ejemplo, cata es todopoderosa, pero beto no. */
+construir cada elemento que no tenga. */
 
 esTodopoderoso(Persona):-
     persona(Persona),
     forall(elementoPrimitivo(Elemento),tiene(Persona,Elemento)),
-    forall(seConstruyeCon(Elemento,_),puedeConstruir(Persona,Elemento)).
+    forall(
+        ( seConstruyeCon(Elemento,_), not(tiene(Persona,Elemento)) ),
+        tieneHerramientasPara(Persona, Elemento)
+    ).
 
 elementoPrimitivo(Elemento):-
     elemento(Elemento),
@@ -182,3 +194,46 @@ elemento(Elemento):-
     seConstruyeCon(_,Elemento).
 elemento(Elemento):-
     tiene(_,Elemento).
+
+% Por ejemplo, cata es todopoderosa, pero beto no.
+
+:- begin_tests(es_todopoderoso_tests).
+    test(es_todopoderoso_es_inversible, set(Personas == [cata])):-
+        esTodopoderoso(Personas).
+    test(no_es_todopoderoso, fail):-
+        esTodopoderoso(beto).
+    test(elementos_primitivos, set(Primitivos == [agua,fuego,tierra,aire])):-
+        elementoPrimitivo(Primitivos).
+:- end_tests(es_todopoderoso_tests).
+
+% 6. Conocer quienGana, que es quien puede construir más cosas.
+quienGana(Persona):-
+    cuantosPuedeConstruir(Persona, Cantidad),
+    forall(
+        (cuantosPuedeConstruir(OtraPersona, OtraCantidad), Persona \= OtraPersona),
+        OtraCantidad < Cantidad
+    ).
+
+cuantosPuedeConstruir(Persona, Cantidad):-
+    persona(Persona),
+    findall(Elemento, puedeConstruir(Persona, Elemento), ElementosConDuplicados),
+    sort(ElementosConDuplicados, Elementos),
+    length(Elementos, Cantidad).
+
+% Por ejemplo, cata gana, pero beto no.
+:- begin_tests(quien_gana_tests).
+    test(quien_gana_es_inversible, set(Personas == [cata])):-
+        esTodopoderoso(Personas).
+    test(no_gana, fail):-
+        esTodopoderoso(beto).
+    test(cuantos_puede_construir, nondet):-
+        cuantosPuedeConstruir(cata, 4).
+:- end_tests(quien_gana_tests).
+
+% 7. En la línea 32: "Cata no tiene vapor" se cumple por principio de universo cerrado.
+
+/* 8- Hacer una nueva versión del predicado puedeConstruir (se puede llamar puedeLlegarATener) 
+para considerar todo lo que podría construir si va combinando todos los elementos que tiene 
+(y siempre y cuando tenga alguna herramienta que le sirva para construir eso). Un jugador puede 
+llegar a tener un elemento si o bien lo tiene, o bien tiene alguna herramienta que le sirva para 
+hacerlo y cada ingrediente necesario para construirlo puede llegar a tenerlo a su vez. */
