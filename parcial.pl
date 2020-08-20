@@ -237,3 +237,25 @@ para considerar todo lo que podría construir si va combinando todos los element
 (y siempre y cuando tenga alguna herramienta que le sirva para construir eso). Un jugador puede 
 llegar a tener un elemento si o bien lo tiene, o bien tiene alguna herramienta que le sirva para 
 hacerlo y cada ingrediente necesario para construirlo puede llegar a tenerlo a su vez. */
+
+puedeLlegarATener(Persona, Elemento):-
+    tiene(Persona, Elemento).
+puedeLlegarATener(Persona, Elemento):-
+    puedeTenerIngredientesPara(Persona, Elemento),
+    tieneHerramientasPara(Persona, Elemento).
+
+puedeTenerIngredientesPara(Persona, Elemento):-
+    tieneIngredientesPara(Persona, Elemento).
+puedeTenerIngredientesPara(Persona, Elemento):-
+    forall(seConstruyeCon(Elemento, Ingrediente), puedeTenerIngredientesPara(Persona, Ingrediente)).
+
+% Por ejemplo, cata podría llegar a tener una playstation, pero beto no.
+
+:- begin_tests(puede_llegar_a_tener_tests).
+    test(cata_puede_llegar_a_tener_todo, 
+        set(Elementos == [fuego, tierra, agua, aire, pasto, hierro, vapor, silicio, huesos, presion, playstation, plastico])
+    ):-
+        puedeLlegarATener(cata, Elementos).
+    test(persona_no_puede_llegar_a_tener_elemento, fail):-
+        puedeLlegarATener(beto, playstation).
+:- end_tests(puede_llegar_a_tener_tests).
