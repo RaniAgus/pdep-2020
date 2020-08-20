@@ -16,9 +16,6 @@ herramienta(cata, circulo(100,5)).
 % Las cucharas tienen una longitud en cms.
 % Hay distintos tipos de libro.
 
-persona(Persona):-
-    herramienta(Persona,_).
-
 /* 1. Modelar los jugadores y elementos y agregarlos a la base de conocimiento, utilizando los 
 ejemplos provistos. */
 
@@ -73,6 +70,9 @@ seConstruyeCon(plastico, presion).
 /* 2- Saber si un jugador tieneIngredientesPara construir un elemento, que es cuando tiene en su 
 inventario todo lo que hace falta. */
 
+persona(Persona):-
+    herramienta(Persona,_).
+
 tieneIngredientesPara(Persona, Elemento):-
     persona(Persona),
     seConstruyeCon(Elemento, _),
@@ -114,15 +114,9 @@ estaVivo(Elemento):-
         estaVivo(Elementos).
 :- end_tests(esta_vivo_tests).
 
-/*
-4- Conocer las personas que puedeConstruir un elemento, para lo que se necesita tener los ingredientes 
-ahora en el inventario y además contar con una o más herramientas que sirvan para construirlo. 
-
-Por ejemplo, beto puede construir el silicio (porque tiene tierra y tiene el libro inerte, que le 
-sirve para el silicio), pero no puede construir la presión (porque a pesar de tener hierro y vapor, 
-no cuenta con herramientas que le sirvan para la presión). Ana, por otro lado, sí puede construir 
-silicio y presión.
-*/
+/* 4- Conocer las personas que puedeConstruir un elemento, para lo que se necesita tener los 
+ingredientes ahora en el inventario y además contar con una o más herramientas que sirvan para 
+construirlo. */
 
 puedeConstruir(Persona, Elemento):-
     tieneIngredientesPara(Persona, Elemento),
@@ -130,23 +124,61 @@ puedeConstruir(Persona, Elemento):-
 
 tieneHerramientasPara(Persona, Elemento):-
     herramienta(Persona, Herramienta),
-    fabricaElemento(Herramienta, Elemento).
+    herramientaFabricaElemento(Herramienta, Elemento).
 
-% Para los elementos vivos sirve el libro de la vida (y para los elementos no vivos el libro inerte).
-fabricaElemento(libro(vida), Elemento):- 
-    estaVivo(Elemento).
-fabricaElemento(libro(inerte), Elemento):- 
-    not(estaVivo(Elemento)).
-
-% Además, las cucharas y círculos sirven cuando soportan la cantidad de ingredientes del elemento 
+% Las cucharas y círculos sirven cuando soportan la cantidad de ingredientes del elemento 
 cuantosIngredientesRequiere(Elemento, Cantidad):-
     findall(Ingrediente,seConstruyeCon(Elemento, Ingrediente), Ingredientes),
     length(Ingredientes, Cantidad).  
 
 % Las cucharas soportan tantos ingredientes como centímetros/10
-fabricaElemento(cuchara(Cms), Elemento):-
+herramientaFabricaElemento(cuchara(Cms), Elemento):-
     cuantosIngredientesRequiere(Elemento, Cantidad),
-    Cantidad < Cms / 10.
+    Cantidad =< Cms / 10.
 % Los círculos alquímicos soportan tantos ingredientes como metros * cantidad de niveles).
+herramientaFabricaElemento(circulo(Cms, Niveles), Elemento):-
+    cuantosIngredientesRequiere(Elemento, Cantidad),
+    Cantidad =< Cms / 100 * Niveles.
+% Para los elementos vivos sirve el libro de la vida (y para los elementos no vivos el libro inerte).
+herramientaFabricaElemento(libro(vida), Elemento):- 
+    estaVivo(Elemento).
+herramientaFabricaElemento(libro(inerte), Elemento):- 
+    not(estaVivo(Elemento)).
 
- 
+/* Por ejemplo, beto puede construir el silicio (porque tiene tierra y tiene el libro inerte, que le 
+sirve para el silicio), pero no puede construir la presión (porque a pesar de tener hierro y vapor, 
+no cuenta con herramientas que le sirvan para la presión). Ana, por otro lado, sí puede construir 
+silicio y presión. */
+:- begin_tests(puede_construir_tests).
+    test(puede_construir_con_libro_inerte, nondet):-
+        puedeConstruir(beto, silicio).
+    test(no_puede_construir_sin_herramienta, fail):-
+        puedeConstruir(beto, presion).
+    test(puede_construir_inversible_para_elementos, 
+        set(Elementos == [pasto,presion,silicio])
+    ):-
+        puedeConstruir(ana, Elementos).
+    test(puede_construir_inversible_para_personas, 
+    set(Personas == [ana, cata])
+    ):-
+        puedeConstruir(Personas, pasto).
+:- end_tests(puede_construir_tests).
+
+
+/* 5- Saber si alguien es todopoderoso, que es cuando tiene todos los elementos primitivos (los 
+que no pueden construirse a partir de nada) y además cuenta con herramientas que sirven para 
+construir cada elemento que no tenga. Por ejemplo, cata es todopoderosa, pero beto no. */
+
+esTodopoderoso(Persona):-
+    persona(Persona),
+    forall(elementoPrimitivo(Elemento),tiene(Persona,Elemento)),
+    forall(seConstruyeCon(Elemento,_),puedeConstruir(Persona,Elemento)).
+
+elementoPrimitivo(Elemento):-
+    elemento(Elemento),
+    not(seConstruyeCon(Elemento,_)).
+
+elemento(Elemento):-
+    seConstruyeCon(_,Elemento).
+elemento(Elemento):-
+    tiene(_,Elemento).
