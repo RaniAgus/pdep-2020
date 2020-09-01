@@ -1,4 +1,46 @@
 /** ¿Alguien quiere pensar en los carpinchos? */
+object plantaNuclear
+{
+	var barrasUranio = 0
+	var empleadoSalaControl = homero
+	
+	method estaEnPeligro() = 
+		( barrasUranio > 10000 && empleadoSalaControl.estaDistraido() ) 
+		|| mrBurns.seQuedoPobre() 
+	
+	method cambiarEmpleado(empleado) { empleadoSalaControl = empleado }
+	
+	method traerBarrasUranio(cantidad) { barrasUranio += cantidad }
+	
+	method empleadoEstaDistraido() = empleadoSalaControl.estaDistraido()
+}
 
+object mrBurns
+{
+	var riquezas = 1000000
+	
+	method seQuedoPobre() = riquezas == 0
+	method despojarseRiquezas() { riquezas = 0 }
+}
 
+object homero
+{
+	var donas = 0
+	
+	method estaDistraido() = donas < 2
+	method comprarDonas() { donas += 12 }
+	method comerDonas() { donas-- }
+}
 
+object patoBalancin
+{
+	method estaDistraido() = false
+}
+
+object lenny
+{
+	var cervezasBebidas = 0
+	
+	method estaDistraido() = cervezasBebidas > 3
+	method tomarCerveza() { cervezasBebidas++ }
+}
