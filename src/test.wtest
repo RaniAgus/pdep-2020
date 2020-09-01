@@ -16,7 +16,7 @@ describe "tests de homero"
 		homero.comerDonas() // 3
 		homero.comerDonas() // 2
 		homero.comerDonas() // 1
-		assert.equals(true, homero.estaDistraido())
+		assert.that(homero.estaDistraido())
 	}
 	
 	test "homero no está distraído cuando tiene suficientes donas"
@@ -32,7 +32,7 @@ describe "tests de homero"
 		homero.comerDonas() // 4
 		homero.comerDonas() // 3
 		homero.comerDonas() // 2
-		assert.equals(false, homero.estaDistraido())
+		assert.notThat(homero.estaDistraido())
 	}
 }
 
@@ -44,7 +44,7 @@ describe "tests de lenny"
 		lenny.tomarCerveza() // 2
 		lenny.tomarCerveza() // 3
 		lenny.tomarCerveza() // 4
-		assert.equals(true, lenny.estaDistraido())
+		assert.that(lenny.estaDistraido())
 	}
 	
 	test "lenny no está distraido cuando tomó poca cerveza"
@@ -52,7 +52,7 @@ describe "tests de lenny"
 		lenny.tomarCerveza() // Bebe 1 cerveza
 		lenny.tomarCerveza() // 2
 		lenny.tomarCerveza() // 3
-		assert.equals(false, lenny.estaDistraido())
+		assert.notThat(lenny.estaDistraido())
 	}
 }
 
@@ -60,29 +60,29 @@ describe "tests de planta nuclear"
 {
 	test "condiciones iniciales"
 	{
-		assert.equals(false, plantaNuclear.estaEnPeligro())
-		assert.equals(true, plantaNuclear.empleadoEstaDistraido())
-		assert.equals(false, mrBurns.seQuedoPobre())
+		assert.notThat(plantaNuclear.estaEnPeligro())
+		assert.that(plantaNuclear.empleadoEstaDistraido())
+		assert.notThat(mrBurns.seQuedoPobre())
 	}
 	
 	test "la planta nuclear con burns pobre está en peligro"
 	{
 		mrBurns.despojarseRiquezas()
 		
-		assert.equals(true, plantaNuclear.estaEnPeligro())
+		assert.that(plantaNuclear.estaEnPeligro())
 	}
 	
 	test "la planta nuclear con pocas barras no está en peligro"
 	{
 		plantaNuclear.traerBarrasUranio(10000)
 
-		assert.equals(false, plantaNuclear.estaEnPeligro())
+		assert.notThat(plantaNuclear.estaEnPeligro())
 	}
 	
 	test "la planta nuclear con muchas barras y un empleado distraído está en peligro"
 	{
 		plantaNuclear.traerBarrasUranio(10001)
 		
-		assert.equals(true, plantaNuclear.estaEnPeligro())
+		assert.that(plantaNuclear.estaEnPeligro())
 	}
 }
