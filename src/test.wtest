@@ -5,33 +5,16 @@ describe "tests de homero"
 	test "homero está distraído cuando tiene pocas donas"
 	{	
 		homero.comprarDonas() // Tiene 12 donas
-		homero.comerDonas() // 11
-		homero.comerDonas() // 10
-		homero.comerDonas() // 9
-		homero.comerDonas() // 8
-		homero.comerDonas() // 7
-		homero.comerDonas() // 6
-		homero.comerDonas() // 5
-		homero.comerDonas() // 4
-		homero.comerDonas() // 3
-		homero.comerDonas() // 2
-		homero.comerDonas() // 1
+		homero.comerDonas(11) // Tiene 1 dona, debe estar distraído
+		
 		assert.that(homero.estaDistraido())
 	}
 	
 	test "homero no está distraído cuando tiene suficientes donas"
 	{
 		homero.comprarDonas() // Tiene 12 donas
-		homero.comerDonas() // 11
-		homero.comerDonas() // 10
-		homero.comerDonas() // 9
-		homero.comerDonas() // 8
-		homero.comerDonas() // 7
-		homero.comerDonas() // 6
-		homero.comerDonas() // 5
-		homero.comerDonas() // 4
-		homero.comerDonas() // 3
-		homero.comerDonas() // 2
+		homero.comerDonas(10) // Tiene 2 donas, no debe estar distraído
+		
 		assert.notThat(homero.estaDistraido())
 	}
 }
@@ -40,18 +23,15 @@ describe "tests de lenny"
 {
 	test "lenny está distraído cuando tomó mucha cerveza"
 	{
-		lenny.tomarCerveza() // Bebe 1 cerveza
-		lenny.tomarCerveza() // 2
-		lenny.tomarCerveza() // 3
-		lenny.tomarCerveza() // 4
+		lenny.tomarCervezas(4)
+		
 		assert.that(lenny.estaDistraido())
 	}
 	
 	test "lenny no está distraido cuando tomó poca cerveza"
 	{
-		lenny.tomarCerveza() // Bebe 1 cerveza
-		lenny.tomarCerveza() // 2
-		lenny.tomarCerveza() // 3
+		lenny.tomarCervezas(3)
+		
 		assert.notThat(lenny.estaDistraido())
 	}
 }

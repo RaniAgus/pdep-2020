@@ -5,8 +5,8 @@ object plantaNuclear
 	var empleadoSalaControl = homero
 	
 	method estaEnPeligro() = 
-		( barrasUranio > 10000 && empleadoSalaControl.estaDistraido() ) 
-		|| mrBurns.seQuedoPobre() 
+		( barrasUranio > 10000 and empleadoSalaControl.estaDistraido() ) 
+		or mrBurns.seQuedoPobre() 
 	
 	method cambiarEmpleado(empleado) { empleadoSalaControl = empleado }
 	
@@ -17,10 +17,10 @@ object plantaNuclear
 
 object mrBurns
 {
-	var riquezas = 1000000
+	var esRico = true
 	
-	method seQuedoPobre() = riquezas == 0
-	method despojarseRiquezas() { riquezas = 0 }
+	method seQuedoPobre() = not esRico
+	method despojarseRiquezas() { esRico = false }
 }
 
 object homero
@@ -29,7 +29,8 @@ object homero
 	
 	method estaDistraido() = donas < 2
 	method comprarDonas() { donas += 12 }
-	method comerDonas() { donas-- }
+	method comerDona() { donas-- }
+	method comerDonas(cantidad) { donas-= cantidad }
 }
 
 object patoBalancin
@@ -43,4 +44,5 @@ object lenny
 	
 	method estaDistraido() = cervezasBebidas > 3
 	method tomarCerveza() { cervezasBebidas++ }
+	method tomarCervezas(cantidad) { cervezasBebidas+= cantidad }
 }
