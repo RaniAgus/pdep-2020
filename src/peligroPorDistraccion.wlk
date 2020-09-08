@@ -17,10 +17,10 @@ object plantaNuclear
 
 object mrBurns
 {
-	var esRico = true
+	var esPobre = false
 	
-	method seQuedoPobre() = not esRico
-	method despojarseRiquezas() { esRico = false }
+	method seQuedoPobre() = esPobre
+	method despojarseRiquezas() { esPobre = true }
 }
 
 object homero
