@@ -1,6 +1,7 @@
 import mensajeros.*
 
-object mensajeria {
+object mensajeria
+{
 
 	
 }

@@ -1,2 +1,72 @@
 import mensajeros.*
 
+describe "Mensajeros"
+{
+	test "Roberto (90kg) puede llevar un paquete que está pago en un camión con un acoplado a Brooklyn"
+	{
+		paquete.destino(puenteDeBrooklyn)
+		paquete.mensajero(roberto)
+		roberto.peso(90)
+		paquete.pagar()
+		roberto.medioTransporte(camion)
+		camion.acoplados(1)
+		
+		assert.that(paquete.puedeSerEntregado())
+	}
+	
+	test "Roberto (90kg) NO puede llevar un paquete que está pago en un camión con dos acoplados a Brooklyn"
+	{
+		paquete.destino(puenteDeBrooklyn)
+		paquete.mensajero(roberto)
+		roberto.peso(90)
+		paquete.pagar()
+		roberto.medioTransporte(camion)
+		camion.acoplados(2)
+		
+		assert.notThat(paquete.puedeSerEntregado())
+	}
+	
+	test "Neo con crédito NO puede llevar un paquete que NO está pago a la matrix"
+	{
+		paquete.mensajero(neo)
+		neo.tieneSaldo(true)
+		paquete.destino(matrix)
+		paquete.cancelarPago()
+		
+		assert.notThat(paquete.puedeSerEntregado())
+	}
+	
+	test "Neo sin crédito NO puede llevar un paquete que está pago a la matrix"
+	{
+		paquete.mensajero(neo)
+		neo.tieneSaldo(false)
+		paquete.destino(matrix)
+		paquete.pagar()
+		
+		assert.notThat(paquete.puedeSerEntregado())
+	}
+	
+	test "Neo con crédito puede llevar un paquete que está pago a la matrix"
+	{
+		paquete.mensajero(neo)
+		neo.tieneSaldo(true)
+		paquete.destino(matrix)
+		paquete.pagar()
+		
+		assert.that(paquete.puedeSerEntregado())
+	}
+	
+	test "Chuck Norris puede llevar un paquete pago a donde sea porque es Chuck Norris"
+	{
+		paquete.mensajero(chuckNorris)
+		paquete.destino(matrix)
+		paquete.pagar()
+		
+		assert.that(paquete.puedeSerEntregado())
+		
+		paquete.destino(puenteDeBrooklyn)
+		
+		assert.that(paquete.puedeSerEntregado())
+		
+	}
+}
