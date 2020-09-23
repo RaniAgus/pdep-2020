@@ -1,3 +1,247 @@
 import mensajeria.*
 import mensajeros.*
 
+describe "Mensajeria Parte 2" 
+{
+	test "Contratar un mensajero"
+	{
+		mensajeria.contratar(neo)
+		assert.equals(#{neo}, mensajeria.mensajeros())
+	}
+	
+	test "Despedir un mensajero"
+	{
+		mensajeria.contratar(neo)
+		mensajeria.contratar(chuckNorris)
+		assert.equals(#{neo,chuckNorris}, mensajeria.mensajeros())
+		mensajeria.despedir(chuckNorris)
+		assert.equals(#{neo}, mensajeria.mensajeros())
+	}
+	
+	test "Despedir a todos los mensajeros"
+	{
+		mensajeria.contratar(neo)
+		mensajeria.contratar(chuckNorris)
+		assert.equals(#{neo,chuckNorris}, mensajeria.mensajeros())
+		mensajeria.despedirATodos()
+		assert.equals(#{}, mensajeria.mensajeros())
+	}
+	
+	test "Mensajería con 2 mensajeros NO es grande"
+	{
+		mensajeria.contratar(neo)
+		mensajeria.contratar(chuckNorris)
+		assert.notThat(mensajeria.esGrande())
+	}
+	
+	test "Mensajería con más de 2 mensajeros es grande"
+	{
+		mensajeria.contratar(neo)
+		mensajeria.contratar(chuckNorris)
+		mensajeria.contratar(roberto)
+		assert.that(mensajeria.esGrande())
+	}
+	
+	test "Primer mensajero (por orden alfabético) entrega el paquete"
+	{
+		paquete.destino(puenteDeBrooklyn)
+		paquete.estaPago(true)
+		
+		mensajeria.contratar(neo)
+		mensajeria.contratar(roberto)
+		mensajeria.contratar(chuckNorris)
+		
+		assert.equals(chuckNorris, mensajeria.primerMensajero())
+		assert.that(mensajeria.primerMensajeroPuedeEntregar(paquete))
+	}
+	
+	test "Peso del último mensajero (por orden alfabético)"
+	{
+		roberto.medioTransporte(bicicleta)
+		
+		mensajeria.contratar(neo)
+		mensajeria.contratar(roberto)
+		mensajeria.contratar(chuckNorris)
+		
+		assert.equals(roberto, mensajeria.ultimoMensajero())
+		assert.equals(roberto.peso(), mensajeria.pesoUltimoMensajero())
+	}
+}
+
+describe "Mensajería Parte 3"
+{
+	test "Un mensajero puede entregar el paquete"
+	{
+		paquetito.destino(matrix)
+		
+		mensajeria.contratar(roberto)
+		mensajeria.contratar(neo)
+		
+		neo.tieneSaldo(true)
+		assert.that(mensajeria.puedeEntregar(paquetito))
+	}
+	
+	test "Ningún mensajero puede entregar el paquete"
+	{
+		paquetito.destino(matrix)
+		
+		mensajeria.contratar(neo)
+		mensajeria.contratar(roberto)
+		
+		neo.tieneSaldo(false)
+		assert.notThat(mensajeria.puedeEntregar(paquetito))
+	}
+	
+	test "Obtener mensajeros que pueden llevar un paquete dado"
+	{
+		paquetito.destino(matrix)
+		
+		mensajeria.contratar(neo)
+		mensajeria.contratar(roberto)
+		mensajeria.contratar(chuckNorris)
+		
+		neo.tieneSaldo(true)
+		assert.equals(#{neo,chuckNorris}, mensajeria.losQuePuedenEntregar(paquetito))
+	}
+	
+	test "Una mensajería con peso promedio de 525kg tiene sobrepeso"
+	{
+		camion.acoplados(2)
+		roberto.medioTransporte(camion)
+		
+		mensajeria.contratar(roberto)
+		mensajeria.contratar(neo)
+		
+		assert.equals(1050, roberto.peso() + neo.peso())
+		assert.that(mensajeria.tieneSobrepeso())
+	}
+	
+	test "Una mensajería con peso promedio de 483kg NO tiene sobrepeso"
+	{
+		camion.acoplados(1)
+		roberto.medioTransporte(camion)
+		
+		mensajeria.contratar(roberto)
+		mensajeria.contratar(neo)
+		mensajeria.contratar(chuckNorris)
+		
+		assert.equals(1450, roberto.peso() + neo.peso() + chuckNorris.peso())
+		assert.notThat(mensajeria.tieneSobrepeso())
+	}
+	
+	test "Empresa que puede enviar paquete, incrementa su facturación"
+	{
+		assert.equals(0, mensajeria.facturacion())
+		assert.equals([], mensajeria.paquetesPendientes())
+		
+		mensajeria.contratar(roberto)
+		mensajeria.contratar(chuckNorris)
+		
+		paquetonViajero.agregarDestino(puenteDeBrooklyn)
+		paquetonViajero.agregarDestino(matrix)
+		paquetonViajero.pagar(201)
+		mensajeria.enviar(paquetonViajero)
+		
+		assert.equals([], mensajeria.paquetesPendientes())
+		assert.equals(200, mensajeria.facturacion())
+	}
+	
+	test "Empresa que NO puede enviar paquete, lo agrega a pendientes"
+	{
+		assert.equals(0, mensajeria.facturacion())
+		assert.equals([], mensajeria.paquetesPendientes())
+				
+		mensajeria.contratar(roberto)
+		mensajeria.contratar(chuckNorris)
+		
+		paquetonViajero.agregarDestino(puenteDeBrooklyn)
+		paquetonViajero.agregarDestino(matrix)
+		paquetonViajero.pagar(199)
+		mensajeria.enviar(paquetonViajero)
+		
+		assert.equals(0, mensajeria.facturacion())
+		assert.equals([paquetonViajero], mensajeria.paquetesPendientes())
+	}
+	
+	test "Intentar enviar múltiples paquetes"
+	{
+		assert.equals(0, mensajeria.facturacion())
+		assert.equals([], mensajeria.paquetesPendientes())
+				
+		mensajeria.contratar(roberto)
+		mensajeria.contratar(neo)
+		neo.tieneSaldo(false)
+		
+		paquete.destino(puenteDeBrooklyn)
+		paquete.estaPago(true)
+		paquetonViajero.agregarDestino(puenteDeBrooklyn)
+		paquetonViajero.pagar(100)
+		paquetito.destino(matrix)
+		
+		mensajeria.enviarTodos(#{paquete,paquetito,paquetonViajero})
+		
+		assert.equals(150, mensajeria.facturacion())
+		assert.equals([paquetito], mensajeria.paquetesPendientes())
+	}
+	
+	test "Intentar enviar paquete más caro pendiente actualiza los datos"
+	{
+		paquete.destino(matrix)
+		paquete.estaPago(true)
+		paquetonViajero.agregarDestino(puenteDeBrooklyn)
+		paquetonViajero.agregarDestino(matrix)
+		paquetonViajero.pagar(200)
+		paquetito.destino(puenteDeBrooklyn)
+		
+		mensajeria.enviarTodos(#{paquetito, paquetonViajero, paquete})
+		
+		assert.equals(0, mensajeria.facturacion())
+		assert.equals([paquete, paquetito, paquetonViajero], mensajeria.paquetesPendientes())
+		
+		mensajeria.contratar(neo)
+		
+		mensajeria.intentarEnviarMasCaro()
+		
+		assert.equals(200, mensajeria.facturacion())
+		assert.equals([paquete, paquetito], mensajeria.paquetesPendientes())
+		
+		neo.tieneSaldo(false)
+		
+		mensajeria.intentarEnviarMasCaro()
+		
+		assert.equals(200, mensajeria.facturacion())
+		assert.equals([paquetito, paquete], mensajeria.paquetesPendientes())
+		
+	}	
+	
+}
+
+describe "Agregados"
+{
+	test "Rani entrega paquetes hasta que le llegue la cuarentena"
+	{
+		assert.equals(0, mensajeria.facturacion())
+		assert.equals([], mensajeria.paquetesPendientes())
+		
+		mensajeria.contratar(rani)
+		
+		paquete.destino(puenteDeBrooklyn)
+		paquete.estaPago(true)
+		paquetonViajero.agregarDestino(puenteDeBrooklyn)
+		paquetonViajero.pagar(100)
+		paquetito.destino(matrix)
+		paqueteLoco.destino(matrix)
+		
+		mensajeria.enviarTodos(#{paquetito, paquetonViajero, paquete, paqueteLoco})
+		
+		assert.equals(1150, mensajeria.facturacion())
+		assert.equals([], mensajeria.paquetesPendientes())
+		
+		rani.encuarentenar()
+		
+		mensajeria.enviarTodos(#{paquetito, paquetonViajero, paquete, paqueteLoco})
+		
+		assert.equals(1150, mensajeria.facturacion())
+		assert.equals([paquete, paqueteLoco, paquetito, paquetonViajero], mensajeria.paquetesPendientes())
+	}
+}
