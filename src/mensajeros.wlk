@@ -2,56 +2,46 @@
 
 object paquete
 {
+	var estaPago = false
 	var destino = matrix
-	var property estaPago = false
 	const property precio = 50
 	
 	method destino(unDestino) { destino = unDestino }
-	method destinos() = #{ destino }
+	method pagar() { estaPago = true }
+	method cancelarPago() { estaPago = false }
+	method puedeSerEntregadoPor(unMensajero) = destino.puedePasar(unMensajero) and estaPago
 }
 
 object paquetito
 {
-	var property destino = matrix
-	const property estaPago = true
-	
+	var destino = matrix
 	const property precio = 0
 	
 	method destino(unDestino) { destino = unDestino }
-	method destinos() = #{ destino }
+	method puedeSerEntregadoPor(unMensajero) = destino.puedePasar(unMensajero)
 }
 
 object paquetonViajero
 {
 	var cantidadPaga = 0
-	const property destinos = #{}
-	
-	method pagar(cantidad)
-	{ 
-		cantidadPaga = (cantidadPaga + cantidad).min(self.precio())
-	}
-	
-	method estaPago() = cantidadPaga == self.precio()
+	const destinos = #{}
 	
 	method agregarDestino(unDestino) { destinos.add(unDestino) }
 	method quitarDestino(unDestino) { destinos.remove(unDestino) }
-	
 	method precio() = destinos.size() * 100
+	method pagar(cantidad) { cantidadPaga = (cantidadPaga + cantidad).min(self.precio()) }
+	method puedeSerEntregadoPor(unMensajero) = destinos.all({ unDestino => unDestino.puedePasar(unMensajero) }) and cantidadPaga == self.precio()
 }
 
 object paqueteLoco
 {
-	var destino = matrix
 	var estaPago = true
-	
-	method pagar() { estaPago = false }
-	
-	method estaPago() = estaPago
+	var destino = matrix
 	
 	method destino(unDestino) { destino = unDestino }
-	method destinos() = #{ destino }
-	
 	method precio() = 1000
+	method pagar() { estaPago = false }
+	method puedeSerEntregadoPor(unMensajero) = destino.puedePasar(unMensajero) and estaPago
 }
 
 //*************************DESTINOS*************************
@@ -77,8 +67,6 @@ object roberto
 	method peso() = peso + medioTransporte.peso()
 	
 	method puedeLlamar() = false
-	
-	method puedeEntregar(unPaquete) = unPaquete.destinos().all({ destino => destino.puedePasar(self)}) and unPaquete.estaPago()
 }
 
 object chuckNorris
@@ -86,8 +74,6 @@ object chuckNorris
 	const property peso = 900
 	
 	method puedeLlamar() = true
-	
-	method puedeEntregar(unPaquete) = unPaquete.destinos().all({ destino => destino.puedePasar(self)}) and unPaquete.estaPago()
 }
 
 object neo
@@ -98,8 +84,6 @@ object neo
 	method tieneSaldo(_saldo) { tieneSaldo = _saldo }
 	
 	method puedeLlamar() = tieneSaldo
-	
-	method puedeEntregar(unPaquete) = unPaquete.destinos().all({ destino => destino.puedePasar(self)}) and unPaquete.estaPago()
 }
 
 object rani
@@ -116,8 +100,6 @@ object rani
 	method peso() = auto.peso() + peso
 	
 	method puedeLlamar() = puedeConseguirTelefono
-	
-	method puedeEntregar(unPaquete) = unPaquete.destinos().all({ destino => destino.puedePasar(self)}) and unPaquete.estaPago()
 }
 
 //*************************TRANSPORTES*************************

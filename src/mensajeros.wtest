@@ -1,102 +1,160 @@
 import mensajeros.*
 
-describe "Mensajeros"
+describe "Roberto"
 {
+	fixture
+	{		
+		roberto.peso(90)
+		roberto.medioTransporte(camion)
+		paquete.destino(puenteDeBrooklyn)
+		paquete.pagar()
+	}
+	
 	test "Roberto (90kg) puede llevar un paquete que está pago en un camión con un acoplado a Brooklyn"
 	{
-		paquete.destino(puenteDeBrooklyn)
-		roberto.peso(90)
-		paquete.estaPago(true)
-		roberto.medioTransporte(camion)
-		camion.acoplados(1)
-		
-		assert.that(roberto.puedeEntregar(paquete))
+		camion.acoplados(1)	
+		assert.that(paquete.puedeSerEntregadoPor(roberto))
 	}
 	
 	test "Roberto (90kg) NO puede llevar un paquete que está pago en un camión con dos acoplados a Brooklyn"
 	{
-		paquete.destino(puenteDeBrooklyn)
-		roberto.peso(90)
-		paquete.estaPago(true)
-		roberto.medioTransporte(camion)
 		camion.acoplados(2)
-		
-		assert.notThat(roberto.puedeEntregar(paquete))
+		assert.notThat(paquete.puedeSerEntregadoPor(roberto))
+	}
+}
+
+describe "Neo"
+{
+	fixture
+	{
+		paquete.destino(matrix)
 	}
 	
 	test "Neo con crédito NO puede llevar un paquete que NO está pago a la matrix"
 	{
 		neo.tieneSaldo(true)
-		paquete.destino(matrix)
-		paquete.estaPago(false)
+		paquete.cancelarPago()
 		
-		assert.notThat(neo.puedeEntregar(paquete))
+		assert.notThat(paquete.puedeSerEntregadoPor(neo))
 	}
 	
 	test "Neo sin crédito NO puede llevar un paquete que está pago a la matrix"
 	{
 		neo.tieneSaldo(false)
-		paquete.destino(matrix)
-		paquete.estaPago(true)
+		paquete.pagar()
 		
-		assert.notThat(neo.puedeEntregar(paquete))
+		assert.notThat(paquete.puedeSerEntregadoPor(neo))
 	}
 	
 	test "Neo con crédito puede llevar un paquete que está pago a la matrix"
 	{
 		neo.tieneSaldo(true)
-		paquete.destino(matrix)
-		paquete.estaPago(true)
+		paquete.pagar()
 		
-		assert.that(neo.puedeEntregar(paquete))
+		assert.that(paquete.puedeSerEntregadoPor(neo))
+	}
+}
+
+describe "Chuck Norris"
+{
+	fixture 
+	{
+		paquete.pagar()
+	}
+
+	test "Chuck Norris puede llevar un paquete pago al puente de Brooklyn"
+	{
+		paquete.destino(puenteDeBrooklyn)
+		assert.that(paquete.puedeSerEntregadoPor(chuckNorris))
+		
 	}
 	
-	test "Chuck Norris puede llevar un paquete pago a donde sea (porque es Chuck Norris)"
+	test "Chuck Norris puede llevar un paquete pago a la matrix"
 	{
-		paquete.estaPago(true)
-		
 		paquete.destino(matrix)
-		assert.that(chuckNorris.puedeEntregar(paquete))
-		
-		paquete.destino(puenteDeBrooklyn)
-		assert.that(chuckNorris.puedeEntregar(paquete))
-		
+		assert.that(paquete.puedeSerEntregadoPor(chuckNorris))
+	}
+}
+
+describe "Paqueton Viajero"
+{
+	fixture
+	{
+		paquetonViajero.agregarDestino(puenteDeBrooklyn)
+		paquetonViajero.agregarDestino(matrix)
+		paquetonViajero.pagar(100)
+	}
+	
+	test "Paquetón viajero NO puede ser enviado si no fue pagado en su totalidad"
+	{
+		assert.notThat(paquetonViajero.puedeSerEntregadoPor(chuckNorris))
+	}
+	
+	test "Paquetón viajero NO puede ser enviado por mensajero que no pueda pasar por todos los destinos"
+	{
+		paquetonViajero.pagar(100)
+		neo.tieneSaldo(false)
+		assert.notThat(paquetonViajero.puedeSerEntregadoPor(neo))
+	}
+	
+	test "Paquetón viajero puede ser enviado"
+	{
+		paquetonViajero.pagar(100)
+		assert.that(paquetonViajero.puedeSerEntregadoPor(chuckNorris))
+	}
+}
+
+describe "Rani sin cuarentena"
+{
+	test "Rani sin cuarentena puede llevar un paquete a la matrix"
+	{
+		paqueteLoco.destino(matrix)
+		assert.that(paqueteLoco.puedeSerEntregadoPor(rani))
+	}
+	
+	test "Rani sin cuarentena puede llevar un paquete al puente"
+	{
+		paqueteLoco.destino(puenteDeBrooklyn)
+		assert.that(paqueteLoco.puedeSerEntregadoPor(rani))
+	}
+}
+
+describe "Rani en cuarentena"
+{
+	fixture
+	{
+		rani.encuarentenar()
+	}
+	
+	test "Rani en cuarentena NO puede llevar un paquete a la matrix"
+	{
+		paqueteLoco.destino(matrix)
+		assert.notThat(paqueteLoco.puedeSerEntregadoPor(rani))
+	}
+	
+	test "Rani en cuarentena NO puede llevar un paquete al puente"
+	{
+		paqueteLoco.destino(puenteDeBrooklyn)
+		assert.notThat(paqueteLoco.puedeSerEntregadoPor(rani))
 	}
 }
 
 describe "Agregados"
 {
-	test "Rani sin cuarentena puede llevar un paquete donde quiera"
+	fixture
 	{
-		paqueteLoco.destino(matrix)
-		assert.that(rani.puedeEntregar(paqueteLoco))
-		
 		paqueteLoco.destino(puenteDeBrooklyn)
-		assert.that(rani.puedeEntregar(paqueteLoco))
 	}
-	
-	test "Rani en cuarentena NO puede llevar ningún paquete"
-	{
-		rani.encuarentenar()
 		
-		paqueteLoco.destino(matrix)
-		assert.notThat(rani.puedeEntregar(paqueteLoco))
-		
-		paqueteLoco.destino(puenteDeBrooklyn)
-		assert.notThat(rani.puedeEntregar(paqueteLoco))
-	}
-	
 	test "Paquete loco puede ser entregado por cualquiera si no lo paga nadie"
 	{
-		paqueteLoco.destino(puenteDeBrooklyn)
-		assert.that(#{rani, chuckNorris, roberto, neo}.all({ mensajero => mensajero.puedeEntregar(paqueteLoco) }))
+		assert.that(#{rani, chuckNorris, roberto, neo}.all({ mensajero => paqueteLoco.puedeSerEntregadoPor(mensajero) }))
 	}
 	
 	test "Paquete loco NO puede ser entregado si alguien lo paga"
 	{
-		paqueteLoco.destino(puenteDeBrooklyn)
 		paqueteLoco.pagar()
 		
-		assert.notThat(#{rani, chuckNorris, roberto, neo}.any({ mensajero => mensajero.puedeEntregar(paqueteLoco) }))
+		assert.notThat(#{rani, chuckNorris, roberto, neo}.any({ mensajero => paqueteLoco.puedeSerEntregadoPor(mensajero) }))
 	}
 }
