@@ -1,0 +1,10 @@
+import wollok.game.*
+import zombies.*
+import trampas.*
+import configGenerales.*
+
+program game {
+	game.title("Plantas vs Zombies")
+	game.addVisual(pepita)
+	game.start()
+}

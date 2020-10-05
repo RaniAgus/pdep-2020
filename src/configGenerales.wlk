@@ -1,4 +1,7 @@
 import wollok.game.*
+import zombies.*
+import trampas.*
+import configGenerales.*
 
 object pepita {
 
