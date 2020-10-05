@@ -3,15 +3,14 @@ import zombies.*
 import trampas.*
 import configGenerales.*
 
-object pepita {
+object plantita {
 
 	method position() {
-		return game.center()
+		return game.at(1,5)
 	}
 
 	method image() {
-		return "pepita.png"
+		return "plantita2.png"
 	}
 
 }
-

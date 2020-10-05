@@ -5,6 +5,9 @@ import configGenerales.*
 
 program game {
 	game.title("Plantas vs Zombies")
-	game.addVisual(pepita)
+	game.boardGround("grass03.png")
+	game.width(20)
+	game.height(10)
+	game.addVisual(plantita)
 	game.start()
 }
