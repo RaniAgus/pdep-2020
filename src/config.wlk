@@ -4,19 +4,31 @@ import enemigos.*
 import trampas.*
 
 object config {
+	
 	method finalizar() {
 		game.say(torre, "FIN DEL JUEGO!")
 		game.schedule(2 * 1000, { game.stop() })
 	}
+	
+	method chocar(zombie){
+		game.onCollideDo(zombie,{planta=>planta.morir()})
+	}
+	method mover(){
+		game.addVisual(zombie)
+		game.onTick(1, "MOVER",{ zombie.caminar() })
+	}
+	method configurarTeclas(){
+		keyboard.q().onPressDo({game.addVisual(plantita)})
+	}
 }
 
-object plantita {
+object plantita inherits Planta {
 
-	method position() {
+	override method position() {
 		return game.at(1,5)
 	}
 
-	method image() {
+	override method image() {
 		return "plantita2.png"
 	}
 

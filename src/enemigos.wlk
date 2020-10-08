@@ -2,8 +2,9 @@ import wollok.game.*
 import config.*
 import objetosBasicos.*
 
-class Enemigo inherits Personaje {
+class Enemigo inherits Planta {
 	const property rangoAtaque = 1
+	const velocidadMovimiento
 	
 	method moverSiNoEstaAtacando() {
 		if(not estaAtacando)
@@ -13,3 +14,15 @@ class Enemigo inherits Personaje {
 	
 }
 
+object zombie{
+	method position(){
+		return game.origin()
+	}
+	 method image(){
+	 	return "jugador.png"
+	 }
+	 
+	 method caminar(){
+	 	return game.at(0.max(self.position().x() + 1),self.position().y())
+	 }
+}

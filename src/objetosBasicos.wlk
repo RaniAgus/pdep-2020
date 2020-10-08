@@ -2,13 +2,15 @@ import wollok.game.*
 import config.*
 
 class Elemento {
-	var salud
+	var vida
+	var property image
+	var property position
 	
-	method salud() = salud
+	method vida() = vida
 	
 	method recibirAtaque(atacante) {
-		salud = 0.max(salud - atacante.danio())
-		if(salud == 0) {
+		vida = 0.max(vida - atacante.danio())
+		if(vida == 0) {
 			atacante.detenerAtaque(self)
 			self.morir()
 		}
@@ -19,38 +21,33 @@ class Elemento {
 	}
 }
 
-object torre inherits Elemento(salud = 10000) {
+object torre inherits Elemento(vida = 10000, image = "muro.png", position= game.center()) {
 	override method morir() {
 		config.finalizar()
 	}
+	
 }
 
-class Personaje inherits Elemento {
-	const property id 
+class Planta inherits Elemento {
+//	const property id 
 	const property elixirNecesario // cada personaje (trampa) va a tener un elixir necesario para que éste funcione
 	
 	var danio
-	var velocidadMovimiento
 	var velocidadAtaque
 	var estaAtacando = false
-	
-	var property position
-	
-	override method morir() {
-		game.removeVisual(self)
-	}
+
 	
 	method danio() = danio
 	
 	method atacar(atacado) {
 		estaAtacando = true
-		game.onTick(velocidadAtaque, "ATACAR" + id.toString() + "-" + atacado.id().toString(), {
-			atacado.recibirAtaque(self)
-		})
+		game.onTick(velocidadAtaque, "ATACAR", {atacado.recibirAtaque(self)})
 	}
 	
 	method detenerAtaque(atacado) {
-		game.removeTickEvent("ATACAR" + id.toString() + "-" + atacado.id().toString() )
+		game.removeTickEvent("ATACAR")
 		estaAtacando = false
 	}
 }
+
+
