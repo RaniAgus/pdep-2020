@@ -1,7 +1,7 @@
 import wollok.game.*
-import zombies.*
+import enemigos.*
 import trampas.*
-import configGenerales.*
+import config.*
 
 program game {
 	game.title("Plantas vs Zombies")

@@ -1,5 +1,5 @@
 import wollok.game.*
-import configGenerales.*
+import config.*
 import objetosBasicos.*
 
 class Enemigo inherits Personaje {
@@ -9,5 +9,7 @@ class Enemigo inherits Personaje {
 		if(not estaAtacando)
 			position = game.at( self.position().x(), 10.max(self.position().y() + velocidadMovimiento) )
 	}
+	
+	
 }
 

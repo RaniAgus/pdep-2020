@@ -14,7 +14,9 @@ class Elemento {
 		}
 	}
 	
-	method morir()
+	method morir(){
+		game.removeVisual(self)
+	}
 }
 
 object torre inherits Elemento(salud = 10000) {
@@ -25,6 +27,7 @@ object torre inherits Elemento(salud = 10000) {
 
 class Personaje inherits Elemento {
 	const property id 
+	const property elixirNecesario // cada personaje (trampa) va a tener un elixir necesario para que éste funcione
 	
 	var danio
 	var velocidadMovimiento

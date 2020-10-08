@@ -1,17 +1,8 @@
 import wollok.game.*
-import zombies.*
-import trampas.*
-import configGenerales.*
+import enemigos.*
+import config.*
+import objetosBasicos.*
 
-object pepita {
-
-	method position() {
-		return game.center()
-	}
-
-	method image() {
-		return "pepita.png"
-	}
-
+object planta1 inherits Elemento {
+	method detenerAtaque(atacante){}
 }
-
