@@ -1,0 +1,10 @@
+import wollok.game.*
+import objetosBasicos.*
+import enemigos.*
+import trampas.*
+
+test "testX" {
+
+	assert.that(true)
+
+}

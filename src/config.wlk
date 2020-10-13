@@ -14,7 +14,6 @@ object config {
 		game.onCollideDo(zombie,{planta=>planta.morir()})
 	}
 	method mover(){
-		game.addVisual(zombie)
 		game.onTick(1, "MOVER",{ zombie.caminar() })
 	}
 	method configurarTeclas(){

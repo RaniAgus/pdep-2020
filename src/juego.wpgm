@@ -13,5 +13,6 @@ program game {
 	//game.addVisual(plantita)
 	config.configurarTeclas()
 	config.mover()
+	game.addVisual(zombie)
 	game.start()
 }
