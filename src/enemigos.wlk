@@ -2,7 +2,7 @@ import wollok.game.*
 import config.*
 import objetosBasicos.*
 
-class Enemigo inherits Planta {
+class Enemigo inherits Zombie {
 	const property rangoAtaque = 1
 	const velocidadMovimiento
 	

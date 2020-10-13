@@ -48,6 +48,26 @@ class Planta inherits Elemento {
 		game.removeTickEvent("ATACAR")
 		estaAtacando = false
 	}
+	
+	
+}
+
+class Zombie inherits Elemento {
+
+	var danio
+	var velocidadAtaque
+	var estaAtacando = false
+
+	
+	method danio() = danio
+	
+	method atacar(atacado) {
+		estaAtacando = true
+		game.onTick(velocidadAtaque, "ATACAR", {atacado.recibirAtaque(self)})
+	}
+	
+	
+	
 }
 
 
