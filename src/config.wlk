@@ -1,3 +1,4 @@
+  
 import wollok.game.*
 import objetosBasicos.*
 import enemigos.*
@@ -13,12 +14,17 @@ object config {
 	method chocar(zombie){
 		game.onCollideDo(zombie,{planta=>planta.morir()})
 	}
-	method mover(){
-		game.onTick(1, "MOVER",{ zombie.caminar() })
-	}
+
 	method configurarTeclas(){
 		keyboard.q().onPressDo({game.addVisual(plantita)})
 	}
+	
+	method configurarAcciones(){
+		game.onTick(1000, "mover aleatoriamente", { zombie.caminar()})
+	
+}
+
+	
 }
 
 object plantita inherits Planta {

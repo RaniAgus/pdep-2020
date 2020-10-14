@@ -12,7 +12,8 @@ program game {
 	game.addVisual(torre)
 	//game.addVisual(plantita)
 	config.configurarTeclas()
-	config.mover()
-	game.addVisual(zombie)
+	config.configurarAcciones()
+
+	game.addVisualCharacter(zombie)
 	game.start()
 }
