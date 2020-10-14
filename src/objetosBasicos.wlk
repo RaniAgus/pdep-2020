@@ -58,7 +58,7 @@ class Zombie inherits Elemento {
 	var velocidadAtaque
 	var estaAtacando = false
 
-	
+
 	method danio() = danio
 	
 	method atacar(atacado) {
@@ -67,7 +67,7 @@ class Zombie inherits Elemento {
 	}
 	
 	
-	
+
 }
 
 
