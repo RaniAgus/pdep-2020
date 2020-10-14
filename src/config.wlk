@@ -2,7 +2,7 @@ import wollok.game.*
 import objetosBasicos.*
 import enemigos.*
 import trampas.*
-
+// probando branches
 object config {
 	
 	method finalizar() {
