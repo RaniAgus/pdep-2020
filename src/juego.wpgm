@@ -10,11 +10,11 @@ program game {
 	game.width(20)
 	game.height(10)
 	game.addVisual(torre)
-	//game.addVisual(plantita)
+	game.addVisual(plantita)
 	config.configurarTeclas()
 	config.configurarAcciones()
-
-	game.addVisualCharacter(zombie)
+	
+	
 	game.start()
 }
 
