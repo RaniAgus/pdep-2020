@@ -2,8 +2,8 @@ import wollok.game.*
 import config.*
 
 class Elemento {
-	var vida
-	var property image
+	var property vida
+	var property image = ""
 	var property position
 	
 	method vida() = vida
@@ -21,12 +21,18 @@ class Elemento {
 	}
 }
 
-object torre inherits Elemento(vida = 10000, image = "muro.png", position= game.center()) {
+class Muro inherits Elemento{
+	
+	
+	override method image() = "muro.png"
+	
+	
 	override method morir() {
-		config.finalizar()
+		config.finalizar(self)
 	}
 	
 }
+
 
 class Planta inherits Elemento {
 //	const property id 
@@ -69,5 +75,6 @@ class Zombie inherits Elemento {
 	
 
 }
+
 
 
