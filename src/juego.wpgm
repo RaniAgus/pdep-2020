@@ -9,10 +9,9 @@ program game {
 	game.boardGround("grass03.png")
 	game.width(20)
 	game.height(10)
-	game.addVisual(torre)
-	//game.addVisual(plantita)
 	config.configurarTeclas()
 	config.configurarAcciones()
+	config.agregarTorre()
 
 	game.addVisualCharacter(zombie)
 	game.start()
