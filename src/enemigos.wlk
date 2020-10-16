@@ -16,12 +16,12 @@ class Enemigo inherits Zombie {
 }
 
 object zombie{
-	var property position=game.origin()
+	var property position=game.at(0,0.randomUpTo(game.height()))
 	method image(){
 	 	return "jugador.png"
 	 }
 	 method caminar(){
-	 	position =self.position().right(0.5)
+	 	position =self.position().right(1)
 	 }
 }
-		
+	 

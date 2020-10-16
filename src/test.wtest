@@ -3,6 +3,9 @@ import objetosBasicos.*
 import enemigos.*
 import trampas.*
 
+//crear que el zombie ataque
+//que ataque al muro, y si el muro llega a cero que termine el juego
+
 test "testX" {
 
 	assert.that(true)

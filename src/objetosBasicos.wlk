@@ -58,23 +58,27 @@ class Planta inherits Elemento {
 	
 }
 
-class Zombie inherits Elemento {
+class Zombie{
 
-	var danio
-	var velocidadAtaque
+	var danio=0
+	var velocidadAtaque=0
 	var estaAtacando = false
+	var property position=game.at(0,1.randomUpTo(game.height()))
+	var property image="jugador.png"
 
 
+	
 	method danio() = danio
+	 method caminar(){
+	 	position =self.position().right(1)
+	 }
 	
 	method atacar(atacado) {
 		estaAtacando = true
 		game.onTick(velocidadAtaque, "ATACAR", {atacado.recibirAtaque(self)})
 	}
+}	
 	
-	
-
-}
 
 
 

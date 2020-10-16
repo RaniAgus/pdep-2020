@@ -13,7 +13,6 @@ program game {
 	config.configurarAcciones()
 	config.agregarTorre()
 
-	game.addVisualCharacter(zombie)
 	game.start()
 }
 
