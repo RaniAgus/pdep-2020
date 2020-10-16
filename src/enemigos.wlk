@@ -24,3 +24,4 @@ object zombie{
 	 	position =self.position().right(0.5)
 	 }
 }
+		

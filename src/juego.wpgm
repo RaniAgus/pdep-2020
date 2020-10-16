@@ -16,3 +16,4 @@ program game {
 	game.addVisualCharacter(zombie)
 	game.start()
 }
+

@@ -11,7 +11,9 @@ object config {
 		game.schedule(2 * 1000, { game.stop() })
 	}
 	
-	method chocar(zombi){
+
+	method chocar(zombie){
+		game.onCollideDo(zombie,{planta=>planta.morir()})
 	}
 
 	method configurarTeclas(){
@@ -30,7 +32,6 @@ object config {
 		torre.forEach({murito => game.addVisual(murito)})
 		
 	}
-
 	
 }
 
