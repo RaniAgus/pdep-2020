@@ -20,8 +20,6 @@ object zombie{
 	method image(){
 	 	return "jugador.png"
 	 }
-	 method caminar(){
-	 	position =self.position().right(1)
-	 }
+
 }
 	 

@@ -2,9 +2,9 @@ import wollok.game.*
 import config.*
 
 class Elemento {
-	var property vida
+	var property vida 
 	var property image = ""
-	var property position
+	var property position 
 	
 	method vida() = vida
 	
@@ -38,12 +38,15 @@ class Planta inherits Elemento {
 //	const property id 
 	const property elixirNecesario // cada personaje (trampa) va a tener un elixir necesario para que éste funcione
 	
+	
 	var danio
 	var velocidadAtaque
 	var estaAtacando = false
 
-	
+	override method image() = "plantita2.png"
 	method danio() = danio
+	
+	override method position()=game.center()
 	
 	method atacar(atacado) {
 		estaAtacando = true
@@ -54,6 +57,10 @@ class Planta inherits Elemento {
 		game.removeTickEvent("ATACAR")
 		estaAtacando = false
 	}
+	
+	override method position(nuevaPosicion){
+	 position =nuevaPosicion
+	 }
 	
 	
 }

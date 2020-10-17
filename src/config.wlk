@@ -1,9 +1,8 @@
-  
 import wollok.game.*
 import objetosBasicos.*
 import enemigos.*
 import trampas.*
-// probando branches
+
 object config {
 	
 	method finalizar(murito) {
@@ -18,9 +17,22 @@ object config {
 		game.addVisual(zombi)
 		game.onTick(2000,"Caminar a la derecha",{zombi.caminar()})
 	}
+	
+	method agregarPlanta(){
+		const plantita= new Planta(elixirNecesario = 0, danio = 0, velocidadAtaque = 0, vida = 0, position = game.center())
+		game.addVisual(plantita)
+		// TODO revisar para implementacion
+	}
  
 	method configurarTeclas(){
+		keyboard.up().onPressDo({plantita.caminar(plantita.position().up(1))})
+		keyboard.down().onPressDo({plantita.caminar(plantita.position().down(1))})
+		keyboard.right().onPressDo({plantita.caminar(plantita.position().right(1))})
+		keyboard.left().onPressDo({plantita.caminar(plantita.position().left(1))})
+		// TODO preguntar a santy/dany
+		keyboard.enter().onPressDo({plantita.position()})
 		keyboard.q().onPressDo({game.addVisual(plantita)})
+		
 	}
 	
 	method configurarAcciones(){
@@ -40,15 +52,17 @@ object config {
 	}
 	
 }
+// esto lo quiero volar a la miercoles pero me rompe con lo de las teclas
 
-object plantita inherits Planta {
+object plantita {
 
-	override method position() {
-		return game.at(1,5)
-	}
+	var property position = game.center()
 
-	override method image() {
+	method image() {
 		return "plantita2.png"
 	}
+	method caminar(nuevaPosicion){
+	 	position =nuevaPosicion
+	 }
 
 }
