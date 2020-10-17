@@ -1,6 +1,8 @@
 import wollok.game.*
 import config.*
 
+// sinceramente creo que lo que es imagen deberia pasarse por parametro en el momento de declarar
+// principalmente por las plantas si quieren que hayan muchos tipos
 class Elemento {
 	var property vida 
 	var property image = ""
