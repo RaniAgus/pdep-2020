@@ -29,8 +29,7 @@ object config {
 		keyboard.down().onPressDo({plantita.caminar(plantita.position().down(1))})
 		keyboard.right().onPressDo({plantita.caminar(plantita.position().right(1))})
 		keyboard.left().onPressDo({plantita.caminar(plantita.position().left(1))})
-		// TODO preguntar a santy/dany
-		keyboard.enter().onPressDo({plantita.position()})
+		keyboard.enter().onPressDo({plantita.seEstaMoviendo(false)})
 		keyboard.q().onPressDo({game.addVisual(plantita)})
 		
 	}
@@ -56,12 +55,14 @@ object config {
 
 object plantita {
 
+	var property seEstaMoviendo = true
 	var property position = game.center()
 
 	method image() {
 		return "plantita2.png"
 	}
 	method caminar(nuevaPosicion){
+		if(self.seEstaMoviendo())
 	 	position =nuevaPosicion
 	 }
 
