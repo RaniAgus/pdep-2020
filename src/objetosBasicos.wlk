@@ -76,7 +76,7 @@ class Planta inherits Elemento {
 		if(self.seEstaMoviendo())
 	 	position =position.left(1)
 	}
-	
+
 }
 
 

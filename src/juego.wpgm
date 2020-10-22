@@ -3,6 +3,7 @@ import enemigos.*
 import trampas.*
 import config.*
 import objetosBasicos.*
+import cursor.*
 
 program game {
 	game.title("Plantas vs Zombies")
@@ -12,7 +13,6 @@ program game {
 	config.configurarTeclas()
 	config.configurarAcciones()
 	config.agregarTorre()
-	//config.chocar()
 
 	game.start()
 }
