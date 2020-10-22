@@ -49,7 +49,6 @@ class Planta inherits Elemento {
 	override method image() = "plantita2.png"
 	method danio() = danio
 	
-	override method position()=game.center()
 	
 	method atacar(atacado) {
 		estaAtacando = true
