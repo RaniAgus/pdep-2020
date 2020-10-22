@@ -39,6 +39,7 @@ class Muro inherits Elemento{
 class Planta inherits Elemento {
 //	const property id 
 	const property elixirNecesario // cada personaje (trampa) va a tener un elixir necesario para que éste funcione
+	var property seEstaMoviendo =true
 	
 	
 	var danio
@@ -60,21 +61,34 @@ class Planta inherits Elemento {
 		estaAtacando = false
 	}
 	
-	override method position(nuevaPosicion){
-	 position =nuevaPosicion
-	 }
-	
+	method moverHaciaArriba(){
+		if(self.seEstaMoviendo())
+	 	position =position.up(1)
+	}
+	method moverHaciaAbajo(){
+		if(self.seEstaMoviendo())
+	 	position =position.down(1)
+	}
+	method moverHaciaLaDerecha(){
+		if(self.seEstaMoviendo())
+	 	position =position.right(1)
+	}
+	method moverHaciaLaIzquierda(){
+		if(self.seEstaMoviendo())
+	 	position =position.left(1)
+	}
 	
 }
+
 
 class Zombie{
 
 	var danio=0
+	var vida =100
 	var velocidadAtaque=0
 	var estaAtacando = false
 	var property position=game.at(0,1.randomUpTo(game.height()))
 	var property image="jugador.png"
-
 
 	
 	method danio() = danio
@@ -85,6 +99,12 @@ class Zombie{
 	method atacar(atacado) {
 		estaAtacando = true
 		game.onTick(velocidadAtaque, "ATACAR", {atacado.recibirAtaque(self)})
+	}
+	
+	method morir(){
+		if(vida==0){
+			game.removeVisual(self)
+		}
 	}
 }	
 	

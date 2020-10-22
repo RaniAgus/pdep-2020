@@ -5,6 +5,7 @@ import config.*
 import objetosBasicos.*
 
 program game {
+	const zombie=new Zombie()
 	game.title("Plantas vs Zombies")
 	game.boardGround("grass03.png")
 	game.width(20)
@@ -12,6 +13,7 @@ program game {
 	config.configurarTeclas()
 	config.configurarAcciones()
 	config.agregarTorre()
+	//config.chocar()
 
 	game.start()
 }

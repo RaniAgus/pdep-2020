@@ -2,35 +2,33 @@ import wollok.game.*
 import objetosBasicos.*
 import enemigos.*
 import trampas.*
+import creadorPlantas.*
 
 object config {
+	
 	
 	method finalizar(murito) {
 		game.say(murito, "FIN DEL JUEGO!")
 		game.schedule(2 * 1000, { game.stop() })
 	}
 	
-	method chocar(zombie){
-	}
+	/*method chocar(){
+		game.onCollideDo(zombie,{algo=>algo.morir()})
+	} */
 	method agregarZombie(){
 		const zombi=new Zombie()
 		game.addVisual(zombi)
 		game.onTick(2000,"Caminar a la derecha",{zombi.caminar()})
 	}
-	
-	method agregarPlanta(){
-		const plantita= new Planta(elixirNecesario = 0, danio = 0, velocidadAtaque = 0, vida = 0, position = game.center())
-		game.addVisual(plantita)
-		// TODO revisar para implementacion
-	}
- 
+		
 	method configurarTeclas(){
-		keyboard.up().onPressDo({plantita.caminar(plantita.position().up(1))})
-		keyboard.down().onPressDo({plantita.caminar(plantita.position().down(1))})
-		keyboard.right().onPressDo({plantita.caminar(plantita.position().right(1))})
-		keyboard.left().onPressDo({plantita.caminar(plantita.position().left(1))})
+		var plantita 
+		keyboard.q().onPressDo({plantita=creadorDePlantas.agregarPlanta(1)})
+		keyboard.up().onPressDo({plantita.moverHaciaArriba()})
+		keyboard.down().onPressDo({plantita.moverHaciaAbajo()})
+		keyboard.right().onPressDo({plantita.moverHaciaLaDerecha()})
+		keyboard.left().onPressDo({plantita.moverHaciaLaIzquierda()})
 		keyboard.enter().onPressDo({plantita.seEstaMoviendo(false)})
-		keyboard.q().onPressDo({game.addVisual(plantita)})
 		
 	}
 	
@@ -51,9 +49,8 @@ object config {
 	}
 	
 }
-// esto lo quiero volar a la miercoles pero me rompe con lo de las teclas
 
-object plantita {
+/* object plantita {
 
 	var property seEstaMoviendo = true
 	var property position = game.center()
@@ -61,9 +58,21 @@ object plantita {
 	method image() {
 		return "plantita2.png"
 	}
-	method caminar(nuevaPosicion){
-		if(self.seEstaMoviendo())
-	 	position =nuevaPosicion
-	 }
 
-}
+	 method moverHaciaArriba(){
+		if(self.seEstaMoviendo())
+	 	position =position.up(1)
+	}
+	method moverHaciaAbajo(){
+		if(self.seEstaMoviendo())
+	 	position =position.down(1)
+	}
+	method moverHaciaLaDerecha(){
+		if(self.seEstaMoviendo())
+	 	position =position.right(1)
+	}
+	method moverHaciaLaIzquierda(){
+		if(self.seEstaMoviendo())
+	 	position =position.left(1)
+	} */
+

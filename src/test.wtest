@@ -2,12 +2,27 @@ import wollok.game.*
 import objetosBasicos.*
 import enemigos.*
 import trampas.*
+import config.*
+
 
 //crear que el zombie ataque
-//que ataque al muro, y si el muro llega a cero que termine el juego
-
-test "testX" {
-
-	assert.that(true)
-
+/* 
+describe "Movimiento de la planta"{
+	//const plantita =new Planta(elixirNecesario = 5, danio = 25, velocidadAtaque = 10, vida = 100, position = game.center())
+	
+	test "La posicion inicial de cada planta en el momento que se crea es el centro de la pantalla" {
+		assert.equals(game.center(),plantita.position())
 }
+	test "Si desde su posicion inicial la planta se mueve dos posciones en la derecha esta queda en la posicion (4,2)"{
+		plantita.moverHaciaLaDerecha()
+		plantita.moverHaciaLaDerecha()
+		assert.equals(game.at(4,2),plantita.position())		
+	}
+	
+	test "Si desde la posicion (4,2) se baja una posicion y se da enter, la planta no se movera"{
+		plantita.moverHaciaAbajo()
+		plantita.seEstaMoviendo(false)
+		assert.notThat(plantita.seEstaMoviendo())
+	}
+}
+*/
