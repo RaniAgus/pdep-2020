@@ -13,7 +13,6 @@ class Planta inherits Elemento {
 	var velocidadAtaque
 	var estaAtacando = false
 
-	override method image() = "plantita2.png"
 	method danio() = danio
 	
 	
@@ -44,4 +43,12 @@ class Planta inherits Elemento {
 	 	position =position.left(1)
 	}
 
+}
+// Esta es la plantita que usabamos para las pruebas
+class Margarita inherits Planta{
+	override method image()= "margarita.png"
+}
+// Se me ocurrio esta planta como otra , la foto fijense si pueden invertirla porque no la consegui asi
+class Lanzaguisantes inherits Planta{
+	override method image()= "lanzaguisantes.png"
 }

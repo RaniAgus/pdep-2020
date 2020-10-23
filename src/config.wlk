@@ -1,7 +1,7 @@
 import wollok.game.*
 import Elemento.*
 import enemigos.*
-import trampas.*
+import Plantas.*
 import creadorPlantas.*
 import cursor.*
 import Zombie.*
@@ -9,6 +9,7 @@ import Zombie.*
 object config {
 	var plantita 
 	
+	// Hice este metodo para directamente cargar esto en el juego.wpgm, traten de agregar aca
 	method iniciar(){
 		self.configurarTeclas()
 		self.configurarAcciones()
@@ -31,6 +32,11 @@ object config {
 
 		keyboard.q().onPressDo({
 			cursor.planta(creadorDePlantas.agregarPlanta(1))
+			game.addVisual(cursor)
+			cursor.seEstaMoviendo(true)
+		})
+		keyboard.w().onPressDo({
+			cursor.planta(creadorDePlantas.agregarPlanta(2))
 			game.addVisual(cursor)
 			cursor.seEstaMoviendo(true)
 		})
@@ -58,6 +64,12 @@ object config {
 		
 	}
 	
+}
+//Lo agrego para ir teniendo algo de base grafica
+object tableroDePlantas{
+	method image() ="tableroDePlantas.png"
+	method position()= game.at(5,0)
+	method mostrar()=game.addVisual(self)
 }
 
 

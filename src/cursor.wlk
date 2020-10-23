@@ -1,6 +1,6 @@
 import wollok.game.*
 import enemigos.*
-import trampas.*
+import Plantas.*
 import config.*
 import Elemento.*
 
@@ -16,7 +16,7 @@ import Elemento.*
 	
 
 	method image() {
-		return "plantita2.png"
+		return planta.image()
 	}
 	
 	method morir(){}

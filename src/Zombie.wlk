@@ -1,6 +1,6 @@
 import wollok.game.*
 import enemigos.*
-import trampas.*
+import Plantas.*
 import config.*
 import Elemento.*
 
