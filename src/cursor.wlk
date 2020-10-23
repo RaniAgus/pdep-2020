@@ -38,8 +38,8 @@ import Elemento.*
 	}
 	// Elimina la posicion de la planta que recibe, para que pueda volver a usarse por otra planta
 	//( la invoca el metodo morir de las plantas
-	method eliminarPosicion(plantita){
-		posicionesOcupadas.remove(plantita.position())
+	method eliminarPosicion(posicion){
+		posicionesOcupadas.remove(posicion)
 	}
 
 	 method moverHaciaArriba(){
