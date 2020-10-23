@@ -43,6 +43,7 @@ class Planta inherits Elemento {
 		if(self.seEstaMoviendo())
 	 	position =position.left(1)
 	}
+	// Lo sobreescribo usando lo que hace su metodo padre y elimino la posicion que ocupaba
 	override method morir(){
 		super()
 		cursor.eliminarPosicion(self)

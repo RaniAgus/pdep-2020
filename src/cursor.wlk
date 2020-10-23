@@ -7,6 +7,7 @@ import Elemento.*
  object cursor {
 
 	var property seEstaMoviendo = true
+	// Guarda posiciones del juego ya ocupadas por una planta
 	var posicionesOcupadas =#{}
 
 	var property planta = null
@@ -19,9 +20,11 @@ import Elemento.*
 	method image() {
 		return planta.image()
 	}
-	
+	// Revisa si la posicion ya esta ocupada
 	method estaOcupada(posicion) = posicionesOcupadas.contains(posicion)
 	method morir(){}
+	//Le agregue el condicional para que chequee si la posicion esta libre o no, si lo esta la agrega a la lista de 
+	// ocupadas, sino te tira un mensaje en el juego (este metodo deberia delegarse
 	method posicionarPlanta(){
 		if(!self.estaOcupada(self.position())){
 		game.addVisual(planta)
@@ -33,6 +36,8 @@ import Elemento.*
 		}
 
 	}
+	// Elimina la posicion de la planta que recibe, para que pueda volver a usarse por otra planta
+	//( la invoca el metodo morir de las plantas
 	method eliminarPosicion(plantita){
 		posicionesOcupadas.remove(plantita.position())
 	}
