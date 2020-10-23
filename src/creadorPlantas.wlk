@@ -1,7 +1,7 @@
 import enemigos.*
 import trampas.*
 import config.*
-import objetosBasicos.*
+import Elemento.*
 import wollok.game.*
 
 object creadorDePlantas {

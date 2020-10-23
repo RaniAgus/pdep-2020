@@ -1,12 +1,19 @@
 import wollok.game.*
-import objetosBasicos.*
+import Elemento.*
 import enemigos.*
 import trampas.*
 import creadorPlantas.*
 import cursor.*
+import Zombie.*
 
 object config {
 	var plantita 
+	
+	method iniciar(){
+		self.configurarTeclas()
+		self.configurarAcciones()
+		self.agregarTorre()
+	}
 	
 	method finalizar(murito) {
 		game.say(murito, "FIN DEL JUEGO!")

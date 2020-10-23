@@ -1,5 +1,5 @@
 import wollok.game.*
-import objetosBasicos.*
+import Elemento.*
 import enemigos.*
 import trampas.*
 import config.*

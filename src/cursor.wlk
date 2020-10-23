@@ -2,7 +2,7 @@ import wollok.game.*
 import enemigos.*
 import trampas.*
 import config.*
-import objetosBasicos.*
+import Elemento.*
 
  object cursor {
 

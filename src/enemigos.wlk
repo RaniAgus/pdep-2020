@@ -1,7 +1,7 @@
-  
 import wollok.game.*
 import config.*
-import objetosBasicos.*
+import Elemento.*
+import Zombie.*
 
 class Enemigo inherits Zombie {
 	const property rangoAtaque = 1
