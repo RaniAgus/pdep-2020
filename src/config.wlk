@@ -40,6 +40,7 @@ object config {
 			game.addVisual(cursor)
 			cursor.seEstaMoviendo(true)
 		})
+		keyboard.a().onPressDo({game.removeVisual(cursor)})
 		keyboard.up().onPressDo({cursor.moverHaciaArriba()})
 		keyboard.down().onPressDo({cursor.moverHaciaAbajo()})
 		keyboard.right().onPressDo({cursor.moverHaciaLaDerecha()})
