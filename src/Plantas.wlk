@@ -2,6 +2,7 @@ import wollok.game.*
 import enemigos.*
 import config.*
 import Elemento.*
+import cursor.*
 
 class Planta inherits Elemento {
 //	const property id 
@@ -41,6 +42,10 @@ class Planta inherits Elemento {
 	method moverHaciaLaIzquierda(){
 		if(self.seEstaMoviendo())
 	 	position =position.left(1)
+	}
+	override method morir(){
+		super()
+		cursor.eliminarPosicion(self)
 	}
 
 }

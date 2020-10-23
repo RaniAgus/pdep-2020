@@ -7,6 +7,7 @@ import Elemento.*
  object cursor {
 
 	var property seEstaMoviendo = true
+	var posicionesOcupadas =#{}
 
 	var property planta = null
 	
@@ -19,11 +20,21 @@ import Elemento.*
 		return planta.image()
 	}
 	
+	method estaOcupada(posicion) = posicionesOcupadas.contains(posicion)
 	method morir(){}
 	method posicionarPlanta(){
+		if(!self.estaOcupada(self.position())){
 		game.addVisual(planta)
 		game.removeVisual(self)
 		seEstaMoviendo = false
+		posicionesOcupadas.add(self.position())
+		} else{
+			game.say(cursor,"La posicion ya se encuentra ocupada, elija otra")
+		}
+
+	}
+	method eliminarPosicion(plantita){
+		posicionesOcupadas.remove(plantita.position())
 	}
 
 	 method moverHaciaArriba(){
