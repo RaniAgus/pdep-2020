@@ -46,19 +46,19 @@ import creadorPlantas.*
 		posicionesOcupadas.remove(posicion)
 	}
 	method moverHaciaArriba(){
-		if(self.seEstaMoviendo())	 	
+		if(self.seEstaMoviendo() and planta.position().y() < 9 )	 	
 	 	planta.position(planta.position().up(1))
 	}
 	method moverHaciaAbajo(){
-		if(self.seEstaMoviendo())
+		if(self.seEstaMoviendo() and planta.position().y() > 1)
 	 	planta.position(planta.position().down(1))
 	}
 	method moverHaciaLaDerecha(){
-		if(self.seEstaMoviendo())
+		if(self.seEstaMoviendo() and planta.position().x() < 18)
 	 	planta.position(planta.position().right(1))
 	}
 	method moverHaciaLaIzquierda(){
-		if(self.seEstaMoviendo())
+		if(self.seEstaMoviendo() and planta.position().x() > 4)
 	 	planta.position(planta.position().left(1))
 	} 
 }
