@@ -1,5 +1,4 @@
 import wollok.game.*
-import enemigos.*
 import Plantas.*
 import config.*
 import Elemento.*
