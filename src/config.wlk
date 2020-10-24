@@ -29,18 +29,10 @@ object config {
 	}
 		
 	method configurarTeclas(){
-		// TODO delegar los bloques de codigo
-		keyboard.q().onPressDo({
-			cursor.planta(creadorDePlantas.agregarPlanta(1))
-			game.addVisual(cursor)
-			cursor.seEstaMoviendo(true)
-		})
+
+		keyboard.q().onPressDo({cursor.insertarPlanta(1)})
 		// Se droppea la planta lanzaguisantes
-		keyboard.w().onPressDo({
-			cursor.planta(creadorDePlantas.agregarPlanta(2))
-			game.addVisual(cursor)
-			cursor.seEstaMoviendo(true)
-		})
+		keyboard.w().onPressDo({cursor.insertarPlanta(2)})
 		// Con esta tecla se borra la planta que tiene el cursor actual, por si el jugador quiere droppear otra
 		// planta en lugar de la que eligio
 		keyboard.a().onPressDo({game.removeVisual(cursor)})
