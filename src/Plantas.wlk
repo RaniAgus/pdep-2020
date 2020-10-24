@@ -35,5 +35,5 @@ class Margarita inherits Planta{
 }
 // Se me ocurrio esta planta como otra , la foto fijense si pueden invertirla porque no la consegui asi
 class Lanzaguisantes inherits Planta{
-	override method image()= "lanzaguisantes.png"
+	override method image()= "lanzaguisante.png"
 }
