@@ -10,7 +10,7 @@ class Zombie{
 	var velocidadAtaque=0
 	var estaAtacando = false
 	var property position=game.at(0,1.randomUpTo(game.height()))
-	var property image="jugador.png"
+	var property image="zombie.png"
 
 	
 	method danio() = danio
