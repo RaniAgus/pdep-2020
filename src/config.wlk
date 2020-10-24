@@ -1,14 +1,11 @@
 import wollok.game.*
 import Elemento.*
-import enemigos.*
 import Plantas.*
 import creadorPlantas.*
 import cursor.*
 import Zombie.*
 
 object config {
-	var plantita 
-	
 	// Hice este metodo para directamente cargar esto en el juego.wpgm, traten de agregar aca
 	method iniciar(){
 		self.configurarTeclas()

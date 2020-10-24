@@ -1,5 +1,4 @@
 import wollok.game.*
-import enemigos.*
 import Plantas.*
 import config.*
 import Elemento.*
@@ -32,14 +31,14 @@ import creadorPlantas.*
 			seEstaMoviendo = false
 			posicionesOcupadas.add(self.position())
 		} else{
-			game.say(cursor,"La posicion ya se encuentra ocupada, elija otra")
+			game.say(self,"La posicion ya se encuentra ocupada, elija otra")
 		}
 
 	}
 	method insertarPlanta(opcion){
-		cursor.planta(creadorDePlantas.agregarPlanta(opcion))
-		game.addVisual(cursor)
-		cursor.seEstaMoviendo(true)
+		self.planta(creadorDePlantas.agregarPlanta(opcion))
+		game.addVisual(self)
+		self.seEstaMoviendo(true)
 	}
 	// Elimina la posicion de la planta que recibe, para que pueda volver a usarse por otra planta
 	//( la invoca el metodo morir de las plantas)
