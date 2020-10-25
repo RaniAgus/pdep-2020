@@ -51,7 +51,7 @@ object config {
 	method agregarTorre(){
 
 		const torre = []
-		(1 .. 9).forEach({posEnY => torre.add(new Muro(vida= 500, position = game.at(19, posEnY)))})
+		(2 .. 9).forEach({posEnY => torre.add(new Muro(vida= 500, position = game.at(19, posEnY)))})
 		
 		torre.forEach({murito => game.addVisual(murito)})
 		

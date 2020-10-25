@@ -50,7 +50,7 @@ import creadorPlantas.*
 	 	planta.position(planta.position().up(1))
 	}
 	method moverHaciaAbajo(){
-		if(self.seEstaMoviendo() and planta.position().y() > 1)
+		if(self.seEstaMoviendo() and planta.position().y() > 2)
 	 	planta.position(planta.position().down(1))
 	}
 	method moverHaciaLaDerecha(){
