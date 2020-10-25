@@ -32,7 +32,7 @@ object config {
 		keyboard.w().onPressDo({cursor.insertarPlanta(2)})
 		// Con esta tecla se borra la planta que tiene el cursor actual, por si el jugador quiere droppear otra
 		// planta en lugar de la que eligio
-		keyboard.a().onPressDo({game.removeVisual(cursor)})
+		keyboard.c().onPressDo({game.removeVisual(cursor)}) //cambio a c por clean
 		keyboard.up().onPressDo({cursor.moverHaciaArriba()})
 		keyboard.down().onPressDo({cursor.moverHaciaAbajo()})
 		keyboard.right().onPressDo({cursor.moverHaciaLaDerecha()})
