@@ -2,6 +2,7 @@ import wollok.game.*
 import config.*
 import Elemento.*
 import cursor.*
+import tablero.*
 
 class Planta inherits Elemento {
 //	const property id 
@@ -25,7 +26,7 @@ class Planta inherits Elemento {
 	// Lo sobreescribo usando lo que hace su metodo padre y elimino la posicion que ocupaba
 	override method morir(){
 		super()
-		cursor.eliminarPosicion(self.position())
+		tablero.eliminarPosicion(self.position())
 	}
 
 }

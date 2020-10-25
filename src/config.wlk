@@ -4,6 +4,7 @@ import Plantas.*
 import creadorPlantas.*
 import cursor.*
 import Zombie.*
+import tablero.*
 
 object config {
 	// Hice este metodo para directamente cargar esto en el juego.wpgm, traten de agregar aca
@@ -20,6 +21,7 @@ object config {
 	
 	method agregarZombie(){
 		const zombi=new Zombie()
+		tablero.zombiesEnJuego(zombi)
 		game.addVisual(zombi)
 		game.onTick(2000,"Caminar a la derecha",{zombi.caminar()})
 		game.onCollideDo(zombi,{algo => algo.morir()})
