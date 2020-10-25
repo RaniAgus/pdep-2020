@@ -1,20 +1,16 @@
 import wollok.game.*
-import enemigos.*
-import trampas.*
+import Plantas.*
 import config.*
-import objetosBasicos.*
+import Elemento.*
+import cursor.*
 
 program game {
 	game.title("Plantas vs Zombies")
-	game.boardGround("grass03.png")
+	game.boardGround("grass03.png")	
 	game.width(20)
 	game.height(10)
-	game.addVisual(torre)
-	game.addVisual(plantita)
-	config.configurarTeclas()
-	config.configurarAcciones()
-	
-	
+	tableroDePlantas.mostrar()
+	config.iniciar()
 	game.start()
 }
 

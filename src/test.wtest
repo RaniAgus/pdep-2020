@@ -1,10 +1,37 @@
 import wollok.game.*
-import objetosBasicos.*
-import enemigos.*
-import trampas.*
+import Elemento.*
+import Plantas.*
+import config.*
+import cursor.*
+import creadorPlantas.*
 
-test "testX" {
+//crear que el zombie ataque
+ 
+describe "Movimiento de la planta"{
+	var planta=creadorDePlantas.agregarPlanta(1)
 
-	assert.that(true)
-
+		
+	test "La posicion de la planta en el momento de colocarla es la (5,1)"{
+		cursor.planta(planta)
+		assert.equals(game.at(5,1),planta.position())
+	}
+	test "Si se corren 2 posiciones arriba y otras dos a la derecha la nueva posicion de la planta es la (7,3)"{
+		cursor.planta(planta)
+		cursor.moverHaciaArriba()
+		cursor.moverHaciaArriba()
+		cursor.moverHaciaLaDerecha()
+		cursor.moverHaciaLaDerecha()
+		assert.equals(game.at(7,3),planta.position())
+	}
+/* 	test "Si de la posicion (7,3) se baja una posicion y se fija la posicion la misma deja de moverse"{
+		cursor.planta(planta)
+		cursor.moverHaciaArriba()
+		cursor.moverHaciaArriba()
+		cursor.moverHaciaLaDerecha()
+		cursor.moverHaciaLaDerecha()
+		cursor.moverHaciaAbajo()
+		cursor.posicionarPlanta()
+		assert.notThat(planta.seEstaMoviendo())
+	} */
 }
+
