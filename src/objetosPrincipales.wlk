@@ -34,28 +34,22 @@ class Muro {
 	}*/
 	
 	method morir() {
-		config.finalizar(self)
+		//config.finalizar(self)
 	}
 }
 
-/* TODO: object saludMuro
-object saludMuro {
-	var vida = 0
+object torre inherits ElementoVivo(vida = 1000) {
+	const muros = []
 	
-	
-	method recibirAtaque(atacante) {
-		vida = 0.max(vida - atacante.danio())
-		if(vida == 0) {
-			atacante.detenerAtaque(self)
-			self.morir(atacante)
-		}
-	}
-	
-	method morir(atacante) {
-		config.finalizar(atacante)
-	}
-	
+	method agregarMuro(muro) {
+		muros.add(muro)
+		game.addVisual(muro)
+	}	
+		
+	override method morir() {
+		config.finalizar()
+	}	
 }
-*/
+
 
 
