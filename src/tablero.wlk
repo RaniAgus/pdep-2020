@@ -9,7 +9,7 @@ import zombies.*
 	
 	var property position = game.at(10, 10)
 	
-	method image() = if(seleccionado < 0) "grass03.png" else imagenes.get(seleccionado)
+	method image() = if(seleccionado < 0) "null.png" else imagenes.get(seleccionado)
 	
 	//Para cuando se choque con zombie
 	method morir(){}

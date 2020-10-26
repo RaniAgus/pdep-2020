@@ -7,7 +7,6 @@ import tablero.*
 object config {
 	// Hice este metodo para directamente cargar esto en el juego.wpgm, traten de agregar aca
 	method iniciar(){
-		tableroDePlantas.mostrar()
 		game.addVisual(cursor)
 		
 		self.configurarTeclas()
@@ -59,12 +58,3 @@ object config {
 	}
 	
 }
-//Lo agrego para ir teniendo algo de base grafica
-object tableroDePlantas{
-	method image() ="tableroDePlantas.png"
-	method position()= game.at(5,0)
-	method mostrar()=game.addVisual(self)
-}
-
-
-
