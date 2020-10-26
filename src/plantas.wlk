@@ -1,18 +1,11 @@
 import wollok.game.*
 import config.*
-import Elemento.*
-import cursor.*
+import objetosPrincipales.*
 import tablero.*
 
-class Planta inherits Elemento {
-//	const property id 
-	const property elixirNecesario // cada personaje (trampa) va a tener un elixir necesario para que éste funcione
-	var property seEstaMoviendo =true
-	var danio
-	var velocidadAtaque
-	var estaAtacando = false
-
-	method danio() = danio
+class Planta inherits ElementoVivo {
+	const property elixirNecesario 
+	// cada personaje (trampa) va a tener un elixir necesario para que éste funcione
 	
 	method atacar(atacado) {
 		estaAtacando = true
@@ -25,16 +18,15 @@ class Planta inherits Elemento {
 	}
 	// Lo sobreescribo usando lo que hace su metodo padre y elimino la posicion que ocupaba
 	override method morir(){
-		super()
-		tablero.eliminarPosicion(self.position())
+		tablero.eliminarPlanta(self)
 	}
 
 }
 // Esta es la plantita que usabamos para las pruebas
-class Margarita inherits Planta{
-	override method image()= "margarita.png"
+class Margarita inherits Planta {
+	override method image() = "margarita.png"
 }
 // Se me ocurrio esta planta como otra , la foto fijense si pueden invertirla porque no la consegui asi
-class Lanzaguisantes inherits Planta{
-	override method image()= "lanzaguisante.png"
+class Lanzaguisantes inherits Planta {
+	override method image() = "lanzaguisante.png"
 }
