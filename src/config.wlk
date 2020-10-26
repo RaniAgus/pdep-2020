@@ -41,8 +41,8 @@ object config {
 	}
 	
 	method configurarPersonajes() {
-		cursor.agregarPersonaje(({ => new Margarita(elixirNecesario = 0, danio = 0, velocidadAtaque = 0, vida = 0, position = cursor.position()) }), "margarita.png")
-		cursor.agregarPersonaje(({ => new Lanzaguisantes(elixirNecesario = 0, danio = 0, velocidadAtaque = 0, vida = 0, position = cursor.position()) }), "lanzaguisante.png")
+		cursor.agregarPersonaje(({ => new Margarita(elixirNecesario = 0, danio = 0, velocidadAtaque = 0, vida = 0, position = cursor.position()) }), "margarita-gris.png")
+		cursor.agregarPersonaje(({ => new Lanzaguisantes(elixirNecesario = 0, danio = 0, velocidadAtaque = 0, vida = 0, position = cursor.position()) }), "lanzaguisante-gris.png")
 	}
 	
 	method configurarAcciones(){
