@@ -10,13 +10,13 @@ object config {
 		game.addVisual(cursor)
 		
 		self.configurarTeclas()
-		self.configurarPersonajes()
-		self.configurarAcciones()
+		self.configurarPlantas()
+		self.configurarNiveles()
 		self.agregarTorre()
 	}
 	
-	method finalizar(zombi) {
-		game.say(zombi, "FIN DEL JUEGO!")
+	method finalizar() {
+		game.say(cursor, "FIN DEL JUEGO!")
 		game.schedule(2 * 1000, { game.stop() })
 	}
 		
@@ -40,21 +40,40 @@ object config {
 		
 	}
 	
-	method configurarPersonajes() {
-		cursor.agregarPersonaje(({ => new Margarita(elixirNecesario = 0, danio = 0, velocidadAtaque = 0, vida = 0, position = cursor.position()) }), "margarita-gris.png")
-		cursor.agregarPersonaje(({ => new Lanzaguisantes(elixirNecesario = 0, danio = 0, velocidadAtaque = 0, vida = 0, position = cursor.position()) }), "lanzaguisante-gris.png")
-	}
-	
-	method configurarAcciones(){
-		game.onTick(3000,"Agregar zombies",{tablero.insertarZombie()})
-		game.schedule(16000, { => game.removeTickEvent("Agregar zombies") })
-	}
-	
-	method agregarTorre(){
-		const torre = []
-		(2 .. 9).forEach({posEnY => torre.add(new Muro(position = game.at(19, posEnY)))})
+	method configurarPlantas() {
 		
-		torre.forEach({murito => game.addVisual(murito)})
+		//Se agregan los creadores de Plantas con sus variables iniciales
+		cursor.agregarPlanta( ({ => new Margarita(
+			elixirNecesario = 0, 
+			danio = 50,
+			velocidadAtaque = 1, 
+			vida = 0, 
+			position = cursor.position()
+		) }), "margarita-gris.png")
+		
+		cursor.agregarPlanta( ({ => new Lanzaguisantes(
+			elixirNecesario = 0, 
+			danio = 50, 
+			velocidadAtaque = 1, 
+			vida = 0, 
+			position = cursor.position()
+		) }), "lanzaguisante-gris.png") 
+	}
+	
+	method configurarNiveles(){
+		//NIVEL 1 - 5 Zombies (velocidad 1 / 2)
+		game.onTick(3*1000,"Agregar zombies nivel 1",{tablero.agregarZombie(2)})
+		game.schedule(16*1000, { => game.removeTickEvent("Agregar zombies nivel 1") })
+		//NIVEL 2 - 10 Zombies (velocidad 1 / 1.3)
+		game.schedule(26*1000, { => game.onTick(3000,"Agregar zombies nivel 2",{tablero.agregarZombie(1.3)}) })
+		game.schedule(60*1000, { => game.removeTickEvent("Agregar zombies nivel 2") })
+		//NIVEL 3 - 15 Zombies (velocidad 1 / 0.9)
+	    game.schedule(70*1000, { => game.onTick(3000,"Agregar zombies nivel 3",{tablero.agregarZombie(0.9)}) })
+	    game.schedule(119*1000, { => game.removeTickEvent("Agregar zombies nivel 3") })
+	}
+	
+	method agregarTorre() {
+		(2 .. 9).forEach({posEnY => torre.agregarMuro(new Muro(position = game.at(19, posEnY)))})
 	}
 	
 }

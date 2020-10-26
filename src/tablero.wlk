@@ -5,17 +5,17 @@ import zombies.*
 	const creadoresDePlantas = []
 	const imagenes = []
 	
-	var seleccionado = -1
-	
 	var property position = game.at(10, 10)
 	
+	//El juego arranca sin seleccionar nada, y con la imagen transparente
+	var seleccionado = -1
 	method image() = if(seleccionado < 0) "null.png" else imagenes.get(seleccionado)
 	
 	//Para cuando se choque con zombie
 	method morir(){}
 	
 	//Agrega una planta seleccionable, junto con su imagen en blanco y negro
-	method agregarPersonaje(creadorDePlanta, imagen){
+	method agregarPlanta(creadorDePlanta, imagen){
 		creadoresDePlantas.add(creadorDePlanta)
 		imagenes.add(imagen)
 		
@@ -33,7 +33,7 @@ import zombies.*
 		if(tablero.estaOcupada(position)) {
 			self.error("Esta posición está ocupada!!")
 		}
-		tablero.insertarPlanta( creadoresDePlantas.get(seleccionado).apply() )
+		tablero.agregarPlanta( creadoresDePlantas.get(seleccionado).apply() )
 	}
 	
 	method moverHaciaArriba() {
@@ -67,13 +67,13 @@ object tablero {
 			|| zombiesEnJuego.any({ zombie => zombie.position() == posicion })
 	}
 	
-	method insertarPlanta(planta) {
+	method agregarPlanta(planta) {
 		plantasEnJuego.add(planta)
 		game.addVisual(planta)
 		game.showAttributes(planta)
 	}
 	
-	method insertarZombie(){
+	method agregarZombie(velocidadMovimiento){
 		const zombie = new Zombie (
 			position = game.at(0, 2.randomUpTo( game.height() )), 
 			image = "zombie.png",
@@ -84,7 +84,7 @@ object tablero {
 		
 		game.addVisual(zombie)
 		game.showAttributes(zombie)
-		game.onTick(2000,"Caminar a la derecha",{zombie.caminar()})
+		game.onTick(velocidadMovimiento * 1000, "Caminar a la derecha",{zombie.caminar()})
 		game.onCollideDo(zombie,{algo => algo.morir()})
 		zombiesEnJuego.add(zombie)
 	}
