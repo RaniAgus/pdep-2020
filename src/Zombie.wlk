@@ -16,7 +16,7 @@ class Zombie{
 	method recibirAtaque(atacante) {
 		vida = 0.max(vida - atacante.danio())
 		if(vida == 0) {
-			atacante.detenerAtaque(self)
+			//atacante.detenerAtaque(self)
 			self.morir()
 	}
 	}
