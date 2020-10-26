@@ -26,7 +26,7 @@ import creadorPlantas.*
 	// ocupadas, sino te tira un mensaje en el juego (este metodo deberia delegarse)
 	method posicionarPlanta(){
 		if(!self.estaOcupada(self.position())){
-			game.addVisual(planta)    
+			game.addVisual(planta) 
 			game.removeVisual(self)
 			seEstaMoviendo = false
 			posicionesOcupadas.add(self.position())
@@ -38,8 +38,10 @@ import creadorPlantas.*
 	method insertarPlanta(opcion){
 		self.planta(creadorDePlantas.agregarPlanta(opcion))
 		game.addVisual(self)
+		
 		self.seEstaMoviendo(true)
 	}
+	
 	// Elimina la posicion de la planta que recibe, para que pueda volver a usarse por otra planta
 	//( la invoca el metodo morir de las plantas)
 	method eliminarPosicion(posicion){

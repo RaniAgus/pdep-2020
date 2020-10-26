@@ -25,8 +25,10 @@ class Planta inherits Elemento {
 	
 	// Lo sobreescribo usando lo que hace su metodo padre y elimino la posicion que ocupaba
 	override method morir(){
-		super()
 		cursor.eliminarPosicion(self.position())
+		game.onCollideDo(self, {zombi => self.atacar(zombi) })
+		//game.removeVisual(self)
+		//super()
 	}
 
 

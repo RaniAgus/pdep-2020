@@ -22,7 +22,7 @@ object config {
 	method agregarZombie(velo){
 		
 		const zombi=new Zombie()
-		game.addVisual(zombi)
+		game.addVisual(zombi)	
 		game.onTick(velo,"Caminar a la derecha",{zombi.caminar()})
 		game.onCollideDo(zombi,{algo => algo.morir()})
 	}

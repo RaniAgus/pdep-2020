@@ -3,6 +3,7 @@ import Plantas.*
 import config.*
 import Elemento.*
 
+
 class Zombie{
 
 	var danio=0
@@ -12,10 +13,19 @@ class Zombie{
 	var property position=game.at(0,2.randomUpTo(game.height()))
 	var property image="zombie.png"
 
+	method recibirAtaque(atacante) {
+		vida = 0.max(vida - atacante.danio())
+		if(vida == 0) {
+			atacante.detenerAtaque(self)
+			self.morir()
+	}
+	}
+	
 	
 	method danio() = danio
 	 method caminar(){
 	 	position =self.position().right(1)
+	 	
 	 }
 	
 	method atacar(atacado) {
