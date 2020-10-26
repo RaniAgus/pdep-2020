@@ -30,6 +30,9 @@ import zombies.*
 		if(seleccionado < 0) {
 			self.error("No se seleccionó ningún personaje!!")
 		}
+		
+		//TODO: Acá entraría el error "no se cuenta con el elixir necesario"
+		
 		if(tablero.estaOcupada(position)) {
 			self.error("Esta posición está ocupada!!")
 		}

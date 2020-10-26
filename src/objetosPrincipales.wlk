@@ -2,12 +2,12 @@ import wollok.game.*
 import config.*
 
 class ElementoVivo { 
-	var property image = ""
+	var property image
 	var property position = game.origin()
 	
-	var vida = 0
-	var danio = 0
-	var velocidadAtaque = 0
+	var vida
+	var danio
+	var velocidadAtaque
 	var estaAtacando = false
 	
 	method vida() = vida
@@ -16,7 +16,7 @@ class ElementoVivo {
 	method recibirAtaque(atacante) {
 		vida = 0.max(vida - atacante.danio())
 		if(vida == 0) {
-			atacante.detenerAtaque(self)
+			//atacante.detenerAtaque(self)
 			self.morir()
 		}
 	}
@@ -38,7 +38,7 @@ class Muro {
 	}
 }
 
-object torre inherits ElementoVivo(vida = 1000) {
+object torre inherits ElementoVivo(vida = 10000) {
 	const muros = []
 	
 	method agregarMuro(muro) {

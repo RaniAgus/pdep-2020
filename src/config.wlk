@@ -41,22 +41,23 @@ object config {
 	}
 	
 	method configurarPlantas() {
-		
 		//Se agregan los creadores de Plantas con sus variables iniciales
 		cursor.agregarPlanta( ({ => new Margarita(
 			elixirNecesario = 0, 
-			danio = 50,
-			velocidadAtaque = 1, 
+			danio = 25,
+			velocidadAtaque = 3000, 
 			vida = 0, 
-			position = cursor.position()
+			position = cursor.position(),
+			image = "margarita.png"
 		) }), "margarita-gris.png")
 		
 		cursor.agregarPlanta( ({ => new Lanzaguisantes(
 			elixirNecesario = 0, 
-			danio = 50, 
-			velocidadAtaque = 1, 
+			danio = 25, 
+			velocidadAtaque = 3000, 
 			vida = 0, 
-			position = cursor.position()
+			position = cursor.position(),
+			image = "lanzaguisante.png"
 		) }), "lanzaguisante-gris.png") 
 	}
 	
