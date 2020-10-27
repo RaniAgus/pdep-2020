@@ -39,12 +39,19 @@ describe "Nave de carga" {
 }
 
 describe "Nave de residuos" {
-	const naveDeResiduos = new NaveDeResiduos(carga = 5000, velocidad = 10000)
+	const naveSellada = new NaveDeResiduos(carga = 5000, velocidad = 10000, selladoAlVacio = true)
+	const naveSinSellar = new NaveDeResiduos(selladoAlVacio = false)
 	
 	test "recibir amenaza" {
-		naveDeResiduos.recibirAmenaza()
-		assert.equals(5000, naveDeResiduos.carga())
-		assert.equals(0, naveDeResiduos.velocidad())
+		naveSellada.recibirAmenaza()
+		assert.equals(5000, naveSellada.carga())
+		assert.equals(0, naveSellada.velocidad())
+	}
+	
+	test "prepararse para viaje" {
+		naveSinSellar.prepararParaViajar()
+		assert.equals(15000, naveSinSellar.velocidad())
+		assert.that(naveSinSellar.selladoAlVacio())
 	}
 }
 
@@ -72,6 +79,11 @@ describe "Nave de pasajeros" {
 	test "recibir amenaza" {
 		naveSinPasajeros.recibirAmenaza()
 		assert.that(naveSinPasajeros.alarma())
+	}
+	
+	test "preparar para viajar" {
+		naveConPasajeros.prepararParaViajar()
+		assert.equals(300000, naveConPasajeros.velocidad())
 	}
 
 }
@@ -102,6 +114,18 @@ describe "Nave de combate" {
 	test "recibir amenaza en ataque" {
 		naveEnAtaque.recibirAmenaza()
 		assert.equals("Enemigo encontrado", naveEnAtaque.ultimoMensaje())
+	}
+	
+	test "prepararse para viaje en ataque" {
+		naveEnAtaque.prepararParaViajar()
+		assert.equals("Volviendo a la base", naveEnAtaque.ultimoMensaje())
+		assert.equals(15000, naveEnAtaque.velocidad())
+	}
+	
+	test "prepararse para viaje en reposo" {
+		naveEnReposo.prepararParaViajar()
+		assert.equals("Saliendo en misión", naveEnReposo.ultimoMensaje())
+		assert.equals(15000, naveEnReposo.velocidad())
 	}
 }
 
