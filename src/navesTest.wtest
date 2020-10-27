@@ -25,7 +25,17 @@ describe "Nave de carga" {
 		naveLlena.recibirAmenaza()
 		assert.equals(0, naveVacia.carga())
 	}
-
+	
+	test "propulsar sin tener velocidad" {
+		naveVacia.propulsar()	
+		assert.equals(20000, naveVacia.velocidad())
+	}
+	
+	test "propulsar alcanzando máximo de velocidad" {
+		naveLlena.propulsar()
+		assert.equals(300000, naveLlena.velocidad())
+	}
+	
 }
 
 describe "Nave de pasajeros" {

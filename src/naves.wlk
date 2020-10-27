@@ -1,6 +1,15 @@
-class NaveDeCarga {
-
+class Nave {
 	var velocidad = 0
+	
+	method velocidad() = velocidad
+	
+	method propulsar() {
+		velocidad = 300000.min(velocidad + 20000)
+	}
+}
+
+
+class NaveDeCarga inherits Nave{
 	var property carga = 0
 
 	method sobrecargada() = carga > 100000
@@ -13,9 +22,7 @@ class NaveDeCarga {
 
 }
 
-class NaveDePasajeros {
-
-	var velocidad = 0
+class NaveDePasajeros inherits Nave {
 	var property alarma = false
 	const cantidadDePasajeros = 0
 
@@ -31,11 +38,14 @@ class NaveDePasajeros {
 
 }
 
-class NaveDeCombate {
-	var property velocidad = 0
+class NaveDeCombate inherits Nave {
 	var property modo = reposo
 	const property mensajesEmitidos = []
-
+	
+	method velocidad(nuevaVelocidad) {
+		velocidad = nuevaVelocidad
+	}
+	
 	method emitirMensaje(mensaje) {
 		mensajesEmitidos.add(mensaje)
 	}
@@ -51,7 +61,7 @@ class NaveDeCombate {
 }
 
 object reposo {
-
+	
 	method invisible() = false
 
 	method recibirAmenaza(nave) {
