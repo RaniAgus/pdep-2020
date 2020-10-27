@@ -1,5 +1,13 @@
 import naves.*
 
+/* Para pensar: ¿Hace falta testear más casos? 
+ * 
+ * Respuesta: No, no hace falta, ya que encontrarseConEnemigo() produce otros efectos ya testeados.
+ * Con solo testear que se cumplan ambos efectos para un caso, es suficiente para demostrar que se 
+ * cumple para todos.
+ * 
+ * */
+
 describe "Nave de carga" {
 
 	const naveVacia = new NaveDeCarga()
