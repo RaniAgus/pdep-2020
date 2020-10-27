@@ -126,6 +126,7 @@ describe "Nave de combate" {
 		naveEnReposo.prepararParaViajar()
 		assert.equals("Saliendo en misión", naveEnReposo.ultimoMensaje())
 		assert.equals(15000, naveEnReposo.velocidad())
+		assert.equals(ataque, naveEnReposo.modo())
 	}
 }
 

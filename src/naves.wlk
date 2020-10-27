@@ -98,6 +98,7 @@ object reposo {
 
 	method prepararParaViajar(nave) {
 		nave.emitirMensaje("Saliendo en misión")
+		nave.modo(ataque)
 	}
 }
 
