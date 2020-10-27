@@ -4,9 +4,6 @@ import objetosPrincipales.*
 import tablero.*
 
 class Planta inherits ElementoVivo {
-	// cada personaje (trampa) va a tener un elixir necesario para que éste funcione
-	const property elixirNecesario 
-	
 	/*method atacar(atacado) {
 		estaAtacando = true
 		game.onTick(velocidadAtaque, "ATACAR", {atacado.recibirAtaque(self)})

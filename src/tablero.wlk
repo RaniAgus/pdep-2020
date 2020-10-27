@@ -2,32 +2,30 @@ import wollok.game.*
 import zombies.*
 
  object cursor {
+ 	var property position = game.center()
+	var property image = "null.png"
+ 	
+ 	//El juego arranca sin seleccionar ninguna planta y con el elixir a la mitad
+	var seleccionado = null
+ 	var elixirDisponible = 5
+ 	
+ 	//Se cuenta con una lista de creadores de plantas a seleccionar
 	const creadoresDePlantas = []
+	const elixires = []
 	const imagenes = []
 	
-	var property position = game.center()
+	method incrementarElixirDisponible() { elixirDisponible = 10.min(elixirDisponible + 1) }
 	
-	//El juego arranca sin seleccionar nada, y con la imagen transparente
-	var seleccionado = null
-	
-	//Cuando se selecciona una imagen, se obtiene la imagen en blanco y negro de la lista
-	var property image = "null.png"
-	
-	//Para cuando se choque con una planta o zombie
-	method recibirAtaque(atacante){}
-	method morir(){}
-	
-	
-	//Al principio del juego se agregan los creadores de plantas y una imagen en blanco y negro
-	method agregarPlanta(creadorDePlanta, imagen){
+	method agregarPlanta(creadorDePlanta, imagen, elixirNecesario){
 		creadoresDePlantas.add(creadorDePlanta)
 		imagenes.add(imagen)
+		elixires.add(elixirNecesario)
 	}
 	
-	//Selecciona un creador de plantas de la lista
+	//Selecciona un creador de plantas de la lista y cambia su imagen a la correspondiente
 	method seleccionarPlanta(index) {
-		seleccionado = creadoresDePlantas.get(index % creadoresDePlantas.size())
-		image = imagenes.get(index % creadoresDePlantas.size())
+		seleccionado = index
+		image = imagenes.get(index % imagenes.size())
 	}
 	
 	//Al presionar enter, se intenta posicionar la planta usando el creador seleccionado
@@ -36,15 +34,19 @@ import zombies.*
 			self.error("No se seleccionó ningún personaje!!")
 		}
 		
-		//TODO: Acá entraría el error "no se cuenta con el elixir necesario"
+		if(elixires.get(seleccionado) > elixirDisponible) {
+			self.error("No se cuenta con el elixir suficiente!!")
+		}
 		
 		if(tablero.estaOcupada(position)) {
 			self.error("Esta posición está ocupada, busque otra!!")
 		}
 		
-		tablero.agregarPlanta(seleccionado.apply())
+		tablero.agregarPlanta(creadoresDePlantas.get( seleccionado % creadoresDePlantas.size() ).apply())
+		elixirDisponible -= elixires.get( seleccionado % elixires.size() )
 	}
 	
+	//Configuración de movimiento
 	method moverHaciaArriba() {
 		if(position.y() < 9) {
 	 		self.position(position.up(1))
@@ -65,6 +67,10 @@ import zombies.*
 	 		self.position(position.left(1))
 		}
 	} 
+	
+	//Para cuando se choque con una planta o zombie
+	method recibirAtaque(atacante){}
+	method morir(){}
 }
 
 object tablero {
@@ -93,7 +99,7 @@ object tablero {
 		
 		game.addVisual(zombie)
 		game.showAttributes(zombie)
-		game.onTick(velocidadMovimiento * 1000, "Caminar a la derecha",{zombie.caminar()})
+		game.onTick(velocidadMovimiento, "Caminar a la derecha",{zombie.caminar()})
 		game.onCollideDo(zombie,{algo => algo.morir()})
 		zombiesEnJuego.add(zombie)
 	}
