@@ -85,6 +85,12 @@ describe "Nave de pasajeros" {
 		naveConPasajeros.prepararParaViajar()
 		assert.equals(300000, naveConPasajeros.velocidad())
 	}
+	
+	test "encontrarse con enemigo" {
+		naveSinPasajeros.encontrarseConEnemigo()
+		assert.equals(20000, naveSinPasajeros.velocidad())
+		assert.that(naveSinPasajeros.alarma())
+	}
 
 }
 
