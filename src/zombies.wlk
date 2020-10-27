@@ -4,7 +4,8 @@ import tablero.*
 
 class Zombie inherits ElementoVivo {
 	method caminar() {
-	 	position = position.right(1)
+		if(not estaAtacando)
+	 		position = position.right(1)
 	}
 	
 	/*method atacar(atacado) {
