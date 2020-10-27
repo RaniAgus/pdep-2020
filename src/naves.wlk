@@ -22,6 +22,12 @@ class NaveDeCarga inherits Nave{
 
 }
 
+class NaveDeResiduos inherits NaveDeCarga{
+	override method recibirAmenaza() {
+		velocidad = 0
+	}
+}
+
 class NaveDePasajeros inherits Nave {
 	var property alarma = false
 	const cantidadDePasajeros = 0

@@ -38,6 +38,16 @@ describe "Nave de carga" {
 	
 }
 
+describe "Nave de residuos" {
+	const naveDeResiduos = new NaveDeResiduos(carga = 5000, velocidad = 10000)
+	
+	test "recibir amenaza" {
+		naveDeResiduos.recibirAmenaza()
+		assert.equals(5000, naveDeResiduos.carga())
+		assert.equals(0, naveDeResiduos.velocidad())
+	}
+}
+
 describe "Nave de pasajeros" {
 
 	const naveSinPasajeros = new NaveDePasajeros()
