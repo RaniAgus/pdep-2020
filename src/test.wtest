@@ -1,37 +1,118 @@
 import wollok.game.*
-import Elemento.*
-import Plantas.*
 import config.*
-import cursor.*
-import creadorPlantas.*
-
-//crear que el zombie ataque
+import objetosPrincipales.*
+import tablero.*
+import plantas.*
+import zombies.*
  
-describe "Movimiento de la planta"{
-	var planta=creadorDePlantas.agregarPlanta(1)
-
-		
-	test "La posicion de la planta en el momento de colocarla es la (5,1)"{
-		cursor.planta(planta)
-		assert.equals(game.at(5,1),planta.position())
+describe "Cursor" {
+	fixture {
+		cursor.agregarPlanta( ({ => new Margarita(
+			danio = 25,
+			velocidadAtaque = 3000, 
+			vida = 0, 
+			position = cursor.position(),
+			image = "soldado-desde-arriba.png"
+		) }), "soldado-desde-arriba.png", 3)
 	}
-	test "Si se corren 2 posiciones arriba y otras dos a la derecha la nueva posicion de la planta es la (7,3)"{
-		cursor.planta(planta)
-		cursor.moverHaciaArriba()
-		cursor.moverHaciaArriba()
-		cursor.moverHaciaLaDerecha()
-		cursor.moverHaciaLaDerecha()
-		assert.equals(game.at(7,3),planta.position())
-	}
-/* 	test "Si de la posicion (7,3) se baja una posicion y se fija la posicion la misma deja de moverse"{
-		cursor.planta(planta)
-		cursor.moverHaciaArriba()
-		cursor.moverHaciaArriba()
-		cursor.moverHaciaLaDerecha()
-		cursor.moverHaciaLaDerecha()
-		cursor.moverHaciaAbajo()
+			
+	test "No se puede colocar una planta sin seleccionar una" {
+		assert.throwsExceptionWithMessage("No se seleccionó ningún personaje!!", 
+			({ cursor.posicionarPlanta() })
+		)
+	}		
+			
+	test "Cursor no puede colocar más de una planta en el mismo lugar" {
+		cursor.seleccionarPlanta(0)
 		cursor.posicionarPlanta()
-		assert.notThat(planta.seEstaMoviendo())
-	} */
+		cursor.incrementarElixirDisponible()
+		
+		assert.throwsExceptionWithMessage("Esta posición está ocupada, busque otra!!", 
+			({ cursor.posicionarPlanta() })
+		)
+	}
+	
+	test "No se pueden colocar más plantas que el elixir disponible" {
+		cursor.seleccionarPlanta(0)
+		cursor.posicionarPlanta()
+		cursor.moverHaciaLaDerecha()
+		
+		assert.throwsExceptionWithMessage("No se cuenta con el elixir suficiente!!", 
+			({ cursor.posicionarPlanta() })
+		)
+	}	
+	
+	test "Cursor inicia en el centro del tablero" {
+		assert.equals(game.at(10,5), cursor.position())
+	}
+	
+	test "Cursor no puede moverse más arriba de la posición Y = 9"{
+		30.times({ i => cursor.moverHaciaArriba()})
+		
+		assert.equals(game.at(10,9), cursor.position())
+	}
+ 	
+	test "Cursor no puede moverse más abajo de la posición Y = 2"{
+		30.times({ i => cursor.moverHaciaAbajo()})
+		
+		assert.equals(game.at(10,2), cursor.position())
+	}
+	
+	test "Cursor no puede moverse más a la izquierda de la posición X = 4"{
+		30.times({ i => cursor.moverHaciaLaIzquierda()})
+		
+		assert.equals(game.at(4,5), cursor.position())
+	}
+	
+	test "Cursor no puede moverse más a la derecha de la posición X = 18"{
+		30.times({ i => cursor.moverHaciaLaDerecha()})
+		
+		assert.equals(game.at(18,5), cursor.position())
+	}
+
 }
 
+describe "Tablero" {
+	const margarita = new Margarita(
+			danio = 25,
+			velocidadAtaque = 3000, 
+			vida = 0, 
+			position = game.at(5,1),
+			image = "soldado-desde-arriba.png"
+	)
+	
+	const zombie = new Zombie (
+			position = game.at(0, 2.randomUpTo(9)), 
+			image = "zombie.png",
+			vida = 100, 
+			danio = 0, 
+			velocidadAtaque = 0
+		)
+	
+	test "Al colocar una planta, su posición está ocupada"{
+		tablero.agregarPlanta(margarita)
+		
+		assert.that(tablero.estaOcupada( game.at(5,1) ))
+	}
+	
+	test "Al eliminar una planta, su posición no está ocupada"{
+		tablero.agregarPlanta(margarita)
+		tablero.eliminarPlanta(margarita)
+		
+		assert.notThat(tablero.estaOcupada( game.at(5,1) ))
+	}
+	
+	//TODO: Ver test, no funciona
+	test "Al colocar un zombi, su posición está ocupada"{
+		tablero.agregarZombie(zombie, 10000000)
+		
+		assert.that( (2..9).any({ i => tablero.estaOcupada(game.at(0,i)) }))
+	}
+	
+	test "Al eliminar un zombie, su posición está libre" {
+		tablero.agregarZombie(zombie, 10000000)
+		tablero.eliminarZombie(zombie)
+		
+		assert.notThat( (2..9).any({ i => tablero.estaOcupada(game.at(0,i)) }))
+	}
+}
