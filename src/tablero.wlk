@@ -5,38 +5,44 @@ import zombies.*
 	const creadoresDePlantas = []
 	const imagenes = []
 	
-	var property position = game.at(10, 10)
+	var property position = game.center()
 	
 	//El juego arranca sin seleccionar nada, y con la imagen transparente
-	var seleccionado = -1
-	method image() = if(seleccionado < 0) "null.png" else imagenes.get(seleccionado)
+	var seleccionado = null
 	
-	//Para cuando se choque con zombie
+	//Cuando se selecciona una imagen, se obtiene la imagen en blanco y negro de la lista
+	var property image = "null.png"
+	
+	//Para cuando se choque con una planta o zombie
+	method recibirAtaque(atacante){}
 	method morir(){}
 	
-	//Agrega una planta seleccionable, junto con su imagen en blanco y negro
+	
+	//Al principio del juego se agregan los creadores de plantas y una imagen en blanco y negro
 	method agregarPlanta(creadorDePlanta, imagen){
 		creadoresDePlantas.add(creadorDePlanta)
 		imagenes.add(imagen)
-		
 	}
 	
-	// Guarda posiciones del juego ya ocupadas por una planta
-	method seleccionarPlanta(index){
-		seleccionado = index % creadoresDePlantas.size()
+	//Selecciona un creador de plantas de la lista
+	method seleccionarPlanta(index) {
+		seleccionado = creadoresDePlantas.get(index % creadoresDePlantas.size())
+		image = imagenes.get(index % creadoresDePlantas.size())
 	}
 	
+	//Al presionar enter, se intenta posicionar la planta usando el creador seleccionado
 	method posicionarPlanta(){
-		if(seleccionado < 0) {
+		if(seleccionado == null) {
 			self.error("No se seleccionó ningún personaje!!")
 		}
 		
 		//TODO: Acá entraría el error "no se cuenta con el elixir necesario"
 		
 		if(tablero.estaOcupada(position)) {
-			self.error("Esta posición está ocupada!!")
+			self.error("Esta posición está ocupada, busque otra!!")
 		}
-		tablero.agregarPlanta( creadoresDePlantas.get(seleccionado).apply() )
+		
+		tablero.agregarPlanta(seleccionado.apply())
 	}
 	
 	method moverHaciaArriba() {
