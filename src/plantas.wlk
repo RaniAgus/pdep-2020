@@ -3,6 +3,27 @@ import config.*
 import objetosPrincipales.*
 import tablero.*
 
+class Bala inherits ElementoVivo {
+	var nroBala = 0
+	method activar() {
+ 		position = cursor.position().left(1)
+ 		game.addVisual(self)
+ 		game.onTick(111, "Cambiar imagen", { self.cambiarImagen() })
+ 		game.onTick(250, "Moverse", { self.moverse() })
+		game.onCollideDo(self, { zombi => zombi.recibirAtaque(self) })
+ 	}
+
+ 	method cambiarImagen() {
+ 		nroBala = (nroBala + 1) % 3
+ 		
+ 		image = "bala" + nroBala.toString() + ".png"
+ 	}
+ 	
+ 	method moverse() {
+ 		position = position.left(1)
+ 	}
+}
+
 class Planta inherits ElementoVivo {
 	/*method atacar(atacado) {
 		estaAtacando = true
@@ -31,5 +52,8 @@ class Margarita inherits Planta {
 
 // El lanzaguizantes dispararía en un cierto rango, hay que ver cómo hacer eso
 class Lanzaguisantes inherits Planta {
-	
+	const bala = new Bala(image = "bala0.png", vida = 0, danio = 25, velocidadAtaque = 3000)
+	override method atacar(){
+		bala.activar()
+	}
 }

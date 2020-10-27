@@ -21,6 +21,8 @@ class ElementoVivo {
 		}
 	}
 	
+	method atacar(){}
+	method detenerAtaque(){}
 	method morir(){}
 }
 

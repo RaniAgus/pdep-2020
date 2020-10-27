@@ -1,5 +1,6 @@
 import wollok.game.*
 import zombies.*
+import plantas.*
 
  object cursor {
  	var property position = game.center()
@@ -86,17 +87,10 @@ object tablero {
 		plantasEnJuego.add(planta)
 		game.addVisual(planta)
 		game.showAttributes(planta)
+		planta.atacar()
 	}
 	
-	method agregarZombie(velocidadMovimiento){
-		const zombie = new Zombie (
-			position = game.at(0, 2.randomUpTo( game.height() )), 
-			image = "zombie.png",
-			vida = 100, 
-			danio = 0, 
-			velocidadAtaque = 0
-		)
-		
+	method agregarZombie(zombie, velocidadMovimiento){
 		game.addVisual(zombie)
 		game.showAttributes(zombie)
 		game.onTick(velocidadMovimiento, "Caminar a la derecha",{zombie.caminar()})

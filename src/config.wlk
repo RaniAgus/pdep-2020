@@ -7,8 +7,7 @@ import tablero.*
 object config {
 	// Hice este metodo para directamente cargar esto en el juego.wpgm, traten de agregar aca
 	method iniciar(){
-		game.addVisual(cursor)
-		
+		game.addVisual(cursor)		
 		self.configurarTeclas()
 		self.configurarPlantas()
 		self.configurarNiveles()
@@ -62,13 +61,13 @@ object config {
 	
 	method configurarNiveles(){
 		//NIVEL 1 - 5 Zombies (velocidad 1 / 2000)
-		game.onTick(3*1000,"Agregar zombies nivel 1",{tablero.agregarZombie(2000)})
+		game.onTick(3*1000,"Agregar zombies nivel 1",{self.agregarZombie(2000)})
 		game.schedule(16*1000, { => game.removeTickEvent("Agregar zombies nivel 1") })
 		//NIVEL 2 - 10 Zombies (velocidad 1 / 1300)
-		game.schedule(26*1000, { => game.onTick(3000,"Agregar zombies nivel 2",{tablero.agregarZombie(1300)}) })
+		game.schedule(26*1000, { => game.onTick(3000,"Agregar zombies nivel 2",{self.agregarZombie(1300)}) })
 		game.schedule(60*1000, { => game.removeTickEvent("Agregar zombies nivel 2") })
 		//NIVEL 3 - 15 Zombies (velocidad 1 / 9000)
-	    game.schedule(70*1000, { => game.onTick(3000,"Agregar zombies nivel 3",{tablero.agregarZombie(900)}) })
+	    game.schedule(70*1000, { => game.onTick(3000,"Agregar zombies nivel 3",{self.agregarZombie(900)}) })
 	    game.schedule(119*1000, { => game.removeTickEvent("Agregar zombies nivel 3") })
 	}
 	
@@ -78,6 +77,17 @@ object config {
 	
 	method agregarTorre() {
 		(2 .. 9).forEach({posEnY => torre.agregarMuro(new Muro(position = game.at(19, posEnY)))})
+	}
+
+	method agregarZombie(velocidadMovimiento) {
+		const zombie = new Zombie (
+			position = game.at(0, 2.randomUpTo( game.height() )), 
+			image = "zombie.png",
+			vida = 100, 
+			danio = 0, 
+			velocidadAtaque = 0
+		)
+		tablero.agregarZombie(zombie, velocidadMovimiento)
 	}
 	
 }

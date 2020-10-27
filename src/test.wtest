@@ -116,4 +116,3 @@ describe "Tablero" {
 		assert.notThat( (2..9).any({ i => tablero.estaOcupada(game.at(0,i)) }))
 	}
 }
-
