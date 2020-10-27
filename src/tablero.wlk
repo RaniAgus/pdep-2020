@@ -3,7 +3,7 @@ import zombies.*
 import plantas.*
 
  object cursor {
- 	var property position = game.center()
+ 	var property position = game.at(10,5)
 	var property image = "null.png"
  	
  	//El juego arranca sin seleccionar ninguna planta y con el elixir a la mitad
