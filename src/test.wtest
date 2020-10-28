@@ -1,13 +1,20 @@
-import example.*
+import archivos.*
+import autores.*
 
-describe "commits" {
+describe "archivos" {
 	const pdep = new Carpeta(nombre = "pdep")
 	
 	const commitInicial = new Commit(descripcion = "commit inicial", cambios = [
-		({ carpeta => carpeta.crear("leeme.md")}),
-		({ carpeta => carpeta.crear("parcial.wlk")}),
-		({ carpeta => carpeta.agregar("leeme.md", "Este es un parcial")})
+		new Crear(nombreArchivo = "leeme.md"),
+		new Crear(nombreArchivo = "parcial.wlk"),
+		new Agregar(nombreArchivo = "leeme.md", texto = "Este es un parcial")
 	])
+	
+	const avance = new Commit(descripcion = "avance", cambios = [
+		new Agregar(nombreArchivo = "parcial.wlk", texto = "object wollok { method sayHello() = hola }")
+	])
+	
+	const branchAgus = new Branch(commits = [commitInicial, avance])
 	
 	test "aplicar commit" {
 		commitInicial.aplicar(pdep)
@@ -25,29 +32,44 @@ describe "commits" {
 			{commitInicial.aplicar(pdep)}
 		)
 	}
-}
-
-describe "branch" {
-	const pdep = new Carpeta(nombre = "pdep")
-	
-	const commitInicial = new Commit(descripcion = "commit inicial", cambios = [
-		({ carpeta => carpeta.crear("leeme.md")}),
-		({ carpeta => carpeta.crear("parcial.wlk")}),
-		({ carpeta => carpeta.agregar("leeme.md", "Este es un parcial")})
-	])
-	
-	const avance = new Commit(descripcion = "avance", cambios = [
-		({ carpeta => carpeta.agregar("parcial.wlk", "object wollok { method sayHello() = hola }") }),
-		({ carpeta => carpeta.eliminar("leeme.md") })
-	])
-	
-	const agus = new Branch(commits = [commitInicial, avance])
 	
 	test "checkout branch" {
-		agus.checkout(pdep)
+		branchAgus.checkout(pdep)
 		
-		assert.notThat( pdep.contiene("leeme.md") )
 		assert.that( pdep.contiene("parcial.wlk") )
 		assert.equals( "object wollok { method sayHello() = hola }", pdep.obtener("parcial.wlk").contenido() )
+	}
+	
+	test "log branch" {
+		const logReadme = branchAgus.log("leeme.md")
+		const logParcial = branchAgus.log("parcial.wlk")
+		
+		assert.equals(logReadme, [commitInicial])
+		assert.equals(logParcial, [commitInicial, avance])
+	}
+	
+	test "obtener revert" {
+		const revertCommitInicial = commitInicial.revert()
+		
+		assert.equals("revert commit inicial", revertCommitInicial.descripcion())
+		assert.equals("Este es un parcial", revertCommitInicial.cambios().get(0).texto())
+		assert.equals("leeme.md", revertCommitInicial.cambios().get(0).nombreArchivo())
+		assert.equals("parcial.wlk", revertCommitInicial.cambios().get(1).nombreArchivo())
+		assert.equals("leeme.md", revertCommitInicial.cambios().get(2).nombreArchivo())
+	}
+	
+	test "aplicar commit y revert" {
+		const revertCommitInicial = commitInicial.revert()
+		
+		commitInicial.aplicar(pdep)
+		revertCommitInicial.aplicar(pdep)
+		
+		assert.that(pdep.estaVacia())
+	}
+}
+
+describe "autores" {
+	test "foo" {
+		assert.that(true)
 	}
 }
