@@ -32,11 +32,11 @@ class Muro {
 	
 	/* TODO: Muro.recibirAtaque(atacante)
 	method recibirAtaque(atacante) {
-		saludMuro.recibirAtaque(atacante)
+		torre.recibirAtaque(atacante)
 	}*/
 	
 	method morir() {
-		//config.finalizar(self)
+		config.finalizar()
 	}
 }
 
