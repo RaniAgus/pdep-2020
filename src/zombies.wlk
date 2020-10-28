@@ -3,8 +3,9 @@ import objetosPrincipales.*
 import tablero.*
 
 class Zombie inherits ElementoVivo {
+	var estaCongelado=false
 	method caminar() {
-		if(not estaAtacando)
+		if(not estaCongelado)
 	 		position = position.right(1)
 	}
 	
@@ -21,5 +22,9 @@ class Zombie inherits ElementoVivo {
 	// Lo sobreescribo usando lo que hace su metodo padre y elimino la posicion que ocupaba
 	override method morir(){
 		tablero.eliminarZombie(self)
+	}
+	method congelar(){
+		estaCongelado=true
+		game.schedule(3000,{estaCongelado=false})
 	}
 }	

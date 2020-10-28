@@ -47,3 +47,17 @@ object creadorDeGirasoles {
 	
 	method elixirNecesario() = 6
 }
+object creadorDeHielaguisantes {
+	method crearPlanta() = new Hielaguisante(
+		danio = 25, 
+		velocidadAtaque = 3000, 
+		vida = 0, 
+		position = 
+		cursor.position(),
+		image = "lanzaguizanteHielo.png"
+	)
+	
+	method seleccionarImagen() = "lanzaguizanteHielo.png"
+	
+	method elixirNecesario() = 8
+}

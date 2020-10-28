@@ -26,7 +26,7 @@ object config {
 		keyboard.q().onPressDo({cursor.seleccionarPlanta(creadorDeMargaritas)})
 		keyboard.w().onPressDo({cursor.seleccionarPlanta(creadorDeLanzaguizantes)})
 		keyboard.e().onPressDo({cursor.seleccionarPlanta(creadorDeGirasoles)})
-		//keyboard.r().onPressDo({cursor.seleccionarPlanta(creadorDeLanzaguizantes)})
+		keyboard.r().onPressDo({cursor.seleccionarPlanta(creadorDeHielaguisantes)})
 		
 		
 		// Con esta tecla se borra la planta que tiene el cursor actual, por si el jugador quiere droppear otra

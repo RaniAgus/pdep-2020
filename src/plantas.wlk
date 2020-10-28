@@ -12,6 +12,7 @@ class Bala inherits ElementoVivo {
  		game.onTick(250, "Moverse", { self.moverse() })
 		game.onCollideDo(self, { zombi => if(tablero.esZombie(zombi)) zombi.recibirAtaque(self) })
  	}
+ 
 
  	method cambiarImagen() {
  		nroBala = (nroBala + 1) % 3
@@ -23,6 +24,20 @@ class Bala inherits ElementoVivo {
  		position = position.left(1)
  	}
 }
+
+ class Hielo inherits ElementoVivo{
+ 	method activar(hielaguizantes) {
+ 		position = hielaguizantes.position().left(1)
+ 		game.addVisual(self)
+ 		game.onTick(200, "Moverse", { self.moverse() })
+		game.onCollideDo(self, { zombi => if(tablero.esZombie(zombi)) zombi.congelar() })
+ 	}
+ 	
+ 	method moverse() {
+ 		position = position.left(1)
+ 	}
+ }
+
 
 class Planta inherits ElementoVivo {
 	/*method atacar(atacado) {
@@ -52,9 +67,11 @@ class Margarita inherits Planta {
 
 // El lanzaguizantes dispararía en un cierto rango, hay que ver cómo hacer eso
 class Lanzaguisantes inherits Planta {
-	const bala = new Bala(image = "bala0.png", vida = 0, danio = 25, velocidadAtaque = 3000)
 	override method atacar(){
-		bala.activar(self)
+		
+		game.onTick(3000,"Disparar balas",{	
+		const bala = new Bala(image = "bala0.png", vida = 0, danio = 25, velocidadAtaque = 3000)
+		bala.activar(self)})
 	}
 }
 
@@ -67,3 +84,12 @@ class Girasol inherits Planta {
 		})
 	}
 }
+
+class Hielaguisante inherits Planta{
+	override method atacar(){
+		game.onTick(3000,"Disparar hielos",{	
+		const hielo = new Hielo(image = "hielo.png", vida = 0, danio = 10, velocidadAtaque = 3000)
+		hielo.activar(self)})
+	}
+}
+
