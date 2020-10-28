@@ -4,18 +4,10 @@ import objetosPrincipales.*
 import tablero.*
 import plantas.*
 import zombies.*
- 
+import creadores.*
+
 describe "Cursor" {
-	fixture {
-		cursor.agregarPlanta( ({ => new Margarita(
-			danio = 25,
-			velocidadAtaque = 3000, 
-			vida = 0, 
-			position = cursor.position(),
-			image = "soldado-desde-arriba.png"
-		) }), "soldado-desde-arriba.png", 3)
-	}
-			
+				
 	test "No se puede colocar una planta sin seleccionar una" {
 		assert.throwsExceptionWithMessage("No se seleccionó ningún personaje!!", 
 			({ cursor.posicionarPlanta() })
@@ -23,7 +15,7 @@ describe "Cursor" {
 	}		
 			
 	test "Cursor no puede colocar más de una planta en el mismo lugar" {
-		cursor.seleccionarPlanta(0)
+		cursor.seleccionarPlanta(creadorDeMargaritas)
 		cursor.posicionarPlanta()
 		cursor.incrementarElixirDisponible()
 		
@@ -33,7 +25,7 @@ describe "Cursor" {
 	}
 	
 	test "No se pueden colocar más plantas que el elixir disponible" {
-		cursor.seleccionarPlanta(0)
+		cursor.seleccionarPlanta(creadorDeMargaritas)
 		cursor.posicionarPlanta()
 		cursor.moverHaciaLaDerecha()
 		

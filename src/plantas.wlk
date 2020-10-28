@@ -5,12 +5,12 @@ import tablero.*
 
 class Bala inherits ElementoVivo {
 	var nroBala = 0
-	method activar() {
- 		position = cursor.position().left(1)
+	method activar(lanzaguizantes) {
+ 		position = lanzaguizantes.position().left(1)
  		game.addVisual(self)
  		game.onTick(111, "Cambiar imagen", { self.cambiarImagen() })
  		game.onTick(250, "Moverse", { self.moverse() })
-		game.onCollideDo(self, { zombi => zombi.recibirAtaque(self) })
+		game.onCollideDo(self, { zombi => if(tablero.esZombie(zombi)) zombi.recibirAtaque(self) })
  	}
 
  	method cambiarImagen() {
@@ -54,6 +54,16 @@ class Margarita inherits Planta {
 class Lanzaguisantes inherits Planta {
 	const bala = new Bala(image = "bala0.png", vida = 0, danio = 25, velocidadAtaque = 3000)
 	override method atacar(){
-		bala.activar()
+		bala.activar(self)
+	}
+}
+
+class Girasol inherits Planta {
+	override method atacar(){
+		game.onTick(1000, "Recolectar Elixir", {
+			cursor.incrementarElixirDisponible()
+			vida -= 10
+			if(vida == 0) self.morir()
+		})
 	}
 }

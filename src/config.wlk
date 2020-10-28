@@ -3,13 +3,13 @@ import objetosPrincipales.*
 import plantas.*
 import zombies.*
 import tablero.*
+import creadores.*
 
 object config {
 	// Hice este metodo para directamente cargar esto en el juego.wpgm, traten de agregar aca
 	method iniciar(){
 		game.addVisual(cursor)		
 		self.configurarTeclas()
-		self.configurarPlantas()
 		self.configurarNiveles()
 		self.configurarElixir()
 		self.agregarTorre()
@@ -23,10 +23,10 @@ object config {
 	method configurarTeclas() {
 
 		// Se droppea la planta lanzaguisantes
-		keyboard.q().onPressDo({cursor.seleccionarPlanta(0)})
-		keyboard.w().onPressDo({cursor.seleccionarPlanta(1)})
-		keyboard.e().onPressDo({cursor.seleccionarPlanta(2)})
-		keyboard.r().onPressDo({cursor.seleccionarPlanta(3)})
+		keyboard.q().onPressDo({cursor.seleccionarPlanta(creadorDeMargaritas)})
+		keyboard.w().onPressDo({cursor.seleccionarPlanta(creadorDeLanzaguizantes)})
+		keyboard.e().onPressDo({cursor.seleccionarPlanta(creadorDeGirasoles)})
+		//keyboard.r().onPressDo({cursor.seleccionarPlanta(creadorDeLanzaguizantes)})
 		
 		
 		// Con esta tecla se borra la planta que tiene el cursor actual, por si el jugador quiere droppear otra
@@ -38,25 +38,6 @@ object config {
 		
 		keyboard.enter().onPressDo({cursor.posicionarPlanta()})
 		
-	}
-	
-	method configurarPlantas() {
-		//Se agregan los creadores de Plantas con sus variables iniciales
-		cursor.agregarPlanta( ({ => new Margarita(
-			danio = 25,
-			velocidadAtaque = 3000, 
-			vida = 0, 
-			position = cursor.position(),
-			image = "margarita.png"
-		) }), "margarita-gris.png", 2)
-		
-		cursor.agregarPlanta( ({ => new Lanzaguisantes(
-			danio = 25, 
-			velocidadAtaque = 3000, 
-			vida = 0, 
-			position = cursor.position(),
-			image = "lanzaguisante.png"
-		) }), "lanzaguisante-gris.png", 5) 
 	}
 	
 	method configurarNiveles(){

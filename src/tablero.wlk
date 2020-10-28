@@ -7,35 +7,24 @@ import plantas.*
 	var property image = "null.png"
  	
  	//El juego arranca sin seleccionar ninguna planta y con el elixir a la mitad
-	var seleccionado = null
+	var creadorSeleccionado = null
  	var elixirDisponible = 5
- 	
- 	//Se cuenta con una lista de creadores de plantas a seleccionar
-	const creadoresDePlantas = []
-	const elixires = []
-	const imagenes = []
 	
 	method incrementarElixirDisponible() { elixirDisponible = 10.min(elixirDisponible + 1) }
 	
-	method agregarPlanta(creadorDePlanta, imagen, elixirNecesario){
-		creadoresDePlantas.add(creadorDePlanta)
-		imagenes.add(imagen)
-		elixires.add(elixirNecesario)
-	}
-	
 	//Selecciona un creador de plantas de la lista y cambia su imagen a la correspondiente
-	method seleccionarPlanta(index) {
-		seleccionado = index
-		image = imagenes.get(index % imagenes.size())
+	method seleccionarPlanta(unCreador) {
+		creadorSeleccionado = unCreador
+		image = unCreador.seleccionarImagen()
 	}
 	
 	//Al presionar enter, se intenta posicionar la planta usando el creador seleccionado
 	method posicionarPlanta(){
-		if(seleccionado == null) {
+		if(creadorSeleccionado == null) {
 			self.error("No se seleccionó ningún personaje!!")
 		}
 		
-		if(elixires.get(seleccionado) > elixirDisponible) {
+		if(creadorSeleccionado.elixirNecesario() > elixirDisponible) {
 			self.error("No se cuenta con el elixir suficiente!!")
 		}
 		
@@ -43,8 +32,8 @@ import plantas.*
 			self.error("Esta posición está ocupada, busque otra!!")
 		}
 		
-		tablero.agregarPlanta(creadoresDePlantas.get( seleccionado % creadoresDePlantas.size() ).apply())
-		elixirDisponible -= elixires.get( seleccionado % elixires.size() )
+		tablero.agregarPlanta(creadorSeleccionado.crearPlanta())
+		elixirDisponible -= creadorSeleccionado.elixirNecesario()
 	}
 	
 	//Configuración de movimiento
@@ -76,7 +65,7 @@ import plantas.*
 
 object tablero {
 	const plantasEnJuego = []
-	const property zombiesEnJuego=[]
+	const property zombiesEnJuego = []
 	
 	method estaOcupada(posicion) {
 		return plantasEnJuego.any({ planta => planta.position() == posicion }) 
@@ -106,5 +95,11 @@ object tablero {
 	method eliminarZombie(zombie){
 		zombiesEnJuego.remove(zombie)
 		game.removeVisual(zombie)
+		if(zombiesEnJuego.isEmpty()) {
+			//game.subirNivel() ??
+		}
 	}
+	
+	method esZombie(objeto) = zombiesEnJuego.contains(objeto)
+	method esPlanta(objeto) = plantasEnJuego.contains(objeto)
 }
