@@ -81,37 +81,30 @@ describe "autores" {
 	
 	const carpetaVacia = new Carpeta(nombre = "new folder")
 	
-	test "crear branch agregando colaboradores" {
-		assert.that(branch.puedeCommitear(marcelo))
-		assert.that(branch.puedeCommitear(guillermo))
-		assert.that(branch.puedeCommitear(gustavo))
-		assert.that(branch.puedeCommitear(elAdmin))
-	}
-	
 	test "commitear, blame y convertir en administrador" {
-		branch.commitear(guillermo,
+		branch.commitear(
 			new Commit(autor = guillermo, descripcion = "primerCommit", cambios = [
 				new Crear(nombreArchivo = "Final"),
 				new Agregar(nombreArchivo = "Final", texto = "Boca 2")
 			])
 		)
 		
-		branch.commitear(guillermo,
+		branch.commitear(
 			new Commit(autor = guillermo, descripcion = "segundoCommit", cambios = [
 				new Agregar(nombreArchivo = "Final", texto = " River 0")
 			])
 		)
 		
-		branch.commitear(marcelo,
+		branch.commitear(
 			new Commit(autor = marcelo, descripcion = "y va el tercerCommit", cambios = [
 				new Sacar(nombreArchivo = "Final", texto = "0"),
 				new Agregar(nombreArchivo = "Final", texto = "3")
 			])
 		)
 		
-		branch.commitear(elAdmin, branch.commits().last().revert(elAdmin))
+		branch.commitear(branch.commits().last().revert(elAdmin))
 		
-		branch.commitear(gustavo, 
+		branch.commitear( 
 			new Commit(autor = gustavo, descripcion = "primer commit", cambios = [
 				new Crear(nombreArchivo = "recaudacion")
 			])
@@ -121,7 +114,7 @@ describe "autores" {
 		marcelo.cambiarRol([elAdmin], bot)
 		branch.checkout(carpetaVacia)
 		
-		assert.throwsExceptionWithMessage("No puede cambiar los permisos de otro usuario",
+		assert.throwsExceptionWithMessage("No cuenta con los permisos suficientes para cambiar el rol de un usuario",
 			{gustavo.cambiarRol([elAdmin], administrador)}
 		)
 		

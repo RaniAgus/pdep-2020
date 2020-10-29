@@ -10,23 +10,23 @@ class Commit {
 	
 	method afecta(nombreArchivo) = cambios.any({ cambio => cambio.afecta(nombreArchivo) })
 	
-	method revert(nuevoAutor) = new Commit(autor = nuevoAutor, descripcion = "revert " + descripcion, 
+	method revert(nuevoAutor) = new Commit(
+		autor = nuevoAutor, 
+		descripcion = "revert " + descripcion, 
 		cambios = cambios.reverse().map({ cambio => cambio.inverso() })
 	)
 }
 
 class Branch {
-	const creador
+	const property creador
 	const colaboradores
-	const property commits = new List()
+	const commits = new List()
 	
-	method puedeCommitear(usuario) =  usuario == creador or colaboradores.contains(usuario) 
-		or usuario.rol() == administrador or ( usuario.rol() == bot and commits.size() > 10 )
+	method colaboradores() = colaboradores
+	method commits() = commits
 	
-	method commitear(usuario, commit) {
-		if(not self.puedeCommitear(usuario)) {
-			self.error("No cuenta con los permisos suficientes para commitear")
-		}
+	method commitear(commit) {
+		commit.autor().validarPermisos(self)
 		commits.add(commit)
 	}
 	
@@ -40,7 +40,9 @@ class Branch {
 }
 
 class Cambio {
-	const property nombreArchivo
+	const nombreArchivo
+	method nombreArchivo() = nombreArchivo
+	
 	method afecta(archivo) = archivo == nombreArchivo
 	
 	method aplicar(carpeta) {}
@@ -58,15 +60,23 @@ class Eliminar inherits Cambio {
 }
 
 class Agregar inherits Cambio {
-	const property texto
+	const texto
+	method texto() = texto
 	
-	override method aplicar(carpeta) { carpeta.agregar(nombreArchivo, texto) }
+	override method aplicar(carpeta) { 
+		const archivo = carpeta.obtener(nombreArchivo)
+		archivo.agregar(texto)
+	}
 	override method inverso() = new Sacar(nombreArchivo = nombreArchivo, texto = texto)
 }
 
 class Sacar inherits Cambio {
-	const property texto
+	const texto
+	method texto() = texto
 	
-	override method aplicar(carpeta) { carpeta.sacar(nombreArchivo, texto) }
+	override method aplicar(carpeta) { 
+		const archivo = carpeta.obtener(nombreArchivo)
+		archivo.sacar(texto)
+	}
 	override method inverso() = new Agregar(nombreArchivo = nombreArchivo, texto = texto)
 }

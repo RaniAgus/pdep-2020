@@ -1,7 +1,8 @@
 class Archivo {
-	var property nombre
+	var nombre
 	var contenido = ""
 	
+	method nombreEs(unNombre) = nombre == unNombre
 	method contenido() = contenido
 	
 	method agregar(texto) {
@@ -20,7 +21,7 @@ class Carpeta {
 	var property nombre
 	const archivos = new Set()
 	
-	method contiene(nombreArchivo) = archivos.any({ archivo => archivo.nombre() == nombreArchivo })
+	method contiene(nombreArchivo) = archivos.any({ archivo => archivo.nombreEs(nombreArchivo) })
 	
 	method estaVacia() = archivos.isEmpty()
 	
@@ -32,30 +33,13 @@ class Carpeta {
 	}
 	
 	method eliminar(nombreArchivo) {
-		if(not self.contiene(nombreArchivo)) {
-			self.error("No existe un archivo con el nombre: " + nombreArchivo)
-		}
-		archivos.removeAllSuchThat({ archivo => archivo.nombre() == nombreArchivo })
+		archivos.removeAllSuchThat({ archivo => archivo.nombreEs(nombreArchivo) })
 	}
-	
-	method agregar(nombreArchivo, texto) {
-		if(not self.contiene(nombreArchivo)) {
-			self.error("No existe un archivo con el nombre: " + nombreArchivo)
-		}
-		self.obtener(nombreArchivo).agregar(texto)
-	}
-	
-	method sacar(nombreArchivo, texto) {
-		if(not self.contiene(nombreArchivo)) {
-			self.error("No existe un archivo con el nombre: " + nombreArchivo)
-		}
-		self.obtener(nombreArchivo).sacar(texto)		
- 	}
  	
  	method obtener(nombreArchivo) {
  		if(not self.contiene(nombreArchivo)) {
 			self.error("No existe un archivo con el nombre: " + nombreArchivo)
 		}
-		return archivos.find({ archivo => archivo.nombre() == nombreArchivo })
+		return archivos.find({ archivo => archivo.nombreEs(nombreArchivo) })
  	}
 }
