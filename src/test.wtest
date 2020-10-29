@@ -3,19 +3,21 @@ import autores.*
 import commits.*
 
 describe "archivos" {
+	const agus = new Usuario(rol = comun)
+	
 	const pdep = new Carpeta(nombre = "pdep")
 	
-	const commitInicial = new Commit(descripcion = "commit inicial", cambios = [
+	const commitInicial = new Commit(autor = agus, descripcion = "commit inicial", cambios = [
 		new Crear(nombreArchivo = "leeme.md"),
 		new Crear(nombreArchivo = "parcial.wlk"),
 		new Agregar(nombreArchivo = "leeme.md", texto = "Este es un parcial")
 	])
 	
-	const avance = new Commit(descripcion = "avance", cambios = [
+	const avance = new Commit(autor = agus, descripcion = "avance", cambios = [
 		new Agregar(nombreArchivo = "parcial.wlk", texto = "object wollok { method sayHello() = hola }")
 	])
 	
-	const branchAgus = new Branch(commits = [commitInicial, avance])
+	const branchAgus = new Branch(creador = agus, colaboradores = #{}, commits = [commitInicial, avance])
 	
 	test "aplicar commit" {
 		commitInicial.aplicar(pdep)
@@ -50,7 +52,7 @@ describe "archivos" {
 	}
 	
 	test "obtener revert" {
-		const revertCommitInicial = commitInicial.revert()
+		const revertCommitInicial = commitInicial.revert(agus)
 		
 		assert.equals("revert commit inicial", revertCommitInicial.descripcion())
 		assert.equals("Este es un parcial", revertCommitInicial.cambios().get(0).texto())
@@ -60,7 +62,7 @@ describe "archivos" {
 	}
 	
 	test "aplicar commit y revert" {
-		const revertCommitInicial = commitInicial.revert()
+		const revertCommitInicial = commitInicial.revert(agus)
 		
 		commitInicial.aplicar(pdep)
 		revertCommitInicial.aplicar(pdep)
@@ -70,7 +72,59 @@ describe "archivos" {
 }
 
 describe "autores" {
-	test "foo" {
-		assert.that(true)
+	const marcelo = new Usuario(rol = comun)
+	const guillermo = new Usuario(rol = comun)
+	const gustavo = new Usuario(rol = comun)
+	const elAdmin = new Usuario(rol = administrador)
+	
+	const branch = new Branch(creador = marcelo, colaboradores = #{guillermo, gustavo})
+	
+	const carpetaVacia = new Carpeta(nombre = "new folder")
+	
+	test "crear branch agregando colaboradores" {
+		assert.that(branch.puedeCommitear(marcelo))
+		assert.that(branch.puedeCommitear(guillermo))
+		assert.that(branch.puedeCommitear(gustavo))
+		assert.that(branch.puedeCommitear(elAdmin))
+	}
+	
+	test "commitear, blame y convertir en administrador" {
+		branch.commitear(guillermo,
+			new Commit(autor = guillermo, descripcion = "primerCommit", cambios = [
+				new Crear(nombreArchivo = "Final"),
+				new Agregar(nombreArchivo = "Final", texto = "Boca 2")
+			])
+		)
+		
+		branch.commitear(guillermo,
+			new Commit(autor = guillermo, descripcion = "segundoCommit", cambios = [
+				new Agregar(nombreArchivo = "Final", texto = " River 0")
+			])
+		)
+		
+		branch.commitear(marcelo,
+			new Commit(autor = marcelo, descripcion = "y va el tercerCommit", cambios = [
+				new Sacar(nombreArchivo = "Final", texto = "0"),
+				new Agregar(nombreArchivo = "Final", texto = "3")
+			])
+		)
+		
+		branch.commitear(elAdmin, branch.commits().last().revert(elAdmin))
+		
+		branch.commitear(gustavo, 
+			new Commit(autor = gustavo, descripcion = "primer commit", cambios = [
+				new Crear(nombreArchivo = "recaudacion")
+			])
+		)
+		
+		elAdmin.cambiarRol(branch.blame("Final"), administrador)
+		marcelo.cambiarRol([elAdmin], bot)
+		branch.checkout(carpetaVacia)
+		
+		assert.throwsExceptionWithMessage("No puede cambiar los permisos de otro usuario",
+			{gustavo.cambiarRol([elAdmin], administrador)}
+		)
+		
+		assert.equals("Boca 2 River 0", carpetaVacia.obtener("Final").contenido())
 	}
 }

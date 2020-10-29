@@ -1,26 +1,42 @@
 import archivos.*
+import autores.*
 
 class Commit {
+	const property autor
 	const property descripcion
-	const property cambios = new List()
+	const property cambios
 	
 	method aplicar(carpeta) { cambios.forEach({ cambio => cambio.aplicar(carpeta) }) }
 	
 	method afecta(nombreArchivo) = cambios.any({ cambio => cambio.afecta(nombreArchivo) })
 	
-	method revert() = new Commit(descripcion = "revert " + descripcion, 
+	method revert(nuevoAutor) = new Commit(autor = nuevoAutor, descripcion = "revert " + descripcion, 
 		cambios = cambios.reverse().map({ cambio => cambio.inverso() })
 	)
 }
 
 class Branch {
-	const commits
+	const creador
+	const colaboradores
+	const property commits = new List()
+	
+	method puedeCommitear(usuario) =  usuario == creador or colaboradores.contains(usuario) 
+		or usuario.rol() == administrador or ( usuario.rol() == bot and commits.size() > 10 )
+	
+	method commitear(usuario, commit) {
+		if(not self.puedeCommitear(usuario)) {
+			self.error("No cuenta con los permisos suficientes para commitear")
+		}
+		commits.add(commit)
+	}
 	
 	method checkout(carpeta) {
 		commits.forEach({ commit => commit.aplicar(carpeta) })
 	}
 	
 	method log(nombreArchivo) = commits.filter({ commit => commit.afecta(nombreArchivo) })
+	
+	method blame(nombreArchivo) = self.log(nombreArchivo).map({ commit => commit.autor() })
 }
 
 class Cambio {

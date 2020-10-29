@@ -12,7 +12,7 @@ class Archivo {
 		if(not contenido.endsWith(texto)) {
 			self.error("No se puede quitar el texto \"" + texto + "\" del final del archivo: " + nombre)
 		}
-		contenido = contenido.takeLeft(contenido.length() + texto.length())
+		contenido = contenido.takeLeft(contenido.length() - texto.length())
 	}
 }
 
