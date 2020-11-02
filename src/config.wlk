@@ -6,7 +6,7 @@ import tablero.*
 import creadores.*
 
 object config {
-	// Hice este metodo para directamente cargar esto en el juego.wpgm, traten de agregar aca
+	
 	method iniciar(){
 		game.addVisual(cursor)		
 		self.configurarTeclas()
@@ -16,28 +16,23 @@ object config {
 	}
 	
 	method finalizar() {
+		tablero.finalizar()
 		game.say(cursor, "FIN DEL JUEGO!")
-		game.schedule(2 * 1000, { game.stop() })
+		game.schedule(5 * 1000, { game.stop() })
 	}
 		
 	method configurarTeclas() {
-
-		// Se droppea la planta lanzaguisantes
 		keyboard.q().onPressDo({cursor.seleccionarPlanta(creadorDeMargaritas)})
 		keyboard.w().onPressDo({cursor.seleccionarPlanta(creadorDeLanzaguizantes)})
 		keyboard.e().onPressDo({cursor.seleccionarPlanta(creadorDeGirasoles)})
 		keyboard.r().onPressDo({cursor.seleccionarPlanta(creadorDeHielaguisantes)})
 		
-		
-		// Con esta tecla se borra la planta que tiene el cursor actual, por si el jugador quiere droppear otra
-		// planta en lugar de la que eligio
 		keyboard.up().onPressDo({cursor.moverHaciaArriba()})
 		keyboard.down().onPressDo({cursor.moverHaciaAbajo()})
 		keyboard.right().onPressDo({cursor.moverHaciaLaDerecha()})
 		keyboard.left().onPressDo({cursor.moverHaciaLaIzquierda()})
 		
 		keyboard.enter().onPressDo({cursor.posicionarPlanta()})
-		
 	}
 	
 	method configurarNiveles(){
@@ -62,11 +57,9 @@ object config {
 
 	method agregarZombie(velocidadMovimiento) {
 		const zombie = new Zombie (
-			position = game.at(0, 2.randomUpTo( game.height() )), 
-			image = "zombie.png",
-			vida = 100, 
-			danio = 0, 
-			velocidadAtaque = 0
+			  position = game.at(0, 2.randomUpTo( game.height() ))
+			, image = "zombie.png"
+			, vida = 100
 		)
 		tablero.agregarZombie(zombie, velocidadMovimiento)
 	}
