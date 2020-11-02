@@ -18,14 +18,11 @@ class Disparo {
 	
 	method disparar() {
  		game.addVisual(self)
+		game.schedule(velocidadAtaque * rango, { if(game.hasVisual(self)) self.morir() })
 	}
 	
 	method moverse() {
  		position = position.left(1)
- 		rango--
- 		if(rango < 0){
- 			self.morir()
- 		}
  	}
 	
 	method morir() {
@@ -39,14 +36,16 @@ class Bala inherits Disparo {
 	
 	override method disparar() {
 		super()
- 		game.onTick(velocidadAtaque, "Mover bala" + id, { self.moverse() })
- 		game.onTick(velocidadAtaque / cantImagenes, "Cambiar imagen de bala" + id, { self.cambiarImagen() })
- 		game.onCollideDo(self, { 
-			zombi => if(tablero.esZombie(zombi)) {
-				zombi.recibirAtaque(self)
-				self.morir()
+ 		game.onTick(velocidadAtaque, "MoverBala" + id, { self.moverse() })
+ 		game.onTick(velocidadAtaque / cantImagenes, "CambiarImagenBala" + id, { self.cambiarImagen() })
+ 		game.onCollideDo(self, 
+ 			{ zombi => 
+ 				if(tablero.esZombie(zombi)) {
+					zombi.recibirAtaque(self)
+					self.morir()
+				}
 			}
-		})
+		)
  	}
  
  	method cambiarImagen() {
@@ -56,8 +55,8 @@ class Bala inherits Disparo {
 
  	
  	override method morir() {
- 		game.removeTickEvent("Cambiar imagen de bala" + id)
- 		game.removeTickEvent("Mover bala" + id)
+ 		game.removeTickEvent("CambiarImagenBala" + id)
+ 		game.removeTickEvent("MoverBala" + id)
  		super()
  	}
 }
@@ -67,14 +66,18 @@ class Bala inherits Disparo {
  	
  	override method disparar() {
  		super()
- 		game.onTick(200, "Mover hielo" + id, { self.moverse() })
-		game.onCollideDo(self, { 
-			zombi => if(tablero.esZombie(zombi)) zombi.congelar(tiempoEfecto)
-		})
+ 		game.onTick(200, "MoverHielo" + id, { self.moverse() })
+		game.onCollideDo(self, 
+			{ zombi => 
+				if(tablero.esZombie(zombi)) {
+					zombi.congelar(tiempoEfecto)
+				}
+			}
+		)
  	}
  	
  	 override method morir() {
- 		game.removeTickEvent("Mover hielo" + id)
+ 		game.removeTickEvent("MoverHielo" + id)
  		super()
  	}
  }

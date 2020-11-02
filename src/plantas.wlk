@@ -44,7 +44,7 @@ class Lanzaguisantes inherits Planta {
 					, position = position.left(1)
 					, danio = danio
 					, velocidadAtaque = 250
-					, id = idBala.toString()
+					, id = position.x().toString() + "-" + position.y().toString() + "-" + idBala.toString()
 					, rango = 6
 				)
 				idBala++
@@ -87,7 +87,7 @@ class Hielaguisante inherits Planta {
 					, danio = 10
 					, velocidadAtaque = 200
 					, tiempoEfecto = 3000
-					, id = idHielo.toString()
+					, id = position.x().toString() + "-" + position.y().toString() + "-" + idHielo.toString()
 					, rango = 8
 				)
 				idHielo++
