@@ -25,7 +25,7 @@ describe "Cursor" {
 	}
 	
 	test "No se pueden colocar más plantas que el elixir disponible" {
-		cursor.seleccionarPlanta(creadorDeMargaritas)
+		cursor.seleccionarPlanta(creadorDeHielaguisantes)
 		cursor.posicionarPlanta()
 		cursor.moverHaciaLaDerecha()
 		
@@ -65,6 +65,8 @@ describe "Cursor" {
 }
 
 describe "Tablero" {
+	var posicionAleatoria = game.at(0, 2.randomUpTo(9))
+	
 	const margarita = new Margarita(
 			danio = 25,
 			velocidadAtaque = 3000, 
@@ -74,11 +76,9 @@ describe "Tablero" {
 	)
 	
 	const zombie = new Zombie (
-			position = game.at(0, 2.randomUpTo(9)), 
+			position = posicionAleatoria, 
 			image = "zombie.png",
-			vida = 100, 
-			danio = 0, 
-			velocidadAtaque = 0
+			vida = 100
 		)
 	
 	test "Al colocar una planta, su posición está ocupada"{
@@ -94,17 +94,16 @@ describe "Tablero" {
 		assert.notThat(tablero.estaOcupada( game.at(5,1) ))
 	}
 	
-	//TODO: Ver test, no funciona
 	test "Al colocar un zombi, su posición está ocupada"{
 		tablero.agregarZombie(zombie, 10000000)
 		
-		assert.that( (2..9).any({ i => tablero.estaOcupada(game.at(0,i)) }))
+		assert.that(tablero.estaOcupada(posicionAleatoria))
 	}
 	
 	test "Al eliminar un zombie, su posición está libre" {
 		tablero.agregarZombie(zombie, 10000000)
 		tablero.eliminarZombie(zombie)
 		
-		assert.notThat( (2..9).any({ i => tablero.estaOcupada(game.at(0,i)) }))
+		assert.notThat(tablero.estaOcupada(posicionAleatoria))
 	}
 }
