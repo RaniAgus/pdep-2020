@@ -17,7 +17,7 @@ describe "Cursor" {
 	test "Cursor no puede colocar más de una planta en el mismo lugar" {
 		cursor.seleccionarPlanta(creadorDeMargaritas)
 		cursor.posicionarPlanta()
-		cursor.incrementarElixirDisponible()
+		contadorElixir.incrementarElixirDisponible()
 		
 		assert.throwsExceptionWithMessage("Esta posición está ocupada, busque otra!!", 
 			({ cursor.posicionarPlanta() })
