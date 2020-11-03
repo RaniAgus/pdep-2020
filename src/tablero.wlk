@@ -1,6 +1,7 @@
 import wollok.game.*
 import zombies.*
 import plantas.*
+import config.*
 
  object cursor {
  	var property position = game.at(10,5)
@@ -58,7 +59,7 @@ import plantas.*
 		}
 	} 
 	
-	//Para cuando se choque con una planta o zombie
+	//Para cuando se choque con una bala o zombie
 	method recibirAtaque(atacante){}
 	method morir(){}
 }
@@ -76,7 +77,7 @@ object tablero {
 		plantasEnJuego.add(planta)
 		game.addVisual(planta)
 		game.showAttributes(planta)
-		planta.atacar()
+		planta.iniciar()
 	}
 	
 	method agregarZombie(zombie, velocidadMovimiento){
@@ -88,6 +89,7 @@ object tablero {
 	}
 	
 	method eliminarPlanta(planta){
+		planta.detenerAtaque()
 		plantasEnJuego.remove(planta)
 		game.removeVisual(planta)
 	}
@@ -96,10 +98,15 @@ object tablero {
 		zombiesEnJuego.remove(zombie)
 		game.removeVisual(zombie)
 		if(zombiesEnJuego.isEmpty()) {
-			//game.subirNivel() ??
+			niveles.iniciarNuevaOleada()
 		}
 	}
 	
 	method esZombie(objeto) = zombiesEnJuego.contains(objeto)
 	method esPlanta(objeto) = plantasEnJuego.contains(objeto)
+	
+	method finalizar() {
+		zombiesEnJuego.forEach({ zombie => game.removeVisual(zombie) })
+		plantasEnJuego.forEach({ planta => game.removeVisual(planta) })
+	}
 }
