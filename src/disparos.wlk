@@ -12,13 +12,13 @@ class Disparo {
 	var id
 	var rango
 	var danio
-	var velocidadAtaque
+	var velocidad
 	
 	method danio() = danio
 	
 	method disparar() {
  		game.addVisual(self)
-		game.schedule(velocidadAtaque * rango, { if(game.hasVisual(self)) self.morir() })
+		game.schedule(velocidad * rango, { if(game.hasVisual(self)) self.morir() })
 	}
 	
 	method moverse() {
@@ -36,8 +36,8 @@ class Bala inherits Disparo {
 	
 	override method disparar() {
 		super()
- 		game.onTick(velocidadAtaque, "MoverBala" + id, { self.moverse() })
- 		game.onTick(velocidadAtaque / cantImagenes, "CambiarImagenBala" + id, { self.cambiarImagen() })
+ 		game.onTick(velocidad, "MoverBala" + id, { self.moverse() })
+ 		game.onTick(velocidad / cantImagenes, "CambiarImagenBala" + id, { self.cambiarImagen() })
  		game.onCollideDo(self, 
  			{ zombi => 
  				if(tablero.esZombie(zombi)) {
@@ -62,15 +62,13 @@ class Bala inherits Disparo {
 }
 
  class Hielo inherits Disparo {
- 	var tiempoEfecto
- 	
  	override method disparar() {
  		super()
- 		game.onTick(200, "MoverHielo" + id, { self.moverse() })
+ 		game.onTick(velocidad, "MoverHielo" + id, { self.moverse() })
 		game.onCollideDo(self, 
 			{ zombi => 
 				if(tablero.esZombie(zombi)) {
-					zombi.congelar(tiempoEfecto)
+					zombi.congelar(danio * 100)
 				}
 			}
 		)

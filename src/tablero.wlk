@@ -1,6 +1,7 @@
 import wollok.game.*
 import zombies.*
 import plantas.*
+import config.*
 
  object cursor {
  	var property position = game.at(10,5)
@@ -97,7 +98,7 @@ object tablero {
 		zombiesEnJuego.remove(zombie)
 		game.removeVisual(zombie)
 		if(zombiesEnJuego.isEmpty()) {
-			//game.subirNivel() ??
+			niveles.iniciarNuevaOleada()
 		}
 	}
 	
@@ -105,7 +106,7 @@ object tablero {
 	method esPlanta(objeto) = plantasEnJuego.contains(objeto)
 	
 	method finalizar() {
-		zombiesEnJuego.forEach({ zombie => zombie.morir() })
-		plantasEnJuego.forEach({ planta => planta.morir() })
+		zombiesEnJuego.forEach({ zombie => game.removeVisual(zombie) })
+		plantasEnJuego.forEach({ planta => game.removeVisual(planta) })
 	}
 }

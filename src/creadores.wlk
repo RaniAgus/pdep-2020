@@ -5,7 +5,7 @@ import tablero.*
 object creadorDeMargaritas {
 	
 	method crearPlanta() = new Margarita(
-		  danio = 25
+		  danio = 50
 		, velocidadAtaque = 3000
 		, vida = 0
 		, position = cursor.position()
@@ -20,8 +20,8 @@ object creadorDeMargaritas {
 
 object creadorDeLanzaguizantes {
 	method crearPlanta() = new Lanzaguisantes(
-		danio = 25
-		, velocidadAtaque = 3000
+		  danio = 40
+		, velocidadAtaque = 2000
 		, vida = 200
 		, position = cursor.position()
 		, image = "lanzaguisante.png"

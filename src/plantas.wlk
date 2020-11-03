@@ -11,7 +11,7 @@ class Planta inherits ElementoVivo {
 	method danio() = danio
 	
 	method envejecer() {
-		vida -= 5
+		vida -= 20
 		if(vida <= 0) {
 			self.morir()
 		}
@@ -27,7 +27,7 @@ class Planta inherits ElementoVivo {
 
 class Margarita inherits Planta {
 	override method morir() {
-		game.colliders(self).forEach({ zombi => zombi.recibirAtaque(self) })
+		game.colliders(self).forEach({ zombi => if(tablero.esZombie(zombi)) zombi.recibirAtaque(self) })
 		super()
 	}
 }
@@ -43,7 +43,7 @@ class Lanzaguisantes inherits Planta {
 					  image = "bala0.png"
 					, position = position.left(1)
 					, danio = danio
-					, velocidadAtaque = 250
+					, velocidad = 200
 					, id = position.x().toString() + "-" + position.y().toString() + "-" + idBala.toString()
 					, rango = 6
 				)
@@ -84,9 +84,8 @@ class Hielaguisante inherits Planta {
 			, {	const hielo = new Hielo(
 					  image = "hielo.png"
 					, position = position.left(1)
-					, danio = 10
-					, velocidadAtaque = 200
-					, tiempoEfecto = 3000
+					, danio = danio
+					, velocidad = 200
 					, id = position.x().toString() + "-" + position.y().toString() + "-" + idHielo.toString()
 					, rango = 8
 				)
