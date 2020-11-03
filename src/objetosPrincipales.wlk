@@ -20,7 +20,7 @@ class ElementoVivo {
 
 class Muro {
 	var property position 
-	method image() = "muro.png"
+	method image() = "null.png"
 	
 	method morir() {
 		config.finalizar()

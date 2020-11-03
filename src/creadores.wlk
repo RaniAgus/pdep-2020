@@ -38,10 +38,10 @@ object creadorDeGirasoles {
 		, velocidadAtaque = 1000
 		, vida = 100
 		, position = cursor.position()
-		, image = "plantita.png"
+		, image = "girasol.png"
 	)
 	
-	method seleccionarImagen() = "plantita-gris.png"
+	method seleccionarImagen() = "girasol-gris.png"
 	
 	method elixirNecesario() = 6
 }
@@ -54,7 +54,7 @@ object creadorDeHielaguisantes {
 		, image = "lanzaguizanteHielo.png"
 	)
 	
-	method seleccionarImagen() = "lanzaguizanteHielo.png"
+	method seleccionarImagen() = "lanzaguizanteHielo-gris.png"
 	
 	method elixirNecesario() = 4
 }

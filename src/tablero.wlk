@@ -9,16 +9,6 @@ import config.*
  	
  	//El juego arranca sin seleccionar ninguna planta y con el elixir a la mitad
 	var creadorSeleccionado = null
- 	var elixirDisponible = 5
- 	
- 	method elixirDispuesto()  {
- 		contadorElixir.imagenSegunCantElixir(elixirDisponible)
- 		}
-	
-	method incrementarElixirDisponible() { 
-		elixirDisponible = 10.min(elixirDisponible + 1)
-		self.elixirDispuesto()
-	}
 	
 	//Selecciona un creador de plantas de la lista y cambia su imagen a la correspondiente
 	method seleccionarPlanta(unCreador) {
@@ -31,18 +21,8 @@ import config.*
 		if(creadorSeleccionado == null) {
 			self.error("No se seleccionó ningún personaje!!")
 		}
-		
-		if(creadorSeleccionado.elixirNecesario() > elixirDisponible) {
-			self.error("No se cuenta con el elixir suficiente!!")
-		}
-		
-		if(tablero.estaOcupada(position)) {
-			self.error("Esta posición está ocupada, busque otra!!")
-		}
-		
+		contadorElixir.gastarElixir(creadorSeleccionado.elixirNecesario())
 		tablero.agregarPlanta(creadorSeleccionado.crearPlanta())
-		elixirDisponible -= creadorSeleccionado.elixirNecesario()
-		self.elixirDispuesto()
 	}
 	
 	//Configuración de movimiento
@@ -82,6 +62,9 @@ object tablero {
 	}
 	
 	method agregarPlanta(planta) {
+		if(self.estaOcupada(planta.position())) {
+			cursor.error("Esta posición está ocupada, busque otra!!")
+		}
 		plantasEnJuego.add(planta)
 		game.addVisual(planta)
 		game.showAttributes(planta)
@@ -114,7 +97,7 @@ object tablero {
 	method esPlanta(objeto) = plantasEnJuego.contains(objeto)
 	
 	method finalizar() {
-		zombiesEnJuego.forEach({ zombie => game.removeVisual(zombie) })
+		zombiesEnJuego.forEach({ zombie => if(zombie.position().x() < 19) game.removeVisual(zombie) })
 		plantasEnJuego.forEach({ planta => game.removeVisual(planta) })
 	}
 }
@@ -123,28 +106,23 @@ object contadorElixir{
 	var property image = "elixir.png"
 	var property position = game.at(-1,-2)
 	
-	method imagenSegunCantElixir(cant){
-		if(cant ==1 ){
-			image = "elixir1.png"
-		}		if(cant == 2){
-			image = "elixir2.png"
-		}		if(cant == 3){
-			image = "elixir3.png"
-		}		if(cant == 4){
-			image = "elixir4.png"
-		}		if(cant == 5){
-			image = "elixir5.png"
-		}		if(cant == 6){
-			image = "elixir6.png"
-		}		if(cant == 7){
-			image = "elixir7.png"
-		}		if(cant == 8){
-			image = "elixir8.png"
-		}		if(cant == 9){
-			image = "elixir9.png"
-		}		if(cant == 10){
-			image = "elixir10.png"
+ 	var elixirDisponible = 5
+ 	
+ 	method incrementarElixirDisponible() { 
+		elixirDisponible = 10.min(elixirDisponible + 1)
+		self.imagenSegunCantElixir()
+	}
+	
+	method gastarElixir(elixir) {
+		if(elixir > elixirDisponible) {
+			cursor.error("No se cuenta con el elixir suficiente!!")
 		}
+		elixirDisponible -= elixir
+		self.imagenSegunCantElixir()
+	}
+	
+	method imagenSegunCantElixir(){
+		image = "elixir" + elixirDisponible.toString() + ".png"
 	}
 }
 
