@@ -74,7 +74,7 @@ describe "Tablero" {
 	)
 	
 	const zombie = new Zombie (
-			position = game.at(0, 2.randomUpTo(9)), 
+			position = game.at(0, 2), 
 			image = "zombie.png",
 			vida = 100, 
 			danio = 0, 
@@ -98,7 +98,7 @@ describe "Tablero" {
 	test "Al colocar un zombi, su posición está ocupada"{
 		tablero.agregarZombie(zombie, 10000000)
 		
-		assert.that( (2..9).any({ i => tablero.estaOcupada(game.at(0,i)) }))
+		assert.that( (2..9).any({ i => tablero.estaOcupada(game.at(0,i)) })) // que este en la poss
 	}
 	
 	test "Al eliminar un zombie, su posición está libre" {
