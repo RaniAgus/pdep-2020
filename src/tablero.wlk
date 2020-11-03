@@ -10,8 +10,15 @@ import config.*
  	//El juego arranca sin seleccionar ninguna planta y con el elixir a la mitad
 	var creadorSeleccionado = null
  	var elixirDisponible = 5
+ 	
+ 	method elixirDispuesto()  {
+ 		contadorElixir.imagenSegunCantElixir(elixirDisponible)
+ 		}
 	
-	method incrementarElixirDisponible() { elixirDisponible = 10.min(elixirDisponible + 1) }
+	method incrementarElixirDisponible() { 
+		elixirDisponible = 10.min(elixirDisponible + 1)
+		self.elixirDispuesto()
+	}
 	
 	//Selecciona un creador de plantas de la lista y cambia su imagen a la correspondiente
 	method seleccionarPlanta(unCreador) {
@@ -35,6 +42,7 @@ import config.*
 		
 		tablero.agregarPlanta(creadorSeleccionado.crearPlanta())
 		elixirDisponible -= creadorSeleccionado.elixirNecesario()
+		self.elixirDispuesto()
 	}
 	
 	//Configuración de movimiento
@@ -110,3 +118,33 @@ object tablero {
 		plantasEnJuego.forEach({ planta => game.removeVisual(planta) })
 	}
 }
+
+object contadorElixir{
+	var property image = "elixir.png"
+	var property position = game.at(-1,-2)
+	
+	method imagenSegunCantElixir(cant){
+		if(cant ==1 ){
+			image = "elixir1.png"
+		}		if(cant == 2){
+			image = "elixir2.png"
+		}		if(cant == 3){
+			image = "elixir3.png"
+		}		if(cant == 4){
+			image = "elixir4.png"
+		}		if(cant == 5){
+			image = "elixir5.png"
+		}		if(cant == 6){
+			image = "elixir6.png"
+		}		if(cant == 7){
+			image = "elixir7.png"
+		}		if(cant == 8){
+			image = "elixir8.png"
+		}		if(cant == 9){
+			image = "elixir9.png"
+		}		if(cant == 10){
+			image = "elixir10.png"
+		}
+	}
+}
+

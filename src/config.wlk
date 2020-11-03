@@ -13,6 +13,7 @@ object config {
 		self.configurarElixir()
 		self.agregarTorre()
 		niveles.iniciarNuevaOleada()
+		game.addVisual(contadorElixir)
 	}
 	
 	method finalizar() {
