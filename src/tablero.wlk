@@ -97,7 +97,6 @@ object tablero {
 	method esPlanta(objeto) = plantasEnJuego.contains(objeto)
 	
 	method finalizar() {
-		zombiesEnJuego.forEach({ zombie => game.removeVisual(zombie) })
 		plantasEnJuego.forEach({ planta => game.removeVisual(planta) })
 	}
 }
