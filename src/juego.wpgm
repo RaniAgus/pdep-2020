@@ -4,8 +4,8 @@ import config.*
 program game {
 	game.title("Plantas vs Zombies")
 	game.boardGround("tablero.png")	
-	game.width(20)
-	game.height(12)
+	game.width(22)
+	game.height(10)
 	config.iniciar()
 	game.start()
 }

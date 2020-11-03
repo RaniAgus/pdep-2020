@@ -18,6 +18,7 @@ object config {
 	
 	method finalizar() {
 		tablero.finalizar()
+		game.removeTickEvent("IncrementarElixir")
 		game.say(cursor, "FIN DEL JUEGO!")
 		game.schedule(5 * 1000, { game.stop() })
 	}
@@ -37,7 +38,7 @@ object config {
 	}
 	
 	method configurarElixir() {
-		game.onTick(1000, "Incrementar elixir", { cursor.incrementarElixirDisponible() })
+		game.onTick(1000, "IncrementarElixir", { contadorElixir.incrementarElixirDisponible() })
 	}
 	
 	method agregarTorre() {
