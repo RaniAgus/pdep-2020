@@ -43,9 +43,7 @@ object config {
 		
 		keyboard.enter().onPressDo({cursor.posicionarPlanta()})
 		
-		keyboard.p().onPressDo({sonido.arrancarMusicaFondo()})
-
-		keyboard.space().onPressDo({self.iniciar()})
+		keyboard.space().onPressDo({self.iniciar() sonido.arrancarMusicaFondo()})
 	}
 	
 	method configurarElixir() {
@@ -90,4 +88,4 @@ object niveles {
 
 object gameOver{
 	method image()="gameOver.png"
-	method position()=game.at(6,4)}
+	method position()=game.at(4,4)}

@@ -1,4 +1,5 @@
 import wollok.game.*
+import sonidos.*
 
 object menuInicio {
 	
