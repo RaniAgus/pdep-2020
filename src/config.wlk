@@ -4,14 +4,16 @@ import plantas.*
 import zombies.*
 import tablero.*
 import creadores.*
+import menuInicio.*
+
 
 object config {
 	
 	method iniciar(){
 		game.addVisual(cursor)		
-		self.configurarTeclas()
+		menuInicio.cerrarInicio()
 		self.configurarElixir()
-		self.agregarTorre()
+		self.agregarTorre()	
 		niveles.iniciarNuevaOleada()
 		game.addVisual(contadorElixir)
 	}
@@ -35,6 +37,7 @@ object config {
 		keyboard.left().onPressDo({cursor.moverHaciaLaIzquierda()})
 		
 		keyboard.enter().onPressDo({cursor.posicionarPlanta()})
+		keyboard.space().onPressDo({self.iniciar()})
 	}
 	
 	method configurarElixir() {
