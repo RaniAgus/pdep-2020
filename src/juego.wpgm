@@ -1,14 +1,15 @@
 import wollok.game.*
 import config.*
 import sonidos.*
-
+import menuInicio.*
 
 program game {
 	game.title("Plantas vs Zombies")
 	game.boardGround("tablero.png")	
+	menuInicio.generarInicio()
 	game.width(22)
 	game.height(10)
-	config.iniciar()
+	config.configurarTeclas()
 	game.start()
 	
 }

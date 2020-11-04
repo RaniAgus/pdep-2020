@@ -6,14 +6,15 @@ import tablero.*
 import creadores.*
 import sonidos.*
 import puntaje.*
+import menuInicio.*
 
 object config {
 	
 	method iniciar(){
 		game.addVisual(cursor)		
-		self.configurarTeclas()
+		menuInicio.cerrarInicio()
 		self.configurarElixir()
-		self.agregarTorre()
+		self.agregarTorre()	
 		niveles.iniciarNuevaOleada()
 		game.addVisual(contadorElixir)
 		puntaje.iniciarPuntaje()
@@ -42,9 +43,9 @@ object config {
 		
 		keyboard.enter().onPressDo({cursor.posicionarPlanta()})
 		
-		
-		
 		keyboard.p().onPressDo({sonido.arrancarMusicaFondo()})
+
+		keyboard.space().onPressDo({self.iniciar()})
 	}
 	
 	method configurarElixir() {
