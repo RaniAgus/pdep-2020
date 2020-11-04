@@ -1,5 +1,7 @@
 import wollok.game.*
 import config.*
+import sonidos.*
+
 
 program game {
 	game.title("Plantas vs Zombies")
@@ -8,5 +10,6 @@ program game {
 	game.height(10)
 	config.iniciar()
 	game.start()
+	
 }
 

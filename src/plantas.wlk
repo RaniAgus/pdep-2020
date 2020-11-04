@@ -4,6 +4,7 @@ import objetosPrincipales.*
 import tablero.*
 import disparos.*
 import sonidos.*
+import puntaje.*
 
 class Planta inherits ElementoVivo {
 	var velocidadAtaque
@@ -28,7 +29,12 @@ class Planta inherits ElementoVivo {
 
 class Margarita inherits Planta {
 	override method morir() {
-		game.colliders(self).forEach({ zombi => if(tablero.esZombie(zombi)) zombi.recibirAtaque(self) })
+		game.colliders(self).forEach({ zombi => 
+			if(tablero.esZombie(zombi)) {
+				puntaje.sumar(5)
+				zombi.recibirAtaque(self) 
+				sonido.tocar("explosion.mp3")
+		} })
 		super()
 	}
 }
@@ -51,7 +57,7 @@ class Lanzaguisantes inherits Planta {
 					)
 					idBala++
 					bala.disparar()
-					//sonido.tocar(disparo)
+					sonido.tocar("disparo.wav")
 					self.envejecer()
 				} 
 			  }
@@ -70,7 +76,9 @@ class Girasol inherits Planta {
 			, "RecolectarElixir" + position.x().toString() + "-" + position.y().toString()
 			, { contadorElixir.incrementarElixirDisponible()
 				vida -= 10
-				if(vida == 0) self.morir() }
+				if(vida == 0) {					
+					self.morir()
+				} }
 		)
 	}
 	
@@ -97,7 +105,7 @@ class Hielaguisante inherits Planta {
 					)
 					idHielo++
 					hielo.disparar()
-					//sonido.tocar(hielo)
+					sonido.tocar("hielo.mp3")
 					self.envejecer() 
 				}
 			  }

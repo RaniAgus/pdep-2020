@@ -4,6 +4,8 @@ import plantas.*
 import zombies.*
 import tablero.*
 import creadores.*
+import sonidos.*
+import puntaje.*
 
 class Disparo {
 	var property image
@@ -42,7 +44,8 @@ class Bala inherits Disparo {
  			{ zombi => 
  				if(tablero.esZombie(zombi)) {
 					zombi.recibirAtaque(self)
-					//sonido.tocar(danioBala)
+					sonido.tocar("danioBala.wav")
+					puntaje.sumar(4)
 					self.morir()
 				}
 			}
@@ -70,6 +73,8 @@ class Bala inherits Disparo {
 			{ zombi => 
 				if(tablero.esZombie(zombi)) {
 					zombi.congelar(danio * 100)
+					puntaje.sumar(2)
+					
 				}
 			}
 		)
