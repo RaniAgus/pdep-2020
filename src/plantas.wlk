@@ -3,6 +3,7 @@ import config.*
 import objetosPrincipales.*
 import tablero.*
 import disparos.*
+import sonidos.*
 
 class Planta inherits ElementoVivo {
 	var velocidadAtaque
@@ -50,6 +51,7 @@ class Lanzaguisantes inherits Planta {
 					)
 					idBala++
 					bala.disparar()
+					//sonido.tocar(disparo)
 					self.envejecer()
 				} 
 			  }
@@ -95,6 +97,7 @@ class Hielaguisante inherits Planta {
 					)
 					idHielo++
 					hielo.disparar()
+					//sonido.tocar(hielo)
 					self.envejecer() 
 				}
 			  }

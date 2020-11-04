@@ -42,6 +42,7 @@ class Bala inherits Disparo {
  			{ zombi => 
  				if(tablero.esZombie(zombi)) {
 					zombi.recibirAtaque(self)
+					//sonido.tocar(danioBala)
 					self.morir()
 				}
 			}

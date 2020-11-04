@@ -2,6 +2,7 @@ import wollok.game.*
 import objetosPrincipales.*
 import tablero.*
 
+
 class Zombie inherits ElementoVivo {
 	var estaCongelado = false
 	method caminar() {

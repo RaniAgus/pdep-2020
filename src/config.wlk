@@ -4,6 +4,7 @@ import plantas.*
 import zombies.*
 import tablero.*
 import creadores.*
+import sonidos.*
 
 object config {
 	
@@ -14,13 +15,17 @@ object config {
 		self.agregarTorre()
 		niveles.iniciarNuevaOleada()
 		game.addVisual(contadorElixir)
+		sonido.arrancarMusicaFondo()
+		
 	}
 	
 	method finalizar() {
 		tablero.finalizar()
+		sonido.pararMusicaFondo()
 		game.removeTickEvent("IncrementarElixir")
 		game.say(cursor, "FIN DEL JUEGO!")
-		game.schedule(5 * 1000, { game.stop() })
+		sonido.tocar("gameOver.mp3")
+		game.schedule(7 * 1000, { game.stop() })
 	}
 		
 	method configurarTeclas() {
