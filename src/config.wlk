@@ -56,36 +56,6 @@ object config {
 	
 }
 
-object niveles {
-	var property nivel = 1
-	const frecuenciaZombies = 3000
-	//TODO: Agregar position e image
-	
-	method iniciarNuevaOleada() {
-		var velocidadMovimiento = 6000
-		var vidaZombie = 100
-		const cantidadZombies = (4 * nivel + nivel / 2).truncate(0)
-		
-		nivel.times({ i => 
-			velocidadMovimiento = (velocidadMovimiento - velocidadMovimiento / (i+2)).truncate(0)
-			vidaZombie = (vidaZombie + vidaZombie / 2).truncate(0)
-		})
-		
-		game.onTick(
-			  frecuenciaZombies
-			, "Oleada"
-			, {	const zombie = new Zombie (
-			  		  position = game.at(0, 2.randomUpTo( game.height() ))
-					, image = "zombie.png"
-					, vida = vidaZombie
-				)
-				tablero.agregarZombie(zombie, velocidadMovimiento) }
-		)
-		game.schedule(cantidadZombies * frecuenciaZombies, { => game.removeTickEvent("Oleada") })
-		nivel++
-	}	
-}
-
 object gameOver{
 	method image()="gameOver.png"
 	method position()=game.at(4,4)}

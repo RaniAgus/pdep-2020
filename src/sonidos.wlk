@@ -15,9 +15,4 @@ object sonido {
 	method pararMusicaFondo(){
 		musicaFondo.stop()
 	}
-	
-	
-	
-	
-	
 }

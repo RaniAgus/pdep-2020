@@ -3,6 +3,7 @@ import zombies.*
 import plantas.*
 import config.*
 import sonidos.*
+import puntaje.*
 
  object cursor {
  	var property position = game.at(10,5)
@@ -83,7 +84,7 @@ object tablero {
 	method eliminarPlanta(planta){
 		planta.detenerAtaque()
 		plantasEnJuego.remove(planta)
-		game.removeVisual(planta)
+		if(game.hasVisual(planta)) game.removeVisual(planta)
 	}
 	
 	method eliminarZombie(zombie){
