@@ -1,6 +1,8 @@
 import wollok.game.*
 import objetosPrincipales.*
 import tablero.*
+import sonidos.*
+import puntaje.*
 
 class Zombie inherits ElementoVivo {
 	var estaCongelado = false
@@ -10,6 +12,7 @@ class Zombie inherits ElementoVivo {
 	}
 	
 	override method morir() {
+		puntaje.sumar(50)
 		tablero.eliminarZombie(self)
 	}
 	

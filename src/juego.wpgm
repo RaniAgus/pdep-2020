@@ -1,5 +1,6 @@
 import wollok.game.*
 import config.*
+import sonidos.*
 import menuInicio.*
 
 program game {
@@ -10,5 +11,6 @@ program game {
 	game.height(10)
 	config.configurarTeclas()
 	game.start()
+	
 }
 

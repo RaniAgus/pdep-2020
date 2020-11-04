@@ -2,6 +2,7 @@ import wollok.game.*
 import zombies.*
 import plantas.*
 import config.*
+import sonidos.*
 
  object cursor {
  	var property position = game.at(10,5)
@@ -86,9 +87,11 @@ object tablero {
 	}
 	
 	method eliminarZombie(zombie){
+		sonido.tocar("zombi"+1.randomUpTo(5).truncate(0).toString()+".mp3")
 		zombiesEnJuego.remove(zombie)
 		game.removeVisual(zombie)
 		if(zombiesEnJuego.isEmpty()) {
+			sonido.tocar("subidaNivel.mp3")
 			niveles.iniciarNuevaOleada()
 		}
 	}
@@ -123,6 +126,7 @@ object contadorElixir{
 	
 	method imagenSegunCantElixir(){
 		image = "elixir" + elixirDisponible.toString() + ".png"
+
 	}
 }
 

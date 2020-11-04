@@ -4,8 +4,9 @@ import plantas.*
 import zombies.*
 import tablero.*
 import creadores.*
+import sonidos.*
+import puntaje.*
 import menuInicio.*
-
 
 object config {
 	
@@ -16,13 +17,17 @@ object config {
 		self.agregarTorre()	
 		niveles.iniciarNuevaOleada()
 		game.addVisual(contadorElixir)
+		puntaje.iniciarPuntaje()
 	}
 	
 	method finalizar() {
 		tablero.finalizar()
+		sonido.pararMusicaFondo()
 		game.removeTickEvent("IncrementarElixir")
 		game.say(cursor, "FIN DEL JUEGO!")
-		game.schedule(5 * 1000, { game.stop() })
+		sonido.tocar("gameOver.mp3")
+		game.addVisual(gameOver)
+		game.schedule(10 * 1000, { game.stop() })
 	}
 		
 	method configurarTeclas() {
@@ -37,6 +42,9 @@ object config {
 		keyboard.left().onPressDo({cursor.moverHaciaLaIzquierda()})
 		
 		keyboard.enter().onPressDo({cursor.posicionarPlanta()})
+		
+		keyboard.p().onPressDo({sonido.arrancarMusicaFondo()})
+
 		keyboard.space().onPressDo({self.iniciar()})
 	}
 	
@@ -51,7 +59,7 @@ object config {
 }
 
 object niveles {
-	var nivel = 1
+	var property nivel = 1
 	const frecuenciaZombies = 3000
 	//TODO: Agregar position e image
 	
@@ -79,3 +87,7 @@ object niveles {
 		nivel++
 	}	
 }
+
+object gameOver{
+	method image()="gameOver.png"
+	method position()=game.at(6,4)}
