@@ -30,7 +30,7 @@ Son los personajes que te ayudarán a combatir los zombis y proteger tu jardín.
 - Coste de elixir: 5
 - Rango: 6 casilleros máximo
 - Velocidad de ataque: 1 disparo cada 2 segundos
-- Daño por bala: 40 puntos de salud
+- Daño por bala: 75 puntos de salud
 - Descripción: Dispara guisantes de uno en uno a los zombis que se encuentran en su carril.
 
 ![lanzaguizantes-ataque](https://i.imgur.com/PMT8LRP.gif)
