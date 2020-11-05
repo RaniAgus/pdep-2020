@@ -16,8 +16,8 @@ object niveles {
 		const cantidadZombies = (4 * nivel + nivel / 2).truncate(0)
 		
 		nivel.times({ i => 
-			velocidadMovimiento = (velocidadMovimiento - velocidadMovimiento / (i+2)).truncate(0)
-			vidaZombie = (vidaZombie + vidaZombie / 2).truncate(0)
+			velocidadMovimiento = (velocidadMovimiento - 1000 /i).truncate(0)
+			vidaZombie = (vidaZombie + 100 / i).truncate(0)
 		})
 		
 		game.onTick(
