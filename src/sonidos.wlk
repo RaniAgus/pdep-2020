@@ -1,4 +1,6 @@
 import wollok.game.*
+import config.*
+
 object sonido {
 	
 	var musicaFondo=new Sound(file="musicaFondo.ogg")
@@ -9,7 +11,8 @@ object sonido {
 	musicaFondo.play()
 	}
 	method tocar(archivo){
-		new Sound(file=archivo).play()
+		if (config.juegoIniciado()){
+		new Sound(file=archivo).play()}
 	}
 	
 	method pararMusicaFondo(){

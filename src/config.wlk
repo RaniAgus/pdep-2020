@@ -9,8 +9,9 @@ import puntaje.*
 import menuInicio.*
 
 object config {
-	
+	var property juegoIniciado=false
 	method iniciar(){
+		juegoIniciado=true
 		game.addVisual(cursor)		
 		menuInicio.cerrarInicio()
 		self.configurarElixir()

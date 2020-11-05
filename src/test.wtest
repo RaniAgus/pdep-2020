@@ -5,6 +5,8 @@ import tablero.*
 import plantas.*
 import zombies.*
 import creadores.*
+import disparos.*
+import puntaje.*
 
 describe "Cursor" {
 				
@@ -81,6 +83,7 @@ describe "Tablero" {
 			vida = 100
 		)
 	
+	
 	test "Al colocar una planta, su posición está ocupada"{
 		tablero.agregarPlanta(margarita)
 		
@@ -107,4 +110,25 @@ describe "Tablero" {
 		assert.notThat(tablero.estaOcupada(posicionAleatoria))
 	}
 }
- 
+
+
+describe "Puntaje"{
+	var posicionAleatoria = game.at(0, 2.randomUpTo(9))
+	var posicionFija1 = game.at(2, 3)
+	var posicionFija2 = game.at(4, 3)
+	
+	const hielo=new Hielo(image="null.png",position=posicionFija1,id=0,rango=5,velocidad=10,danio=10)
+	const bala=new Bala(image="null.png",position=posicionFija1,id=0,rango=5,velocidad=10,danio=10)
+	const zombie = new Zombie (
+			position = posicionFija1, 
+			image = "zombie.png",
+			vida = 100
+		)
+	test "Al morir un zombi en el nivel 2, se suma 100 al puntaje"{
+		tablero.agregarZombie(zombie, 10000000)
+		niveles.nivel(2)
+		zombie.morir()
+		assert.equals(100,puntaje.puntaje())
+	}
+	
+}

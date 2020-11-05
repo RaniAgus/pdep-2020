@@ -4,9 +4,9 @@ import tablero.*
 import wollok.game.*
 
 object niveles {
-	var nivel = 0
+	var property nivel = 0
 	const frecuenciaZombies = 3000
-	method nivel() = nivel
+	
 	
 	method iniciarNuevaOleada() {
 		nivel++
