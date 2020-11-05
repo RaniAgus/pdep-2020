@@ -20,7 +20,7 @@ object creadorDeMargaritas {
 
 object creadorDeLanzaguizantes {
 	method crearPlanta() = new Lanzaguisante(
-		  danio = 40
+		  danio = 75
 		, velocidadAtaque = 2000
 		, vida = 200
 		, position = cursor.position()

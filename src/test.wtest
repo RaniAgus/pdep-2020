@@ -112,11 +112,11 @@ describe "Tablero" {
 }
 
 
-describe "Puntaje"{
-	var posicionAleatoria = game.at(0, 2.randomUpTo(9))
-	var posicionFija1 = game.at(2, 3)
-	var posicionFija2 = game.at(4, 3)
+describe "Puntaje y Danios recibidos"{
+	const posicionFija1 = game.at(2, 3)
+	//const posicionFija2 = game.at(4, 3) por si queremos agregar otro zombie
 	
+	const margarita = new Margarita(danio = 50, image = "margarita.png", position = game.at(2,3), vida = 50,velocidadAtaque = 10)
 	const hielo=new Hielo(image="null.png",position=posicionFija1,id=0,rango=5,velocidad=10,danio=10)
 	const bala=new Bala(image="null.png",position=posicionFija1,id=0,rango=5,velocidad=10,danio=10)
 	const zombie = new Zombie (
@@ -130,5 +130,21 @@ describe "Puntaje"{
 		zombie.morir()
 		assert.equals(100,puntaje.puntaje())
 	}
+	test "Al dispararse una bala, la misma choca con el zombie"{
+		bala.disparar()
+		zombie.recibirAtaque(bala)
+		assert.equals(90, zombie.vida())
+	}
+	test "Al dispararse un hielo, el zombie la recibe, pero no le baja su vida"{
+		hielo.disparar()
+		zombie.congelar(100)
+		assert.equals(100, zombie.vida())
+		
+	}
+	test "Al chocarse con una margarita, la misma le baja 50 de danio"{
+		zombie.recibirAtaque(margarita)
+		assert.equals(50, zombie.vida())
+	}
+	
 	
 }
