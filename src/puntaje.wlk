@@ -6,8 +6,6 @@ import wollok.game.*
 object niveles {
 	var nivel = 0
 	const frecuenciaZombies = 3000
-	//TODO: Agregar position e image
-	
 	method nivel() = nivel
 	
 	method iniciarNuevaOleada() {

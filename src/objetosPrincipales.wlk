@@ -35,6 +35,7 @@ object torre inherits ElementoVivo(vida = 10000) {
 		game.addVisual(muro)
 	}	
 		
+		
 	override method morir() {
 		config.finalizar()
 	}	

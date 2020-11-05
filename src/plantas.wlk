@@ -39,7 +39,7 @@ class Margarita inherits Planta {
 	}
 }
 
-class Lanzaguisantes inherits Planta {
+class Lanzaguisante inherits Planta {
 	var idBala = 0
 	
 	override method iniciar(){

@@ -19,7 +19,7 @@ object creadorDeMargaritas {
 }
 
 object creadorDeLanzaguizantes {
-	method crearPlanta() = new Lanzaguisantes(
+	method crearPlanta() = new Lanzaguisante(
 		  danio = 40
 		, velocidadAtaque = 2000
 		, vida = 200
