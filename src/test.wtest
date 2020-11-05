@@ -40,25 +40,25 @@ describe "Cursor" {
 		assert.equals(game.at(10,5), cursor.position())
 	}
 	
-	test "Cursor no puede moverse más arriba de la posición Y = 9"{
+	test "Cursor no puede moverse más arriba del tablero"{
 		30.times({ i => cursor.moverHaciaArriba()})
 		
 		assert.equals(game.at(10,9), cursor.position())
 	}
  	
-	test "Cursor no puede moverse más abajo de la posición Y = 2"{
+	test "Cursor no puede moverse más abajo del tablero"{
 		30.times({ i => cursor.moverHaciaAbajo()})
 		
 		assert.equals(game.at(10,2), cursor.position())
 	}
 	
-	test "Cursor no puede moverse más a la izquierda de la posición X = 4"{
+	test "Cursor no puede moverse más a la izquierda del tablero"{
 		30.times({ i => cursor.moverHaciaLaIzquierda()})
 		
 		assert.equals(game.at(4,5), cursor.position())
 	}
 	
-	test "Cursor no puede moverse más a la derecha de la posición X = 18"{
+	test "Cursor no puede moverse más a la derecha del tablero"{
 		30.times({ i => cursor.moverHaciaLaDerecha()})
 		
 		assert.equals(game.at(18,5), cursor.position())
@@ -130,17 +130,20 @@ describe "Puntaje y Danios recibidos"{
 		zombie.morir()
 		assert.equals(100,puntaje.puntaje())
 	}
+	
 	test "Al dispararse una bala, la misma choca con el zombie"{
 		bala.disparar()
 		zombie.recibirAtaque(bala)
 		assert.equals(90, zombie.vida())
 	}
-	test "Al dispararse un hielo, el zombie la recibe, pero no le baja su vida"{
+	
+	test "Al dispararse un hielo, el zombie se congela, pero no le baja su vida"{
 		hielo.disparar()
 		zombie.congelar(100)
 		assert.equals(100, zombie.vida())
-		
+		assert.that(zombie.estaCongelado())
 	}
+	
 	test "Al chocarse con una margarita, la misma le baja 50 de danio"{
 		zombie.recibirAtaque(margarita)
 		assert.equals(50, zombie.vida())

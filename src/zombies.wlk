@@ -6,6 +6,9 @@ import puntaje.*
 
 class Zombie inherits ElementoVivo {
 	var estaCongelado = false
+	
+	method estaCongelado() = estaCongelado
+	
 	method caminar() {
 		if(not estaCongelado)
 	 		position = position.right(1)
