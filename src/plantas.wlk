@@ -75,12 +75,9 @@ class Girasol inherits Planta {
 			  velocidadAtaque
 			, "RecolectarElixir" + position.x().toString() + "-" + position.y().toString()
 			, { contadorElixir.incrementarElixirDisponible()
-				vida -= 10
-				if(vida == 0) {					
-					self.morir()
-				} }
-		)
-	}
+				self.envejecer()})
+
+}
 	
 	override method detenerAtaque() {
 		game.removeTickEvent("RecolectarElixir" + position.x().toString() + "-" + position.y().toString() )

@@ -22,7 +22,7 @@ object creadorDeLanzaguizantes {
 	method crearPlanta() = new Lanzaguisante(
 		  danio = 75
 		, velocidadAtaque = 2000
-		, vida = 200
+		, vida = 300
 		, position = cursor.position()
 		, image = "lanzaguisante.png"
 	)
@@ -36,7 +36,7 @@ object creadorDeGirasoles {
 	method crearPlanta() = new Girasol(
 		  danio = 25
 		, velocidadAtaque = 1000
-		, vida = 100
+		, vida = 200
 		, position = cursor.position()
 		, image = "girasol.png"
 	)
