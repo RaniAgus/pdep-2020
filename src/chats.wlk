@@ -2,19 +2,27 @@ import mensajeriaWollokiana.*
 import usuario.*
 
 class Chat {
+	const participantes
 	const mensajes = new List()
 	
+	method participa(usuario) = participantes.contains(usuario)
  	method cantidadMensajes() = mensajes.size()
  	method espacioQueOcupa() = mensajes.sum({ mensaje => mensaje.peso() })
  	
 	method enviarMensaje(mensaje) {
-		if(not mensaje.emisor().participaDe(self)) {
+		if(not self.participa( mensaje.emisor() )) {
 			self.error("El emisor del mensaje no es participante de este chat")
 		}
 		mensaje.emisor().quitarEspacioLibre()
 		mensajes.add(mensaje)
+		participantes.forEach({ usuario => usuario.notificar(new Notificacion(chat = self, mensaje = mensaje)) })
 	}
 	
+	method mensajesDe(usuario) = mensajes.filter({ mensaje => mensaje.loEnvio(usuario) })
+	
+	method elMasPesadoDe(usuario) = self.mensajesDe(usuario).sortBy({ m1, m2 => m1.peso() > m2.peso()}).take(1)
+	
+	method algunMensajeContiene(texto) = mensajes.any({ mensaje => mensaje.contiene(texto) })
 }
 
 class ChatPremium inherits Chat {
@@ -22,12 +30,15 @@ class ChatPremium inherits Chat {
 	var property restriccionAdicional
 	
 	method esCreador(usuario) = usuario == creador
-	method agregarParticipante(usuario) = usuario.agregarA(self)
-	method quitarParticipante(usuario) = usuario.quitarDe(self)
+	method agregarParticipante(usuario) = participantes.add(usuario)
+	method quitarParticipante(usuario) = participantes.remove(usuario)
+	
+	override method participa(usuario) = super(usuario) || self.esCreador(usuario)
 	
 	override method enviarMensaje(mensaje) {
 		restriccionAdicional.verificar(self, mensaje)
 		super(mensaje)
+		creador.notificar(new Notificacion(chat = self, mensaje = mensaje))
 	}
 }
 

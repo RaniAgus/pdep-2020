@@ -3,15 +3,12 @@ import chats.*
 
 class Usuario {
 	var espacioLibre
-	const chats = new List()
+	const nombre
+	const notificaciones = new List()
 	
-	method agregarA(chat) {
-		chats.add(chat)
-	}
+	method nombre() = nombre 
 	
-	method quitarDe(chat) {
-		chats.remove(chat)
-	}
+	method chats() = baseDeDatos.chatsDe(self)
 	
 	method quitarEspacioLibre(peso) {
 		if(espacioLibre < peso) {
@@ -20,15 +17,45 @@ class Usuario {
 		espacioLibre -= peso
 	}
 	
-	method crearChat(integrantes) {
-		const nuevoChat = new Chat()
-		self.agregarA(nuevoChat)
-		integrantes.forEach({ integrante => integrante.agregarAChat(nuevoChat) })
+	method buscar(texto) = self.chats().filter({ chat => chat.algunMensajeContiene(texto) })
+	
+	method losMasPesados() = self.chats().map({ chat => chat.elMasPesadoDe(self) })
+
+	method notificar(notificacion) {
+		notificaciones.add(notificacion)
 	}
 	
-	method crearChatPremium(integrantes, tipo) {
-		const nuevoChat = new ChatPremium(creador = self, restriccionAdicional = tipo)
-		self.agregarA(nuevoChat)
-		integrantes.forEach({ integrante => integrante.agregarAChat(nuevoChat) })
+	method leer(chat) {
+		notificaciones.removeAllSuchThat({ notificacion => notificacion.perteneceA(chat) })
 	}
+	
+	method notificacionesSinLeer() = notificaciones
 } 
+
+object baseDeDatos {
+	const chats = new List()
+	
+	method chatsDe(usuario) = chats.filter({ chat => chat.participa(usuario) })
+	
+	method crearChat(participantes) {
+		chats.add(new Chat(participantes = participantes))
+	}
+	
+	method crearChatPremium(creador, participantes, restriccionAdicional) {
+		chats.add(
+			new ChatPremium(
+				  creador = creador
+				, participantes = participantes
+				, restriccionAdicional = restriccionAdicional
+			)
+		)
+	}
+}
+
+class Notificacion {
+	const chat
+	const mensaje
+	
+	method perteneceA(unChat) = chat == unChat
+	method mensaje() = mensaje
+}

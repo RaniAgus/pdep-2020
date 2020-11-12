@@ -6,8 +6,8 @@
  * 
  * Punto 1: unChat.espacioQueOcupa()
  * Punto 2: unChat.enviarMensaje(unMensaje)
- * Punto 3: 
- * Punto 4: 
+ * Punto 3: unUsuario.buscar(texto)
+ * Punto 4: unUsuario.losMasPesados()
  * Punto 5a: 
  * Punto 5b: 
  * Punto 5c:  
@@ -21,7 +21,10 @@ class Mensaje {
 	const contenido
 	
 	method emisor() = emisor
+	method loEnvio(usuario) = usuario == emisor
 	method peso() = datosFijosDeTransferencia + contenido.peso() * factorDeLaRed
+	
+	method contiene(texto) = emisor.nombre().contains(texto) || contenido.contiene(texto)
 }
 
 class Texto {
@@ -29,6 +32,7 @@ class Texto {
 	const texto
 	
 	method peso() = texto.length() * pesoPorCaracter
+	method contiene(unTexto) = texto.contains(unTexto)
 }
 
 class Audio {
@@ -36,6 +40,7 @@ class Audio {
 	const duracion
 	
 	method peso() = duracion * pesoPorSegundo
+	method contiene(unTexto) = false
 }
 
 class Contacto {
@@ -43,6 +48,7 @@ class Contacto {
 	
 	method usuario() = usuario
 	method peso() = 3
+	method contiene(unTexto) = usuario.nombre().contains(unTexto)
 }
 
 class Imagen {
@@ -53,6 +59,7 @@ class Imagen {
 	
 	method pesoSinCompresion() = ancho * alto * pesoPorPixel
 	method peso() = compresion.calcularPeso(self.pesoSinCompresion())
+	method contiene(unTexto) = false
 }
 
 class GIF inherits Imagen {
