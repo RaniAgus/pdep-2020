@@ -13,6 +13,17 @@
  * Punto 5c:  
  */
  
+class Usuario {
+	var espacioLibre
+	
+	method quitarEspacioLibre(peso) {
+		if(espacioLibre < peso) {
+			self.error("No cuenta con espacio libre suficiente")
+		}
+		espacioLibre -= peso
+	}
+} 
+ 
 class Mensaje {
 	const datosFijosDeTransferencia = 5
 	const factorDeLaRed = 1.3
@@ -20,8 +31,7 @@ class Mensaje {
 	const emisor
 	const contenido
 	
-	method quienLoEnvio() = emisor
-	
+	method emisor() = emisor
 	method peso() = datosFijosDeTransferencia + contenido.peso() * factorDeLaRed
 }
 
@@ -30,4 +40,92 @@ class Texto {
 	const texto
 	
 	method peso() = texto.length() * pesoPorCaracter
+}
+
+class Audio {
+	const pesoPorSegundo = 1.2
+	const duracion
+	
+	method peso() = duracion * pesoPorSegundo
+}
+
+class Contacto {
+	const usuario
+	
+	method usuario() = usuario
+	method peso() = 3
+}
+
+class Imagen {
+	const pesoPorPixel = 2
+	const ancho
+	const alto
+	const compresion
+	
+	method pesoSinCompresion() = ancho * alto * pesoPorPixel
+	method peso() = compresion.calcularPeso(self.pesoSinCompresion())
+}
+
+class GIF inherits Imagen {
+	const cuadros
+	override method pesoSinCompresion() = super() * cuadros
+}
+
+object compresionOriginal {
+	method calcularPeso(pesoOriginal) = pesoOriginal
+}
+
+class CompresionVariable {
+	const porcentajeCompresion
+	method calcularPeso(pesoOriginal) = pesoOriginal * porcentajeCompresion
+}
+
+object compresionMaxima {
+	method calcularPeso(pesoOriginal) = pesoOriginal.min(10000)
+}
+
+class Chat {
+	const creador
+	const participantes = new Set()
+	const mensajes = []
+	
+	method esCreador(usuario) = usuario == creador
+	method participa(usuario) = self.esCreador(usuario) || participantes.contains(usuario)
+ 	method cantidadMensajes() = mensajes.size()
+ 	
+	method enviarMensaje(mensaje) {
+		if(not self.participa( mensaje.emisor() )) {
+			self.error("El emisor del mensaje no es participante de este chat")
+		}
+		mensaje.emisor().quitarEspacioLibre()
+		mensajes.add(mensaje)
+	}
+	
+}
+
+class ChatPremium inherits Chat {
+	var restriccionAdicional
+	
+	override method enviarMensaje(mensaje) {
+		restriccionAdicional.verificar(self, mensaje)
+		super(mensaje)
+	}
+}
+
+object difusion {
+	method verificar(chat, mensaje) {
+		if(not chat.esCreador(mensaje.emisor())) {
+			self.error("El emisor del mensaje no es creador de este chat de difusión")
+		}
+	}
+}
+
+class Restringido {
+	const limite
+	
+	method verificar(chat, mensaje) {
+		if(chat.cantidadMensajes() == limite) {
+			self.error("El chat ha llegado a su límite de mensajes")
+		}
+	}
 }
