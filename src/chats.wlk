@@ -1,6 +1,14 @@
 import mensajeriaWollokiana.*
 import usuario.*
 
+class Notificacion {
+	const chat
+	const mensaje
+	
+	method perteneceA(unChat) = chat == unChat
+	method mensaje() = mensaje
+}
+
 class Chat {
 	const participantes
 	const mensajes = new List()
@@ -15,13 +23,14 @@ class Chat {
 		}
 		mensaje.emisor().quitarEspacioLibre()
 		mensajes.add(mensaje)
-		participantes.forEach({ usuario => usuario.notificar(new Notificacion(chat = self, mensaje = mensaje)) })
+		participantes.forEach({ 
+			usuario => if(not mensaje.loEnvio(usuario)) 
+				usuario.notificar(new Notificacion(chat = self, mensaje = mensaje))
+		})
 	}
 	
 	method mensajesDe(usuario) = mensajes.filter({ mensaje => mensaje.loEnvio(usuario) })
-	
 	method elMasPesadoDe(usuario) = self.mensajesDe(usuario).sortBy({ m1, m2 => m1.peso() > m2.peso()}).take(1)
-	
 	method algunMensajeContiene(texto) = mensajes.any({ mensaje => mensaje.contiene(texto) })
 }
 

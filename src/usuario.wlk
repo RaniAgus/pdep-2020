@@ -4,7 +4,7 @@ import chats.*
 class Usuario {
 	var espacioLibre
 	const nombre
-	const notificaciones = new List()
+	const notificacionesSinLeer = new List()
 	
 	method nombre() = nombre 
 	
@@ -22,14 +22,14 @@ class Usuario {
 	method losMasPesados() = self.chats().map({ chat => chat.elMasPesadoDe(self) })
 
 	method notificar(notificacion) {
-		notificaciones.add(notificacion)
+		notificacionesSinLeer.add(notificacion)
 	}
 	
 	method leer(chat) {
-		notificaciones.removeAllSuchThat({ notificacion => notificacion.perteneceA(chat) })
+		notificacionesSinLeer.removeAllSuchThat({ notificacion => notificacion.perteneceA(chat) })
 	}
 	
-	method notificacionesSinLeer() = notificaciones
+	method notificacionesSinLeer() = notificacionesSinLeer
 } 
 
 object baseDeDatos {
@@ -38,7 +38,9 @@ object baseDeDatos {
 	method chatsDe(usuario) = chats.filter({ chat => chat.participa(usuario) })
 	
 	method crearChat(participantes) {
-		chats.add(new Chat(participantes = participantes))
+		chats.add(
+			new Chat(participantes = participantes)
+		)
 	}
 	
 	method crearChatPremium(creador, participantes, restriccionAdicional) {
@@ -50,12 +52,4 @@ object baseDeDatos {
 			)
 		)
 	}
-}
-
-class Notificacion {
-	const chat
-	const mensaje
-	
-	method perteneceA(unChat) = chat == unChat
-	method mensaje() = mensaje
 }

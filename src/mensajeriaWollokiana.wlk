@@ -4,14 +4,17 @@
  * 
  * Puntos de Entrada:
  * 
- * Punto 1: unChat.espacioQueOcupa()
- * Punto 2: unChat.enviarMensaje(unMensaje)
- * Punto 3: unUsuario.buscar(texto)
- * Punto 4: unUsuario.losMasPesados()
- * Punto 5a: 
- * Punto 5b: 
- * Punto 5c:  
+ * Punto 1:  unChat.espacioQueOcupa()
+ * Punto 2:  unChat.enviarMensaje(unMensaje)
+ * Punto 3:  unUsuario.buscar(texto)
+ * Punto 4:  unUsuario.losMasPesados()
+ * Punto 5a: unUsuario.notificar(unaNotificacion)
+ * Punto 5b: unUsuario.leer(chat)
+ * Punto 5c: unUsuario.notificacionesSinLeer()
  */
+ 
+import chats.*
+import usuario.*
  
 class Mensaje {
 	const datosFijosDeTransferencia = 5

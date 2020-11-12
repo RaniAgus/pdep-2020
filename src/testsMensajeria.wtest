@@ -1,6 +1,15 @@
+import mensajeriaWollokiana.*
+import chats.*
+import usuario.*
 
-test "tests" {
-
-	assert.that(false)
-
+describe "espacio que ocupa" {
+	const usuario1 = new Usuario(nombre = "usuario1", espacioLibre = 1000)
+	const usuario2 = new Usuario(nombre = "usuario2", espacioLibre = 2000)
+	const mensaje1 = new Texto(texto = "hola")
+	const mensaje2 = new Audio(duracion = 10)
+	const mensaje3 = new Contacto(usuario = usuario1)
+	const mensaje4 = new Imagen(ancho = 1000, alto = 500, compresion = new CompresionVariable(porcentajeCompresion = 0.5))
+	const mensaje5 = new GIF(ancho = 100, alto = 100, cuadros = 60, compresion = compresionMaxima)
+	
+	
 }
