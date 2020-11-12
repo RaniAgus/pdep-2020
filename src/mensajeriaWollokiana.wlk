@@ -12,3 +12,22 @@
  * Punto 5b: 
  * Punto 5c:  
  */
+ 
+class Mensaje {
+	const datosFijosDeTransferencia = 5
+	const factorDeLaRed = 1.3
+	
+	const emisor
+	const contenido
+	
+	method quienLoEnvio() = emisor
+	
+	method peso() = datosFijosDeTransferencia + contenido.peso() * factorDeLaRed
+}
+
+class Texto {
+	const pesoPorCaracter = 1
+	const texto
+	
+	method peso() = texto.length() * pesoPorCaracter
+}
