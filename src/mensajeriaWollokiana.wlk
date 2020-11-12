@@ -105,7 +105,10 @@ class Chat {
 }
 
 class ChatPremium inherits Chat {
-	var restriccionAdicional
+	var property restriccionAdicional
+	
+	method agregarParticipante(usuario) = participantes.add(usuario)
+	method quitarParticipante(usuario) = participantes.remove(usuario)
 	
 	override method enviarMensaje(mensaje) {
 		restriccionAdicional.verificar(self, mensaje)
