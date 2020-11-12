@@ -21,7 +21,7 @@ class Chat {
 		if(not self.participa( mensaje.emisor() )) {
 			self.error("El emisor del mensaje no es participante de este chat")
 		}
-		mensaje.emisor().quitarEspacioLibre()
+		mensaje.emisor().quitarEspacioLibre(mensaje.peso())
 		mensajes.add(mensaje)
 		participantes.forEach({ 
 			usuario => if(not mensaje.loEnvio(usuario)) 

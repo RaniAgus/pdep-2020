@@ -2,14 +2,79 @@ import mensajeriaWollokiana.*
 import chats.*
 import usuario.*
 
-describe "espacio que ocupa" {
+describe "peso de un contenido de mensaje" {
+	test "peso de un texto" {
+		const mensaje1 = new Texto(texto = "hola")
+		assert.equals(4, mensaje1.peso())
+	}
+	
+	test "peso de un audio" {
+		const mensaje2 = new Audio(duracion = 10)
+		assert.equals(12, mensaje2.peso())
+	}
+	
+	test "peso de un contacto" {
+		const usuario1 = new Usuario(nombre = "usuario1", espacioLibre = 1000)
+		const mensaje3 = new Contacto(usuario = usuario1)
+		assert.equals(3, mensaje3.peso())
+	}
+	
+	test "peso de una imagen con compresion variable" {
+		const mensaje4 = new Imagen(ancho = 1000, alto = 500
+			, compresion = new CompresionVariable(porcentajeCompresion = 0.25)
+		)
+		assert.equals(250000, mensaje4.peso())
+	}
+	
+	test "paso de una imagen con compresion maxima" {
+		const mensaje5 = new Imagen(ancho = 1000, alto = 500
+			, compresion = compresionMaxima
+		)
+		assert.equals(10000, mensaje5.peso())	
+	}
+	
+	test "peso de un gif" {
+		const mensaje6 = new GIF(ancho = 100, alto = 100, cuadros = 6
+			, compresion = compresionOriginal
+		)
+		assert.equals(120000, mensaje6.peso())
+	}
+}
+
+describe "chats" {
 	const usuario1 = new Usuario(nombre = "usuario1", espacioLibre = 1000)
 	const usuario2 = new Usuario(nombre = "usuario2", espacioLibre = 2000)
-	const mensaje1 = new Texto(texto = "hola")
-	const mensaje2 = new Audio(duracion = 10)
-	const mensaje3 = new Contacto(usuario = usuario1)
-	const mensaje4 = new Imagen(ancho = 1000, alto = 500, compresion = new CompresionVariable(porcentajeCompresion = 0.5))
-	const mensaje5 = new GIF(ancho = 100, alto = 100, cuadros = 60, compresion = compresionMaxima)
+	const chat = baseDeDatos.crearChat([usuario1])
 	
+	const mensajeChico = new Mensaje(
+		  emisor = usuario1
+		, contenido = new Texto(texto = "hola")
+	)
+	const mensajeGrande = new Mensaje(
+		  emisor = usuario1
+		, contenido = new Imagen(ancho = 1000, alto = 500, compresion = compresionMaxima)
+	)
+	
+	const mensajeFueraDeChat = new Mensaje(
+		  emisor = usuario2
+		, contenido = new Texto(texto = "hola")
+	)
+	
+	test "chats de un usuario" {
+		assert.that(usuario1.chats().contains(chat))
+		assert.notThat(usuario2.chats().contains(chat))
+	}
+	
+	test "enviar mensaje con exito" {
+		chat.enviarMensaje(mensajeChico)
+		assert.that(chat.mensajesDe(usuario1).contains(mensajeChico))
+	}
+	
+	test "enviar mensaje demasiado grande falla" {
+		assert.throwsExceptionWithMessage(
+			  "No cuenta con espacio libre suficiente"
+			, { chat.enviarMensaje(mensajeGrande) }
+		)
+	}
 	
 }

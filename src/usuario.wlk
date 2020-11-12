@@ -38,18 +38,18 @@ object baseDeDatos {
 	method chatsDe(usuario) = chats.filter({ chat => chat.participa(usuario) })
 	
 	method crearChat(participantes) {
-		chats.add(
-			new Chat(participantes = participantes)
-		)
+		const chat = new Chat(participantes = participantes) 
+		chats.add(chat)
+		return chat
 	}
 	
 	method crearChatPremium(creador, participantes, restriccionAdicional) {
-		chats.add(
-			new ChatPremium(
+		const chat = new ChatPremium(
 				  creador = creador
 				, participantes = participantes
 				, restriccionAdicional = restriccionAdicional
-			)
 		)
+		chats.add(chat)
+		return chat
 	}
 }
