@@ -55,7 +55,7 @@ describe "chats" {
 		, contenido = new Imagen(ancho = 1000, alto = 500, compresion = compresionMaxima)
 	)
 	
-	const mensajeFueraDeChat = new Mensaje(
+	const mensajeNoParticipante = new Mensaje(
 		  emisor = usuario2
 		, contenido = new Texto(texto = "hola")
 	)
@@ -74,6 +74,13 @@ describe "chats" {
 		assert.throwsExceptionWithMessage(
 			  "No cuenta con espacio libre suficiente"
 			, { chat.enviarMensaje(mensajeGrande) }
+		)
+	}
+	
+	test "enviar mensaje de no participante falla" {
+		assert.throwsExceptionWithMessage(
+			  "El emisor del mensaje no es participante de este chat"
+			, { chat.enviarMensaje(mensajeNoParticipante) }
 		)
 	}
 	
