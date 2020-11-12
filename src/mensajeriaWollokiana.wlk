@@ -4,25 +4,14 @@
  * 
  * Puntos de Entrada:
  * 
- * Punto 1:
- * Punto 2: 
+ * Punto 1: unChat.espacioQueOcupa()
+ * Punto 2: unChat.enviarMensaje(unMensaje)
  * Punto 3: 
  * Punto 4: 
  * Punto 5a: 
  * Punto 5b: 
  * Punto 5c:  
  */
- 
-class Usuario {
-	var espacioLibre
-	
-	method quitarEspacioLibre(peso) {
-		if(espacioLibre < peso) {
-			self.error("No cuenta con espacio libre suficiente")
-		}
-		espacioLibre -= peso
-	}
-} 
  
 class Mensaje {
 	const datosFijosDeTransferencia = 5
@@ -84,14 +73,26 @@ object compresionMaxima {
 	method calcularPeso(pesoOriginal) = pesoOriginal.min(10000)
 }
 
+class Usuario {
+	var espacioLibre
+	
+	method quitarEspacioLibre(peso) {
+		if(espacioLibre < peso) {
+			self.error("No cuenta con espacio libre suficiente")
+		}
+		espacioLibre -= peso
+	}
+} 
+
 class Chat {
 	const creador
-	const participantes = new Set()
-	const mensajes = []
+	const participantes
+	const mensajes = new List()
 	
 	method esCreador(usuario) = usuario == creador
 	method participa(usuario) = self.esCreador(usuario) || participantes.contains(usuario)
  	method cantidadMensajes() = mensajes.size()
+ 	method espacioQueOcupa() = mensajes.sum({ mensaje => mensaje.peso() })
  	
 	method enviarMensaje(mensaje) {
 		if(not self.participa( mensaje.emisor() )) {
@@ -122,10 +123,19 @@ object difusion {
 
 class Restringido {
 	const limite
-	
 	method verificar(chat, mensaje) {
 		if(chat.cantidadMensajes() == limite) {
 			self.error("El chat ha llegado a su límite de mensajes")
 		}
 	}
 }
+
+class Ahorro {
+	const pesoMaximo
+	method verificar(chat, mensaje) {
+		if(mensaje.peso() > pesoMaximo) {
+			self.error("El mensaje supera el máximo permitido en este chat")
+		}
+	}	
+}
+
