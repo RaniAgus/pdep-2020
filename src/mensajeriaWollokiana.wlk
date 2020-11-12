@@ -1,6 +1,6 @@
 /*
- * Nombre: Apellido, Nombre <completar>
- * Legajo: 999999-9 <completar>
+ * Nombre: Ranieri, Agustín Ezequiel
+ * Legajo: 167755-0
  * 
  * Puntos de Entrada:
  * 
