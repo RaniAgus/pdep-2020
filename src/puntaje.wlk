@@ -47,7 +47,7 @@ object puntaje {
 		
 		var aux = puntaje
 		cifras.forEach({ cifra => 
-			cifra.actualizarImagen(aux % 10)
+			cifra.actualizar(aux % 10)
 			aux = aux.div(10)
 		})
 		
@@ -57,7 +57,7 @@ object puntaje {
 	method crearCifra(valorInicial) {
 		const cifra = new Numero(
 				  position = game.at(21 - cifras.size(), 1)
-				, image = valorInicial.toString() + ".png"		 
+				, valor = valorInicial	 
 		)
 		cifras.add(cifra)
 		game.addVisual(cifra)
@@ -66,13 +66,13 @@ object puntaje {
 
 class Numero {
 	var position
-	var image
+	var valor
 	
-	method image() = image
+	method image() = valor.toString() + ".png"
 	method position() = position
 	
-	method actualizarImagen(valor) {
-		image = valor.toString() + ".png"
+	method actualizar(nuevoValor) {
+		valor = nuevoValor
 	}
 	
 }

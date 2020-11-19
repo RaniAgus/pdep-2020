@@ -40,7 +40,6 @@ class Margarita inherits Planta {
 }
 
 class Lanzaguisante inherits Planta {
-	var idBala = 0
 	
 	override method iniciar(){
 		game.onTick(
@@ -52,10 +51,9 @@ class Lanzaguisante inherits Planta {
 						, position = position.left(1)
 						, danio = danio
 						, velocidad = 200
-						, id = position.x().toString() + "-" + position.y().toString() + "-" + idBala.toString()
 						, rango = 6
 					)
-					idBala++
+					
 					bala.disparar()
 					sonido.tocar("disparo.wav")
 					self.envejecer()
@@ -85,7 +83,6 @@ class Girasol inherits Planta {
 }
 
 class Hielaguisante inherits Planta {
-	var idHielo = 0
 	
 	override method iniciar(){
 		game.onTick(
@@ -97,10 +94,8 @@ class Hielaguisante inherits Planta {
 						, position = position.left(1)
 						, danio = danio
 						, velocidad = 200
-						, id = position.x().toString() + "-" + position.y().toString() + "-" + idHielo.toString()
 						, rango = 8
 					)
-					idHielo++
 					hielo.disparar()
 					sonido.tocar("hielo.mp3")
 					self.envejecer() 
