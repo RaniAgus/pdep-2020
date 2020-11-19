@@ -10,8 +10,7 @@ import puntaje.*
 class Disparo {
 	var property image
 	var property position
-	
-	var id
+
 	var rango
 	var danio
 	var velocidad
@@ -38,8 +37,8 @@ class Bala inherits Disparo {
 	
 	override method disparar() {
 		super()
- 		game.onTick(velocidad, "MoverBala" + id, { self.moverse() })
- 		game.onTick(velocidad / cantImagenes, "CambiarImagenBala" + id, { self.cambiarImagen() })
+ 		game.onTick(velocidad, "MoverBala" + self.identity().toString(), { self.moverse() })
+ 		game.onTick(velocidad / cantImagenes, "CambiarImagenBala" + self.identity().toString(), { self.cambiarImagen() })
  		game.onCollideDo(self, 
  			{ zombi => 
  				if(tablero.esZombie(zombi)) {
@@ -59,8 +58,8 @@ class Bala inherits Disparo {
 
  	
  	override method morir() {
- 		game.removeTickEvent("CambiarImagenBala" + id)
- 		game.removeTickEvent("MoverBala" + id)
+ 		game.removeTickEvent("CambiarImagenBala" + self.identity().toString())
+ 		game.removeTickEvent("MoverBala" + self.identity().toString())
  		super()
  	}
 }
@@ -68,7 +67,7 @@ class Bala inherits Disparo {
  class Hielo inherits Disparo {
  	override method disparar() {
  		super()
- 		game.onTick(velocidad, "MoverHielo" + id, { self.moverse() })
+ 		game.onTick(velocidad, "MoverHielo" + self.identity().toString(), { self.moverse() })
 		game.onCollideDo(self, 
 			{ zombi => 
 				if(tablero.esZombie(zombi)) {
@@ -81,7 +80,7 @@ class Bala inherits Disparo {
  	}
  	
  	 override method morir() {
- 		game.removeTickEvent("MoverHielo" + id)
+ 		game.removeTickEvent("MoverHielo" + self.identity().toString())
  		super()
  	}
  }
