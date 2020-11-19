@@ -117,11 +117,11 @@ describe "Puntaje y Danios recibidos"{
 	//const posicionFija2 = game.at(4, 3) por si queremos agregar otro zombie
 	
 	const margarita = new Margarita(danio = 50, image = "margarita.png", position = game.at(2,3), vida = 50,velocidadAtaque = 10)
-	const hielo=new Hielo(image="null.png",position=posicionFija1,id=0,rango=5,velocidad=10,danio=10)
-	const bala=new Bala(image="null.png",position=posicionFija1,id=0,rango=5,velocidad=10,danio=10)
+	const hielo=new Hielo(image="null.png",position=posicionFija1,rango=5,velocidad=10,danio=10)
+	const bala=new Bala(image="null.png",position=posicionFija1,rango=5,velocidad=10,danio=10)
 	const zombie = new Zombie (
 			position = posicionFija1, 
-			image = "zombie.png",
+			image = "zombie.png", 
 			vida = 100
 		)
 	test "Al morir un zombi en el nivel 2, se suma 100 al puntaje"{
