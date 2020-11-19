@@ -151,3 +151,20 @@ describe "Puntaje y Danios recibidos"{
 	
 	
 }
+/*
+describe "Finalizacion de Juego"{
+		const posicionFinalZombie = game.at(5, 18)
+		const zombie = new Zombie (
+			position = posicionFinalZombie, 
+			image = "zombie.png",
+			vida = 100
+		)
+		/
+		test "El juego finaliza al estar el zombie en la posicion del muro"{
+			zombie.caminar()
+			assert.that(game.say(cursor, "FIN DEL JUEGO!"))
+		}
+	
+}
+
+*/
