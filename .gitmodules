@@ -1,0 +1,60 @@
+[submodule "f-parcial-vacaciones"]
+	path = f-parcial-vacaciones
+	url = https://github.com/pdepjm/2020-f-parcial-RaniAgus
+[submodule "f-simu-champiniones"]
+	path = f-simu-champiniones
+	url = https://github.com/pdepjm/2020-f-simu-champiniones-RaniAgus
+[submodule "f-clase-pokemonlistas"]
+	path = f-clase-pokemonlistas
+	url = https://github.com/pdepjm/2020-f-pokemonlistas-RaniAgus
+[submodule "f-tp4-propinas"]
+	path = f-tp4-propinas
+	url = https://github.com/pdepjm/2020-f-tp4-propinas-RaniAgus
+[submodule "f-tp3-tecnicasDeCombate"]
+	path = f-tp3-tecnicasDeCombate
+	url = https://github.com/pdepjm/2020-f-tp3-tecnicas-de-combate-RaniAgus
+[submodule "f-tp1-cerebroMagico"]
+	path = f-tp1-cerebroMagico
+	url = https://github.com/pdepjm/2020-f-tp1-cerebro-magico-RaniAgus
+[submodule "l-tp1-mansion"]
+	path = l-tp1-mansion
+	url = https://github.com/pdepjm/2020-l-tp1-mansion-RaniAgus
+[submodule "l-tp2-teg"]
+	path = l-tp2-teg
+	url = https://github.com/pdepjm/2020-l-tp2-teg-RaniAgus
+[submodule "l-tpi-mafia"]
+	path = l-tpi-mafia
+	url = https://github.com/pdepjm/2020-l-tpi-mafia-stackoverf-l-ow
+[submodule "l-simu-ratatouille"]
+	path = l-simu-ratatouille
+	url = https://github.com/pdepjm/2020-l-simu-ratatouille-RaniAgus
+[submodule "l-simu-hogwarts"]
+	path = l-simu-hogwarts
+	url = https://github.com/RaniAgus/2020-l-simu-hogwarts-RaniAgus
+[submodule "l-parcial-alquimia"]
+	path = l-parcial-alquimia
+	url = https://github.com/pdepjm/2020-l-parcialalquimia-RaniAgus
+[submodule "f-tpi-tallerMecanico"]
+	path = f-tpi-tallerMecanico
+	url = https://github.com/pdepjm/2020-f-tpi-taller-mecanico-stackoverflow
+[submodule "o-tp1-peligroDistraccion"]
+	path = o-tp1-peligroDistraccion
+	url = https://github.com/pdepjm/2020-o-tp1-PeligroDistraccion-RaniAgus
+[submodule "o-tp2-sueldoDePepe"]
+	path = o-tp2-sueldoDePepe
+	url = https://github.com/pdepjm/2020-o-tp2-sueldo-de-pepe-RaniAgus
+[submodule "o-tp3-mensajeros"]
+	path = o-tp3-mensajeros
+	url = https://github.com/pdepjm/2020-o-tp3-mensajeros-RaniAgus
+[submodule "o-tp4-navesEspaciales"]
+	path = o-tp4-navesEspaciales
+	url = https://github.com/pdepjm/2020-o-tp4-naves-espaciales-RaniAgus
+[submodule "o-simu-pdepvc"]
+	path = o-simu-pdepvc
+	url = https://github.com/pdepjm/2020-o-simu-pdepvc-RaniAgus
+[submodule "o-parcialMensajeria"]
+	path = o-parcialMensajeria
+	url = https://github.com/pdepjm/2020-o-parcialmensajeria-RaniAgus
+[submodule "o-tpi-juego-plantsVsZombies"]
+	path = o-tpi-juego-plantsVsZombies
+	url = https://github.com/pdepjm/2020-o-tpi-juego-topesdeg-a-m-a
