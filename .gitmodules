@@ -58,3 +58,6 @@
 [submodule "o-tpi-juego-plantsVsZombies"]
 	path = o-tpi-juego-plantsVsZombies
 	url = https://github.com/pdepjm/2020-o-tpi-juego-topesdeg-a-m-a
+[submodule "o-parcial-mensajeria"]
+	path = o-parcial-mensajeria
+	url = https://github.com/pdepjm/2020-o-parcialmensajeria-RaniAgus
